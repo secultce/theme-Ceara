@@ -25,4 +25,9 @@
 		data-original-title="<?php \MapasCulturais\i::esc_attr_e("Número da Identidade (RG)");?>"
 		data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira o número de sua identidade (RG) se for pessoa física");?>"><?php echo $entity->identidade; ?></span>
 </p>
+
+<p class="privado">
+	<span class="icon icon-private-info"></span> <span class="label">Login:</span>
+	<span><?php echo $entity->user->email; ?></span>
+</p>
 <?php endif; ?>
