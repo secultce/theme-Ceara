@@ -54,13 +54,44 @@ class Theme extends BaseV1\Theme
         }
     }
 
-    function register() {
+    /**
+     *
+     * {@inheritdoc}
+     * @see \MapasCulturais\Themes\BaseV1\Theme::_init()
+     */
+    protected function _init()
+    {
+        parent::_init();
+        $app = App::i();
+        
+        $app->hook('template(agent.<<create|single|edit>>.tab-about-service):end', function () use ($app) {
+            $entity = $this->controller->requestedEntity;
+            if ($this->isEditable()) :
+                echo '<p class="privado">
+                <span class="icon icon-private-info"></span>
+                <span class="label">Login:</span>
+                <span>' . $entity->user->email . '</span>
+              </p>';
+            endif;
+            
+        });
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \MapasCulturais\Themes\BaseV1\Theme::register()
+     */
+    function register()
+    {
         parent::register();
         
-        $def = App::i()->getRegisteredTaxonomyBySlug('area');
-        $terms = $def->restrictedTerms;
-        $terms[] = 'Humor';
-        sort($terms);
-        $def->restrictedTerms = $terms;
+        /* Adicionando novas áreas de atuação */
+        $taxonomy = App::i()->getRegisteredTaxonomyBySlug('area');
+        $novasAreasAtuacao = array_merge($taxonomy->restrictedTerms, [
+            "humor" => "Humor"
+        ]);
+        ksort($novasAreasAtuacao);
+        $taxonomy->restrictedTerms = $novasAreasAtuacao;
     }
 }
