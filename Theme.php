@@ -64,7 +64,8 @@ class Theme extends BaseV1\Theme
         parent::_init();
         $app = App::i();
         
-        $app->hook('template(agent.<<create|single|edit>>.tab-about-service):end', function () use ($app) {
+        /* Adicionando novos campos na entidade agente */
+        $app->hook('template(agent.<<create|single|edit>>.tab-about-service):begin', function () use ($app) {
             $entity = $this->controller->requestedEntity;
             if ($this->isEditable()) :
                 echo '<p class="privado">
@@ -74,6 +75,12 @@ class Theme extends BaseV1\Theme
               </p>';
             endif;
             
+        });
+        
+        $app->hook('template(agent.<<create|single|edit>>.tab-about-service):after', function () {
+            $this->part('campos-extras-agente', [
+                'entity' => $this->data->entity
+            ]);
         });
     }
 
@@ -93,5 +100,27 @@ class Theme extends BaseV1\Theme
         ]);
         ksort($novasAreasAtuacao);
         $taxonomy->restrictedTerms = $novasAreasAtuacao;
+        
+        /* Adicionando novos "AgentMetadata" para os campos da entidade agente */
+        $this->registerAgentMetadata('escolaridade', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Escolaridade'),
+            'type' => 'select',
+            'options' => array(
+                '' => \MapasCulturais\i::__('Não Informar'),
+                'Fundamental' => \MapasCulturais\i::__('Fundamental'),
+                'Fundamental - Incompleto' => \MapasCulturais\i::__('Fundamental - Incompleto'),
+                'Médio' => \MapasCulturais\i::__('Médio'),
+                'Médio - Incompleto' => \MapasCulturais\i::__('Médio - Incompleto'),
+                'Superior' => \MapasCulturais\i::__('Superior'),
+                'Superior - Incompleto' => \MapasCulturais\i::__('Superior - Incompleto'),
+                'Especialização' => \MapasCulturais\i::__('Especialização'),
+                'Especialização - Incompleto' => \MapasCulturais\i::__('Especialização - Incompleto'),
+                'Mestrado' => \MapasCulturais\i::__('Mestrado'),
+                'Mestrado - Incompleto' => \MapasCulturais\i::__('Mestrado - Incompleto'),
+                'Doutorado' => \MapasCulturais\i::__('Doutorado'),
+                'Doutorado - Incompleto' => \MapasCulturais\i::__('Doutorado - Incompleto')
+            )
+        ]);
     }
 }
