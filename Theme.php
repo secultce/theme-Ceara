@@ -144,5 +144,11 @@ class Theme extends BaseV1\Theme
                 'União Estável' => \MapasCulturais\i::__('União Estável')
             )
         ]);
+        
+        $this->registerAgentMetadata('identidade', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Identidade (RG)'),
+            'type' => 'text'
+        ]);
     }
 }

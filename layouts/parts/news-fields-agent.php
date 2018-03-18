@@ -17,4 +17,12 @@
 		data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Selecione seu estado civil se for pessoa física");?>"><?php echo $entity->estadoCivil; ?></span>
 </p>
 
+<p class="privado">
+	<span class="icon icon-private-info"></span><span class="label"><?php \MapasCulturais\i::_e("Identidade (RG)");?>:</span>
+	<span
+		class="js-editable <?php echo ($entity->isPropertyRequired($entity,"identidade") && $editEntity? 'required': '');?>"
+		data-edit="identidade"
+		data-original-title="<?php \MapasCulturais\i::esc_attr_e("Número da Identidade (RG)");?>"
+		data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira o número de sua identidade (RG) se for pessoa física");?>"><?php echo $entity->identidade; ?></span>
+</p>
 <?php endif; ?>
