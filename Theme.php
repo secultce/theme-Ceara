@@ -108,7 +108,7 @@ class Theme extends BaseV1\Theme
         ksort($novasAreasAtuacao);
         $taxonomy->restrictedTerms = $novasAreasAtuacao;
         
-        /* Adicionando novos "AgentMetadata" para os campos da entidade agente */
+        /* Adicionando novos meta data na entidade Agente */
         $this->registerAgentMetadata('escolaridade', [
             'private' => true,
             'label' => \MapasCulturais\i::__('Escolaridade'),
@@ -128,6 +128,21 @@ class Theme extends BaseV1\Theme
                 'Doutorado' => \MapasCulturais\i::__('Doutorado'),
                 'Doutorado Incompleto' => \MapasCulturais\i::__('Doutorado Incompleto')
             ]
+        ]);
+        
+        $this->registerAgentMetadata('estadoCivil', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Estado Civil'),
+            'type' => 'select',
+            'options' => array(
+                '' => \MapasCulturais\i::__('Não Informar'),
+                'Solteiro(a)' => \MapasCulturais\i::__('Solteiro(a)'),
+                'Casado(a)' => \MapasCulturais\i::__('Casado(a)'),
+                'Divorciado(a)' => \MapasCulturais\i::__('Divorciado(a)'),
+                'Viúvo(a)' => \MapasCulturais\i::__('Viúvo(a)'),
+                'Separado(a)' => \MapasCulturais\i::__('Separado(a)'),
+                'União Estável' => \MapasCulturais\i::__('União Estável')
+            )
         ]);
     }
 }
