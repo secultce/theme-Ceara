@@ -78,8 +78,15 @@ class Theme extends BaseV1\Theme
         });
         
         $app->hook('template(agent.<<create|single|edit>>.tab-about-service):after', function () {
-            $this->part('campos-extras-agente', [
+            $this->part('news-fields-agent', [
                 'entity' => $this->data->entity
+            ]);
+        });
+        
+        /* Adicionando novos campos na entidade entity revision agent */
+        $app->hook('template(entityrevision.history.tab-about-service):after', function () {
+            $this->part('news-fields-agent-revision', [
+                'entityRevision' => $this->data->entityRevision
             ]);
         });
     }
@@ -106,21 +113,21 @@ class Theme extends BaseV1\Theme
             'private' => true,
             'label' => \MapasCulturais\i::__('Escolaridade'),
             'type' => 'select',
-            'options' => array(
-                '' => \MapasCulturais\i::__('Não Informar'),
-                'Fundamental' => \MapasCulturais\i::__('Fundamental'),
-                'Fundamental - Incompleto' => \MapasCulturais\i::__('Fundamental - Incompleto'),
-                'Médio' => \MapasCulturais\i::__('Médio'),
-                'Médio - Incompleto' => \MapasCulturais\i::__('Médio - Incompleto'),
-                'Superior' => \MapasCulturais\i::__('Superior'),
-                'Superior - Incompleto' => \MapasCulturais\i::__('Superior - Incompleto'),
-                'Especialização' => \MapasCulturais\i::__('Especialização'),
-                'Especialização - Incompleto' => \MapasCulturais\i::__('Especialização - Incompleto'),
-                'Mestrado' => \MapasCulturais\i::__('Mestrado'),
-                'Mestrado - Incompleto' => \MapasCulturais\i::__('Mestrado - Incompleto'),
+            'options' => [
+                'Nenhuma' => \MapasCulturais\i::__('Nenhuma'),
+                'Fundamental' => \MapasCulturais\i::__('Ensino Fundamental'),
+                'Fundamental Incompleto' => \MapasCulturais\i::__('Ensino Fundamental Incompleto'),
+                'Medio' => \MapasCulturais\i::__('Ensino Medio'),
+                'Medio Incompleto' => \MapasCulturais\i::__('Ensino Medio Incompleto'),
+                'Superior' => \MapasCulturais\i::__('Ensino Superior'),
+                'Superior Incompleto' => \MapasCulturais\i::__('Ensino Superior Incompleto'),
+                'Especializacao' => \MapasCulturais\i::__('Especializacao'),
+                'Especializacao Incompleta' => \MapasCulturais\i::__('Especializacao Incompleta'),
+                'mestrado' => \MapasCulturais\i::__('Mestrado'),
+                'Mestrado Incompleto' => \MapasCulturais\i::__('Mestrado Incompleto'),
                 'Doutorado' => \MapasCulturais\i::__('Doutorado'),
-                'Doutorado - Incompleto' => \MapasCulturais\i::__('Doutorado - Incompleto')
-            )
+                'Doutorado Incompleto' => \MapasCulturais\i::__('Doutorado Incompleto')
+            ]
         ]);
     }
 }
