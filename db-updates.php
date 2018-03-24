@@ -1,10 +1,5 @@
 <?php
 
-use MapasCulturais\Entities\Agent;
-use MapasCulturais\Entities\Space;
-use MapasCulturais\Entities\File;
-use MapasCulturais\Entities\MetaList;
-
 $app = MapasCulturais\App::i();
 $em = $app->em;
 $conn = $em->getConnection();
