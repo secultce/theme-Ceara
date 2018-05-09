@@ -138,12 +138,38 @@ class Theme extends BaseV1\Theme
             'label' => \MapasCulturais\i::__('Identidade (RG)'),
             'type' => 'text'
         ]);
+
+        $this->registerAgentMetadata('expedicaoIdentidade', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Data de Expedição (RG)'),
+            'type' => 'date',
+            'validations' => [
+                'v::date("Y-m-d")' => \MapasCulturais\i::__('Data inválida').'{{format}}',
+            ]
+        ]);
+
+        $this->registerAgentMetadata('expedidorIdentidade', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Órgão Expedidor (RG)'),
+            'validations' => [
+                'v::allOf(v::regex("#[a-zA-Z]/[a-zA-Z]{2}#"))' => \MapasCulturais\i::__('Por favor, informe o expedidor/unidade federativa, exemplo: SSP/CE , SSP/DF')
+            ]
+        ]);
+
+        $this->registerAgentMetadata('telefone1', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Telefone Fixo'),
+            'type' => 'string',
+            'validations' => [
+                'v::allOf(v::regex("#^\(\d{2}\)[ ]?\d{4,5}-\d{4}$#"), v::brPhone())' => \MapasCulturais\i::__('Por favor, informe o telefone fixo no formato (xx) xxxx-xxxx.')
+            ]
+        ]);
         
         $this->registerAgentMetadata('orientacaoSexual', [
             'private' => true,
             'label' => \MapasCulturais\i::__('Orientação Sexual'),
             'type' => 'select',
-            'options' => array(
+            'options' => [
                 '' => \MapasCulturais\i::__('Não Informar'),
                 'Assexual' => \MapasCulturais\i::__('Assexual'),
                 'Bissexual' => \MapasCulturais\i::__('Bissexual'),
@@ -154,7 +180,16 @@ class Theme extends BaseV1\Theme
                 'Transmasculino' => \MapasCulturais\i::__('Transmasculino'),
                 'Pansexual' => \MapasCulturais\i::__('Pansexual'),
                 'Outras' => \MapasCulturais\i::__('Outras')
-            )
+            ]
+        ]);
+
+        $this->registerAgentMetadata('telefone1', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Telefone Fixo'),
+            'type' => 'string',
+            'validations' => [
+                'v::allOf(v::regex("#^\(\d{2}\)[ ]?\d{4,5}-\d{4}$#"), v::brPhone())' => \MapasCulturais\i::__('Por favor, informe o telefone fixo no formato (xx) xxxx-xxxx.')
+            ]
         ]);
     }
 }

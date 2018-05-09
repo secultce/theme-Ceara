@@ -18,11 +18,25 @@
 <?php endif;?>
 
 <?php if(isset($entityRevision->identidade) && $entityRevision->userCanView): ?>
-<p class="privado">
-	<span class="icon icon-private-info"></span> 
-	<span class="label">Identidade (RG):</span> 
-	<span class="js-editable" data-edit="identidade"
-		data-original-title="Número da Identidade (RG)"><?php echo $entityRevision->identidade; ?>
+    <p class="privado">
+        <span class="icon icon-private-info"></span>
+        <span class="label">Identidade (RG):</span>
+        <span class="js-editable" data-edit="identidade" data-original-title="Número da Identidade (RG)">
+            <?php echo $entityRevision->identidade; ?>
+        </span>
+    </p>
+    <p class="privado">
+        <span class="icon icon-private-info"></span>
+        <span class="label">Data de Expedição (RG):</span>
+        <span class="js-editable" data-edit="expedicaoIdentidade" data-original-title="Data de Expedição (RG)">
+            <?php echo $entityRevision->expedicaoIdentidade; ?>
 	</span>
-</p>
+    </p>
+    <p class="privado">
+        <span class="icon icon-private-info"></span>
+        <span class="label">Órgão Expedidor (RG):</span>
+        <span class="js-editable" data-edit="expedidorIdentidade" data-original-title="Órgão Expedidor (RG)">
+            <?php echo $entityRevision->expedidorIdentidade; ?>
+	</span>
+    </p>
 <?php endif;?>
