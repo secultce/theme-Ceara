@@ -1,4 +1,13 @@
 .buildpath
 .project
 .settings/
-
+.idea
+.vscode
+.project
+.phpintel
+nbproject
+.settings
+*.log
+.DS_Store
+.composer/
+.bash_history

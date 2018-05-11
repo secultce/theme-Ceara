@@ -1,0 +1,14 @@
+{
+  "name": "secultce/theme-ceara",
+  "description": "Project Mapas Culturais - Theme State of Ceara",
+  "authors": [
+    {
+      "name": "SECULTCE/CETIC - Célula Tecnologia da Informação e Comunicação",
+      "email": "cetic@secult.ce.gov.br"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.1.0"
+  }
+}
