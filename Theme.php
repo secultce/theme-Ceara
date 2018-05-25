@@ -77,6 +77,7 @@ class Theme extends BaseV1\Theme
                 'entityRevision' => $this->data->entityRevision
             ]);
         });
+
     }
 
     /**
@@ -190,6 +191,16 @@ class Theme extends BaseV1\Theme
             'validations' => [
                 'v::allOf(v::regex("#^\(\d{2}\)[ ]?\d{4,5}-\d{4}$#"), v::brPhone())' => \MapasCulturais\i::__('Por favor, informe o telefone fixo no formato (xx) xxxx-xxxx.')
             ]
+        ]);
+
+        $this->registerProjectMetadata('contraPartida', [
+            'label' => \MapasCulturais\i::__('Preencha aqui a contrapartida do projeto'),
+            'type' => 'text'
+        ]);
+
+        $this->registerProjectMetadata('valor', [
+            'label' => \MapasCulturais\i::__('Informe o valor do projeto'),
+            'type' => 'string'
         ]);
     }
 }
