@@ -96,6 +96,8 @@ class Theme extends BaseV1\Theme
         ]);
         ksort($novasAreasAtuacao);
         $taxonomy->restrictedTerms = $novasAreasAtuacao;
+
+        App::i()->registerTaxonomy('MapasCulturais\Entities\Project',$taxonomy);
         
         /* Adicionando novos meta data na entidade Agente */
         $this->registerAgentMetadata('escolaridade', [
