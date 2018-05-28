@@ -20,6 +20,7 @@ if($this->isEditable()){
     $this->addTaxonoyTermsToJs('area');
     $this->addTaxonoyTermsToJs('tag');
     $this->addTaxonoyTermsToJs('publico');
+    $this->addTaxonoyTermsToJs('municipio');
 }
 
 $this->includeAngularEntityAssets($entity);
@@ -122,4 +123,8 @@ $child_entity_request = isset($child_entity_request) ? $child_entity_request : n
     <!-- Link List BEGIN -->
     <?php $this->part('link-list.php', array('entity'=>$entity)); ?>
     <!-- Link List END -->
+
+    <!-- Municipios Contemplados BEGIN -->
+    <?php $this->part('widget-municipios.php', ['entity' => $entity]); ?>
+    <!-- Municipios Contemplados END -->
 </div>
