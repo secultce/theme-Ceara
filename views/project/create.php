@@ -90,7 +90,7 @@ $child_entity_request = isset($child_entity_request) ? $child_entity_request : n
     <?php $this->part('related-seals.php', array('entity'=>$entity)); ?>
     <!-- Related Seals END -->
     <?php $this->part('widget-areas', ['entity' => $entity]); ?>
-
+    <?php $this->part('widget-publicos', ['entity' => $entity]); ?>
     <?php $this->part('widget-tags', array('entity'=>$entity)); ?>
     <?php $this->part('redes-sociais', array('entity'=>$entity)); ?>
 </div>
