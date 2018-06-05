@@ -28,6 +28,7 @@ return [
             \MapasCulturais\i::__('Arquivo'),
             \MapasCulturais\i::__('Arte de Rua'),
             \MapasCulturais\i::__('Arte Digital'),
+            \MapasCulturais\i::__('Artes integradas'),
             \MapasCulturais\i::__('Artes Visuais'),
             \MapasCulturais\i::__('Artesanato'),
             \MapasCulturais\i::__('Audiovisual'),

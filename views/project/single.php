@@ -93,6 +93,9 @@ $child_entity_request = isset($child_entity_request) ? $child_entity_request : n
     <?php $this->part('related-seals.php', array('entity'=>$entity)); ?>
     <!-- Related Seals END -->
     <?php $this->part('widget-areas', ['entity' => $entity]); ?>
+    <!-- Municipios Contemplados BEGIN -->
+    <?php $this->part('widget-municipios.php', ['entity' => $entity]); ?>
+    <!-- Municipios Contemplados END -->
     <?php $this->part('widget-publicos', ['entity' => $entity]); ?>
     <?php $this->part('widget-tags', array('entity'=>$entity)); ?>
     <?php $this->part('redes-sociais', array('entity'=>$entity)); ?>
@@ -124,7 +127,4 @@ $child_entity_request = isset($child_entity_request) ? $child_entity_request : n
     <?php $this->part('link-list.php', array('entity'=>$entity)); ?>
     <!-- Link List END -->
 
-    <!-- Municipios Contemplados BEGIN -->
-    <?php $this->part('widget-municipios.php', ['entity' => $entity]); ?>
-    <!-- Municipios Contemplados END -->
 </div>
