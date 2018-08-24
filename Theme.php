@@ -78,6 +78,11 @@ class Theme extends BaseV1\Theme
             ]);
         });
 
+        /* Removendo duplicidade de consultas na API*/
+        $app->hook('API.find(<<agent|space|event|project>>).result', function(&$api_params, &$result) use ($app) {
+            $result = array_map('unserialize',array_unique(array_map('serialize',$result)));
+        });
+
     }
 
     /**
