@@ -9,7 +9,7 @@
 	<?php echo ($entity->isPropertyRequired($entity,"name") && $editEntity? 'required': '');?>"
           data-edit="name" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição, artístico ou social");?>"
           data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição, artístico ou social");?>">
-        <?php echo $entity->name; ?>
+        <?php echo htmlentities($entity->name); ?>
 	</span>
     </h2>
 <?php $this->applyTemplateHook('name','after'); ?>
