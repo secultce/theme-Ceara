@@ -13,9 +13,16 @@ $params = ['opportunity' => $opportunity, 'entity' => $entity, 'evaluationMethod
 
 $evaluation = $this->getCurrentRegistrationEvaluation($entity);
 
-$evaluationAgentId = (isset($evaluation)) ? $evaluation->user->id : null;
-$evaluationAgentIdParam = (isset($entity->controller->urlData['uid'])) ? (int) $entity->controller->urlData['uid'] : $evaluationAgentId ;
-$appUserId = $app->user->is('guest') ? null : $app->user->id;
+$canEvaluation =false;
+
+$evaluationAgents = $entity->opportunity->evaluationMethodConfiguration->agentRelations;
+foreach ($evaluationAgents as $agentRelation) {
+    $agent = $agentRelation->agent;
+    if ($agent->canUser('@control', $app->user) ) {
+        $canEvaluation = true;
+        break;
+    }
+}
 
 $infos = (array) $configuration->infos;
 ?>
@@ -52,7 +59,7 @@ $infos = (array) $configuration->infos;
                 </div>
                 <?php endif; ?>
                 <?php $this->part($evaluation_form_part_name, $params); ?>
-                <?php if($evaluationAgentId == $evaluationAgentIdParam && $evaluationAgentId == $appUserId): ?>
+                <?php if($canEvaluation): ?>
                 <hr>
                 <div style="text-align: right;">
                     <button class="btn btn-primary js-evaluation-submit js-next"><?php i::_e('Finalizar Avaliação e Avançar'); ?> &gt;&gt;</button>
