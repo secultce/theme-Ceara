@@ -1,5 +1,5 @@
 <?php
-use MapasCulturais\App;
+use MapasCulturais\App  ;
 use MapasCulturais\i;
 $app = App::i();
 
@@ -13,7 +13,7 @@ $params = ['opportunity' => $opportunity, 'entity' => $entity, 'evaluationMethod
 
 $evaluation = $this->getCurrentRegistrationEvaluation($entity);
 
-$evaluationAgentId = $evaluation->user->id;
+$evaluationAgentId = (isset($evaluation)) ? $evaluation->user->id : null;
 $evaluationAgentIdParam = (isset($entity->controller->urlData['uid'])) ? (int) $entity->controller->urlData['uid'] : $evaluationAgentId ;
 $appUserId = $app->user->is('guest') ? null : $app->user->id;
 
