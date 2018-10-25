@@ -114,6 +114,14 @@
                     data-original-title="<?php \MapasCulturais\i::esc_attr_e("Escolaridade");?>"
                     data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Selecione sua escolaridade");?>"><?php echo $entity->escolaridade; ?></span>
             </p>
+            <!-- Campo CPF/CNPJ -->
+            <p class="privado">
+                <span class="icon icon-private-info"></span>
+                <span class="label"><?php \MapasCulturais\i::_e("CPF/CNPJ");?>:</span> 
+                <span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"documento") && $editEntity? 'required': '');?>" data-edit="documento" data-original-title="<?php \MapasCulturais\i::esc_attr_e("CPF/CNPJ");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira o CPF ou CNPJ com pontos, hífens e barras");?>">
+                    <?php echo $entity->documento; ?>
+                </span>
+            </p>
             <!-- Identidade (RG) -->
             <p class="privado">
                 <span class="icon icon-private-info"></span><span class="label"><?php \MapasCulturais\i::_e("Identidade (RG)");?>:</span>
@@ -142,14 +150,6 @@
                     <?php echo $entity->expedidorIdentidade; ?>
                 </span>
             </p>
-            <!-- Campo CPF/CNPJ -->
-            <p class="privado">
-                <span class="icon icon-private-info"></span>
-                <span class="label"><?php \MapasCulturais\i::_e("CPF/CNPJ");?>:</span> 
-                <span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"documento") && $editEntity? 'required': '');?>" data-edit="documento" data-original-title="<?php \MapasCulturais\i::esc_attr_e("CPF/CNPJ");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira o CPF ou CNPJ com pontos, hífens e barras");?>">
-                    <?php echo $entity->documento; ?>
-                </span>
-            </p>
             <!-- Email Principal -->
             <p class="privado"><span class="icon icon-private-info"></span>
                 <span class="label"><?php \MapasCulturais\i::_e("Email Principal");?>:</span> 
@@ -157,13 +157,18 @@
                     <?php echo $entity->emailPrivado; ?>
                 </span>
             </p>
+        <?php endif; ?>
+        
+        <?php if($this->isEditable() || $entity->emailPublico): ?>
             <!-- Email Público -->
             <p><span class="label"><?php \MapasCulturais\i::_e("E-mail");?>:</span> 
                 <span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"emailPublico") && $this->isEditable()? 'required': '');?>" data-edit="emailPublico" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Email Público");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira um email que será exibido publicamente");?>">
                     <?php echo $entity->emailPublico; ?>
                 </span>
             </p>
+        <?php endif; ?>
 
+        <?php if($this->isEditable()): ?>
             <!-- Telefone Principal -->
             <p class="privado">
                 <span class="icon icon-private-info"></span>
@@ -180,6 +185,9 @@
                     <?php echo $entity->telefone2; ?>
                 </span>
             </p>
+        <?php endif; ?>
+
+        <?php if($this->isEditable() || $entity->telefonePublico): ?>
             <!-- Telefone Público -->
             <p>
                 <span class="label"><?php \MapasCulturais\i::_e("Telefone Público");?>:</span> 
@@ -187,7 +195,6 @@
                     <?php echo $entity->telefonePublico; ?>
                 </span>
             </p>
-  
         <?php endif; ?>
 
         <?php $this->applyTemplateHook('tab-about-service','end'); ?>
