@@ -7,8 +7,8 @@
     <h2>
 	<span class="<?php echo $class ?>
 	<?php echo ($entity->isPropertyRequired($entity,"name") && $editEntity? 'required': '');?>"
-          data-edit="name" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição, artístico ou social");?>"
-          data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição, artístico ou social");?>">
+          data-edit="name" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Nome pessoal, social, artístico ou profissional");?>"
+          data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Nome pessoal, social, artístico ou profissional");?>">
         <?php echo htmlentities($entity->name); ?>
 	</span>
     </h2>

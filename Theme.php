@@ -7,15 +7,14 @@ use MapasCulturais\App;
 class Theme extends BaseV1\Theme
 {
 
-    protected static function _getTexts()
-    {
+    protected static function _getTexts() {
         $self = App::i()->view;
         $url_search_agents = $self->searchAgentsUrl;
         $url_search_spaces = $self->searchSpacesUrl;
         $url_search_events = $self->searchEventsUrl;
         $url_search_projects = $self->searchProjectsUrl;
         
-        return array(
+        return [
             'site: in the region' => 'no Estado do Ceará',
             'site: of the region' => 'do Estado do Ceará',
             'site: owner' => 'Secretaria da Cultura do Estado do Ceará',
@@ -32,7 +31,7 @@ class Theme extends BaseV1\Theme
             //
             // 'search: verified results' => 'Resultados Verificados',
             // 'search: verified' => "Verificados"
-        );
+        ];
     }
 
     static function getThemeFolder()
@@ -64,13 +63,6 @@ class Theme extends BaseV1\Theme
         parent::_init();
         $app = App::i();
         
-        /* Adicionando novos campos na entidade agente */
-        $app->hook('template(agent.<<create|single|edit>>.tab-about-service):end', function () {
-            $this->part('news-fields-agent', [
-                'entity' => $this->data->entity
-            ]);
-        });
-        
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
             $this->part('news-fields-agent-revision', [
@@ -99,10 +91,13 @@ class Theme extends BaseV1\Theme
 
         App::i()->registerTaxonomy('MapasCulturais\Entities\Project',$taxonomy);
         
-        /* Adicionando novos meta data na entidade Agente */
+        /** 
+         * Adicionando novos metadata na entidade Agente 
+         * 
+         */
         $this->registerAgentMetadata('escolaridade', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Escolaridade'),
+            'label' => \MapasCulturais\i::__('Informe sua Escolaridade'),
             'type' => 'select',
             'options' => array(
                 '' => \MapasCulturais\i::__('Não Informar'),
@@ -123,7 +118,7 @@ class Theme extends BaseV1\Theme
         
         $this->registerAgentMetadata('estadoCivil', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Estado Civil'),
+            'label' => \MapasCulturais\i::__('Informe seu Estado Civil'),
             'type' => 'select',
             'options' => array(
                 '' => \MapasCulturais\i::__('Não Informar'),
@@ -138,13 +133,13 @@ class Theme extends BaseV1\Theme
         
         $this->registerAgentMetadata('identidade', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Identidade (RG)'),
+            'label' => \MapasCulturais\i::__('Informe sua Identidade (RG)'),
             'type' => 'text'
         ]);
 
         $this->registerAgentMetadata('expedicaoIdentidade', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Data de Expedição (RG)'),
+            'label' => \MapasCulturais\i::__('Informe a Data de Expedição (RG)'),
             'type' => 'date',
             'validations' => [
                 'v::date("Y-m-d")' => \MapasCulturais\i::__('Data inválida').'{{format}}',
@@ -153,15 +148,15 @@ class Theme extends BaseV1\Theme
 
         $this->registerAgentMetadata('expedidorIdentidade', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Órgão Expedidor (RG)'),
-            'validations' => [
-                'v::allOf(v::regex("#[a-zA-Z]/[a-zA-Z]{2}#"))' => \MapasCulturais\i::__('Por favor, informe o expedidor/unidade federativa, exemplo: SSP/CE , SSP/DF')
-            ]
+            'label' => \MapasCulturais\i::__('Informe o Órgão Expedidor (RG)'),
+            // 'validations' => [
+            //     'v::allOf(v::regex("#[a-zA-Z]/[a-zA-Z]{2}#"))' => \MapasCulturais\i::__('Por favor, informe o expedidor/unidade federativa, exemplo: SSP/CE , SSP/DF')
+            // ]
         ]);
 
         $this->registerAgentMetadata('telefone1', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Telefone Fixo'),
+            'label' => \MapasCulturais\i::__('Informe seu Telefone Fixo'),
             'type' => 'string',
             'validations' => [
                 'v::allOf(v::regex("#^\(\d{2}\)[ ]?\d{4,5}-\d{4}$#"), v::brPhone())' => \MapasCulturais\i::__('Por favor, informe o telefone fixo no formato (xx) xxxx-xxxx.')
@@ -170,7 +165,7 @@ class Theme extends BaseV1\Theme
         
         $this->registerAgentMetadata('orientacaoSexual', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Orientação Sexual'),
+            'label' => \MapasCulturais\i::__('Informe sua Orientação Sexual'),
             'type' => 'select',
             'options' => [
                 '' => \MapasCulturais\i::__('Não Informar'),
@@ -182,25 +177,47 @@ class Theme extends BaseV1\Theme
                 'Transfeminino' => \MapasCulturais\i::__('Transfeminino'),
                 'Transmasculino' => \MapasCulturais\i::__('Transmasculino'),
                 'Pansexual' => \MapasCulturais\i::__('Pansexual'),
-                'Outras' => \MapasCulturais\i::__('Outras')
+                'Outras' => \MapasCulturais\i::__('Outra')
             ]
         ]);
 
-        $this->registerAgentMetadata('telefone1', [
+        $this->registerAgentMetadata('nomeSocial', [
             'private' => true,
-            'label' => \MapasCulturais\i::__('Telefone Fixo'),
-            'type' => 'string',
-            'validations' => [
-                'v::allOf(v::regex("#^\(\d{2}\)[ ]?\d{4,5}-\d{4}$#"), v::brPhone())' => \MapasCulturais\i::__('Por favor, informe o telefone fixo no formato (xx) xxxx-xxxx.')
-            ]
+            'label' => \MapasCulturais\i::__('Informe seu Nome Social'),
+            'type' => 'string'
         ]);
 
+        $this->registerAgentMetadata('nomeProfissional', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Informe seu Nome Profissional'),
+            'type' => 'string'
+        ]);
+
+        $this->registerAgentMetadata('nacionalidade', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Informe sua Nacionalidade'),
+            'type' => 'string'
+        ]);
+
+        $this->registerAgentMetadata('naturalidade', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('Informe sua Naturalidade'),
+            'type' => 'string'
+        ]);
+
+
+        /** 
+         * Adicionando novos metadata na entidade Projeto 
+         * 
+         */
         $this->registerProjectMetadata('contraPartida', [
+            'private' => false,
             'label' => \MapasCulturais\i::__('Preencha aqui a contrapartida do projeto'),
             'type' => 'text'
         ]);
 
         $this->registerProjectMetadata('valor', [
+            'private' => false,
             'label' => \MapasCulturais\i::__('Informe o valor do projeto'),
             'type' => 'string'
         ]);

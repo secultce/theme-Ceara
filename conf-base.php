@@ -13,16 +13,16 @@ return [
         'required' => true,
         'label' => \MapasCulturais\i::__('Agente responsável pela inscrição'),
         'agentRelationGroupName' => 'owner',
-        'description' => \MapasCulturais\i::__('Agente individual (pessoa física) com os campos Nome Completo, CPF, Identidade (RG) com data de expedição e órgão expedidor, Endereço completo, Data de Nascimento ou Fundação, Raça, Gênero, Email Privado e Telefone 1 obrigatoriamente preenchidos'),
+        'description' => \MapasCulturais\i::__('Pessoa física com os campos nome, endereço, data de nascimento, raça, gênero, email, telefone preenchidos. Além dos documentos CPF, identidade (RG) com data de expedição e órgão expedidor.'),
         'type' => 1,
         'requiredProperties' => ['nomeCompleto','documento','identidade','expedicaoIdentidade','expedidorIdentidade','endereco','dataDeNascimento','raca','genero','emailPrivado','telefone1']
     ],
-        'registration.agentRelations' => [
+    'registration.agentRelations' => [
         array(
             'required' => false,
             'label' => \MapasCulturais\i::__('Instituição responsável'),
             'agentRelationGroupName' => 'instituicao',
-            'description' => \MapasCulturais\i::__('Agente coletivo (pessoa jurídica) com os campos Nome Completo, Endereço, CNPJ, Data de Nascimento/Fundação, Email Privado e Telefone 1 obrigatoriamente preenchidos'),
+            'description' => \MapasCulturais\i::__('Pessoa jurídica com os campos nome, endereço, CNPJ, data de fundação, email e telefone preenchidos.'),
             'type' => 2,
             'requiredProperties' => array('nomeCompleto','endereco','documento', 'dataDeNascimento', 'emailPrivado', 'telefone1')
         ),
@@ -30,9 +30,9 @@ return [
             'required' => false,
             'label' => \MapasCulturais\i::__('Coletivo'),
             'agentRelationGroupName' => 'coletivo',
-            'description' => \MapasCulturais\i::__('Agente coletivo sem CNPJ, com os campos Data de Nascimento/Fundação e Email Privado obrigatoriamente preenchidos'),
+            'description' => \MapasCulturais\i::__('Agente coletivo sem CNPJ, com os campos Data de Nascimento/Fundação, email e telefone obrigatoriamente preenchidos'),
             'type' => 2,
-            'requiredProperties' => ['dataDeNascimento', 'emailPrivado']
+            'requiredProperties' => ['dataDeNascimento', 'emailPrivado', 'telefone1']
         )
     ]
 ];

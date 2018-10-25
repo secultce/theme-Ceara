@@ -1,8 +1,7 @@
 <?php
 return [
     1 => [
-        // 'slug' => \MapasCulturais\i::__('tag'),
-        'slug' => 'tag',
+        'slug' => \MapasCulturais\i::__('tag'),
         'entities' => [
             'MapasCulturais\Entities\Space',
             'MapasCulturais\Entities\Agent',
@@ -13,8 +12,7 @@ return [
     ],
 
     2 => [
-        //'slug' => \MapasCulturais\i::__('area'),
-        'slug' => 'area',
+        'slug' => \MapasCulturais\i::__('area'),
         'required' => \MapasCulturais\i::__("Informe, pelo menos, uma área de atuação."),
         'entities' => [
             'MapasCulturais\Entities\Space',
@@ -83,8 +81,7 @@ return [
     ],
 
     3 => [
-        //'slug' => \MapasCulturais\i::__('linguagem'),
-        'slug' => 'linguagem',
+        'slug' => \MapasCulturais\i::__('linguagem'),
         'required' => \MapasCulturais\i::__("Informe, pelo menos, uma linguagem."),
         'entities' => [
             'MapasCulturais\Entities\Event'
@@ -113,8 +110,7 @@ return [
     ],
 
     4 => [
-        //'slug' => \MapasCulturais\i::__('publico'),
-        'slug' => 'publico',
+        'slug' => \MapasCulturais\i::__('publico'),
         //'required' => \MapasCulturais\i::__("Informe, pelo menos, um público-alvo."),
         'entities' => [
             'MapasCulturais\Entities\Project'
@@ -140,8 +136,7 @@ return [
     ],
 
     5 => [
-        //'slug' => \MapasCulturais\i::__('publico'),
-        'slug' => 'municipio',
+        'slug' => \MapasCulturais\i::__('municipio'),
         //'required' => \MapasCulturais\i::__("Informe, pelo menos, um município."),
         'entities' => [
             'MapasCulturais\Entities\Project'
