@@ -62,6 +62,10 @@ class Theme extends BaseV1\Theme
     {
         parent::_init();
         $app = App::i();
+
+        $app->hook('view.render(<<*>>):before', function() use($app) {
+            $this->_publishAssets();
+        });
         
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
@@ -70,6 +74,14 @@ class Theme extends BaseV1\Theme
             ]);
         });
 
+    }
+    /**
+     *
+     * {@inheritdoc}
+     * @see \MapasCulturais\Themes\BaseV1\Theme::_publishAssets()
+     */
+    protected function _publishAssets() {
+        $this->jsObject['assets']['fundo'] = $this->asset('img/backgroud.png', false);
     }
 
     /**

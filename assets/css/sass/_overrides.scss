@@ -42,3 +42,9 @@
         padding: 1.5rem;
     }
 }
+
+#home-watermark {
+    min-height: calc(100vh); // viewport height minus header height
+    background: transparent url(../img/backgroud.png) no-repeat top;
+    background-size: cover;
+}
