@@ -13,7 +13,7 @@ return [
         'required' => true,
         'label' => \MapasCulturais\i::__('Agente responsável pela inscrição'),
         'agentRelationGroupName' => 'owner',
-        'description' => \MapasCulturais\i::__('Pessoa física com os campos nome, endereço, data de nascimento, raça, gênero, email, telefone preenchidos. Além dos documentos CPF, identidade (RG) com data de expedição e órgão expedidor.'),
+        'description' => \MapasCulturais\i::__('Pessoa física com os campos nome, endereço, data de nascimento, raça, gênero, email, telefone principal preenchidos. Além dos documentos CPF, identidade (RG) com data de expedição e órgão expedidor obrigatoriamente preenchidos.'),
         'type' => 1,
         'requiredProperties' => ['nomeCompleto','documento','identidade','expedicaoIdentidade','expedidorIdentidade','endereco','dataDeNascimento','raca','genero','emailPrivado','telefone1']
     ],
@@ -22,7 +22,7 @@ return [
             'required' => false,
             'label' => \MapasCulturais\i::__('Instituição responsável'),
             'agentRelationGroupName' => 'instituicao',
-            'description' => \MapasCulturais\i::__('Pessoa jurídica com os campos nome, endereço, CNPJ, data de fundação, email e telefone preenchidos.'),
+            'description' => \MapasCulturais\i::__('Pessoa jurídica com os campos nome, endereço, CNPJ, data de fundação, email e telefone principal obrigatoriamente preenchidos.'),
             'type' => 2,
             'requiredProperties' => array('nomeCompleto','endereco','documento', 'dataDeNascimento', 'emailPrivado', 'telefone1')
         ),
@@ -30,7 +30,7 @@ return [
             'required' => false,
             'label' => \MapasCulturais\i::__('Coletivo'),
             'agentRelationGroupName' => 'coletivo',
-            'description' => \MapasCulturais\i::__('Agente coletivo sem CNPJ, com os campos Data de Nascimento/Fundação, email e telefone obrigatoriamente preenchidos'),
+            'description' => \MapasCulturais\i::__('Agente coletivo sem CNPJ, com os campos Data de Nascimento/Fundação, email e telefone principal obrigatoriamente preenchidos'),
             'type' => 2,
             'requiredProperties' => ['dataDeNascimento', 'emailPrivado', 'telefone1']
         )

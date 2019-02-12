@@ -89,110 +89,14 @@ class Theme extends BaseV1\Theme
      * {@inheritdoc}
      * @see \MapasCulturais\Themes\BaseV1\Theme::register()
      */
-    function register()
-    {
-        parent::register();
-        
-        /* Adicionando novas áreas de atuação */
-        $taxonomy = App::i()->getRegisteredTaxonomyBySlug('area');
-        $novasAreasAtuacao = array_merge($taxonomy->restrictedTerms, [
-            "humor" => "Humor"
-        ]);
-        ksort($novasAreasAtuacao);
-        $taxonomy->restrictedTerms = $novasAreasAtuacao;
+    function register() {
 
-        App::i()->registerTaxonomy('MapasCulturais\Entities\Project',$taxonomy);
-        
+        parent::register();
+
         /** 
          * Adicionando novos metadata na entidade Agente 
          * 
          */
-        $this->registerAgentMetadata('escolaridade', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe sua Escolaridade'),
-            'type' => 'select',
-            'options' => array(
-                '' => \MapasCulturais\i::__('Não Informar'),
-                'Ensino Fundamental' => \MapasCulturais\i::__('Ensino Fundamental'),
-                'Ensino Fundamental Incompleto' => \MapasCulturais\i::__('Ensino Fundamental Incompleto'),
-                'Ensino Médio' => \MapasCulturais\i::__('Ensino Médio'),
-                'Ensino Médio Incompleto' => \MapasCulturais\i::__('Ensino Médio Incompleto'),
-                'Ensino Superior' => \MapasCulturais\i::__('Ensino Superior'),
-                'Ensino Superior Incompleto' => \MapasCulturais\i::__('Ensino Superior Incompleto'),
-                'Especialização' => \MapasCulturais\i::__('Especialização'),
-                'Especialização Incompleta' => \MapasCulturais\i::__('Especialização Incompleta'),
-                'Mestrado' => \MapasCulturais\i::__('Mestrado'),
-                'Mestrado Incompleto' => \MapasCulturais\i::__('Mestrado Incompleto'),
-                'Doutorado' => \MapasCulturais\i::__('Doutorado'),
-                'Doutorado Incompleto' => \MapasCulturais\i::__('Doutorado Incompleto')
-            )
-        ]);
-        
-        $this->registerAgentMetadata('estadoCivil', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe seu Estado Civil'),
-            'type' => 'select',
-            'options' => array(
-                '' => \MapasCulturais\i::__('Não Informar'),
-                'Solteiro(a)' => \MapasCulturais\i::__('Solteiro(a)'),
-                'Casado(a)' => \MapasCulturais\i::__('Casado(a)'),
-                'Divorciado(a)' => \MapasCulturais\i::__('Divorciado(a)'),
-                'Viúvo(a)' => \MapasCulturais\i::__('Viúvo(a)'),
-                'Separado(a)' => \MapasCulturais\i::__('Separado(a)'),
-                'União Estável' => \MapasCulturais\i::__('União Estável')
-            )
-        ]);
-        
-        $this->registerAgentMetadata('identidade', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe sua Identidade (RG)'),
-            'type' => 'text'
-        ]);
-
-        $this->registerAgentMetadata('expedicaoIdentidade', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe a Data de Expedição (RG)'),
-            'type' => 'date',
-            'validations' => [
-                'v::date("Y-m-d")' => \MapasCulturais\i::__('Data inválida').'{{format}}',
-            ]
-        ]);
-
-        $this->registerAgentMetadata('expedidorIdentidade', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe o Órgão Expedidor (RG)'),
-            // 'validations' => [
-            //     'v::allOf(v::regex("#[a-zA-Z]/[a-zA-Z]{2}#"))' => \MapasCulturais\i::__('Por favor, informe o expedidor/unidade federativa, exemplo: SSP/CE , SSP/DF')
-            // ]
-        ]);
-
-        $this->registerAgentMetadata('telefone1', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe seu Telefone Fixo'),
-            'type' => 'string',
-            'validations' => [
-                'v::allOf(v::regex("#^\(\d{2}\)[ ]?\d{4,5}-\d{4}$#"), v::brPhone())' => \MapasCulturais\i::__('Por favor, informe o telefone fixo no formato (xx) xxxx-xxxx.')
-            ]
-        ]);
-        
-        $this->registerAgentMetadata('orientacaoSexual', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe sua Orientação Sexual'),
-            'type' => 'select',
-            'options' => [
-                '' => \MapasCulturais\i::__('Não Informar'),
-                'Assexual' => \MapasCulturais\i::__('Assexual'),
-                'Bissexual' => \MapasCulturais\i::__('Bissexual'),
-                'Heterossexual' => \MapasCulturais\i::__('Heterossexual'),
-                'Homossexual' => \MapasCulturais\i::__('Homossexual'),
-                'Transsexual' => \MapasCulturais\i::__('Transexual'),
-                'Transfeminino' => \MapasCulturais\i::__('Transfeminino'),
-                'Transmasculino' => \MapasCulturais\i::__('Transmasculino'),
-                'Pansexual' => \MapasCulturais\i::__('Pansexual'),
-                'Outras' => \MapasCulturais\i::__('Outra')
-            ]
-        ]);
-
         $this->registerAgentMetadata('nomeSocial', [
             'private' => true,
             'label' => \MapasCulturais\i::__('Informe seu Nome Social'),
@@ -216,7 +120,6 @@ class Theme extends BaseV1\Theme
             'label' => \MapasCulturais\i::__('Informe sua Naturalidade'),
             'type' => 'string'
         ]);
-
 
         /** 
          * Adicionando novos metadata na entidade Projeto 
