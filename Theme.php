@@ -92,35 +92,7 @@ class Theme extends BaseV1\Theme
     function register() {
 
         parent::register();
-
-        /** 
-         * Adicionando novos metadata na entidade Agente 
-         * 
-         */
-        $this->registerAgentMetadata('nomeSocial', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe seu Nome Social'),
-            'type' => 'string'
-        ]);
-
-        $this->registerAgentMetadata('nomeProfissional', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe seu Nome Profissional'),
-            'type' => 'string'
-        ]);
-
-        $this->registerAgentMetadata('nacionalidade', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe sua Nacionalidade'),
-            'type' => 'string'
-        ]);
-
-        $this->registerAgentMetadata('naturalidade', [
-            'private' => true,
-            'label' => \MapasCulturais\i::__('Informe sua Naturalidade'),
-            'type' => 'string'
-        ]);
-
+        
         /** 
          * Adicionando novos metadata na entidade Projeto 
          * 
