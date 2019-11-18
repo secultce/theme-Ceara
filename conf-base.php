@@ -24,7 +24,7 @@ return [
             'agentRelationGroupName' => 'instituicao',
             'description' => \MapasCulturais\i::__('Agente Pessoa jurídica com os campos Razão Social, CNPJ, Data de Fundação, Endereço, Email e Telefone obrigatoriamente preenchidos.'),
             'type' => 2,
-            'requiredProperties' => array('razaoSocial', 'dataDeFundacao', 'cnpj', 'endereco', 'emailPrivado', 'telefone1')
+            'requiredProperties' => array('razaoSocial', 'dataDeFundacao', 'cnpj', 'endereco', 'emailPrivado', 'telefone1', 'nomeFantasia', 'naturezaJuridica', 'atividadePrincipal')
         ),
         array(
             'required' => false,
