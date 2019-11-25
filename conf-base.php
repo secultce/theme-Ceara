@@ -22,7 +22,7 @@ return [
             'required' => false,
             'label' => \MapasCulturais\i::__('Instituição responsável'),
             'agentRelationGroupName' => 'instituicao',
-            'description' => \MapasCulturais\i::__('Agente Pessoa jurídica com os campos Razão Social, CNPJ, Data de Fundação, Endereço, Email e Telefone obrigatoriamente preenchidos.'),
+            'description' => \MapasCulturais\i::__('Agente pessoa jurídica com cadastro dos campos Razão Social, CNPJ, Nome Fantasia, Código da Natureza Jurídica,  Código da Atividade Principal, Data de Fundação, Endereço, Email e Telefone obrigatoriamente preenchidos.'),
             'type' => 2,
             'requiredProperties' => array('razaoSocial', 'dataDeFundacao', 'cnpj', 'endereco', 'emailPrivado', 'telefone1', 'nomeFantasia', 'naturezaJuridica', 'atividadePrincipal')
         ),
