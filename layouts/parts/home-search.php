@@ -35,7 +35,7 @@
             </form>
             <a class="btn btn-accent btn-large" href="<?php echo $app->createUrl('panel') ?>"><?php $this->dict('home: colabore') ?></a>
         </div>
-        <div style="text-align:right; width:100%;"><img width='320px'src='<?php echo $this->asset('img/map-white-logo-ceara.png', false); ?>'/></div>
+        <div style="text-align:right; width:100%; margin-top:20px;"><img width='320px'src='<?php echo $this->asset('img/map-white-logo-ceara.png', false); ?>'/></div>
 
     </div>
 
