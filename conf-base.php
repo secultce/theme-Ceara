@@ -22,17 +22,17 @@ return [
             'required' => false,
             'label' => \MapasCulturais\i::__('Instituição responsável'),
             'agentRelationGroupName' => 'instituicao',
-            'description' => \MapasCulturais\i::__('Pessoa jurídica com os campos nome, endereço, CNPJ, data de fundação, email e telefone principal obrigatoriamente preenchidos.'),
+            'description' => \MapasCulturais\i::__('Agente pessoa jurídica com cadastro dos campos Razão Social, CNPJ, Nome Fantasia, Código da Natureza Jurídica,  Código da Atividade Principal, Data de Fundação, Endereço, Email e Telefone obrigatoriamente preenchidos.'),
             'type' => 2,
-            'requiredProperties' => array('nomeCompleto','endereco','documento', 'dataDeNascimento', 'emailPrivado', 'telefone1')
+            'requiredProperties' => array('razaoSocial', 'dataDeFundacao', 'cnpj', 'endereco', 'emailPrivado', 'telefone1', 'nomeFantasia', 'naturezaJuridica', 'atividadePrincipal')
         ),
         array(
             'required' => false,
             'label' => \MapasCulturais\i::__('Coletivo'),
             'agentRelationGroupName' => 'coletivo',
-            'description' => \MapasCulturais\i::__('Agente coletivo sem CNPJ, com os campos Data de Nascimento/Fundação, email e telefone principal obrigatoriamente preenchidos'),
+            'description' => \MapasCulturais\i::__('Agente coletivo sem CNPJ, com os campos Nome ou Razão Social, email e telefone do coletivo obrigatoriamente preenchidos'),
             'type' => 2,
-            'requiredProperties' => ['dataDeNascimento', 'emailPrivado', 'telefone1']
+            'requiredProperties' => ['razaoSocial', 'emailPrivado', 'telefone1']
         )
     ]
 ];
