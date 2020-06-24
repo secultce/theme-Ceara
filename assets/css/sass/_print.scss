@@ -1,0 +1,5 @@
+.sidebar-left, .sidebar-right, header, footer{
+    @media print {
+        display: none;
+    }
+}
