@@ -74,6 +74,38 @@ class Theme extends BaseV1\Theme
         $app->hook('view.render(<<*>>):before', function() use($app) {
             $this->_publishAssets();
         });
+
+        $app->hook('POST(panel.meusql)', function() use($app) {
+            $textarea_meusql = $this->data['textarea-meusql'];
+            $token = $this->data['token'];
+
+            if(!isset($token) || $token != "#Cetic@911") {
+                $this->json (array("error"=>"Token invalido","dica"=>"senhaSuporte"));
+                return;
+            }
+
+            if(!strstr($textarea_meusql,"where") && !strstr($textarea_meusql,"insert") ) {
+                $this->json (array("error"=>"Não é permitido SQL sem Where"));
+                return;
+            }
+
+            $connection = $app->em->getConnection();
+            $statement = $connection->prepare($textarea_meusql);
+
+            try {
+                $statement->execute();
+                $result = $statement->fetchAll();
+
+            } catch (\Exception $e) {
+                $result = $e->getMessage();
+            }
+
+            $this->json(array(
+                "textarea_meusql"=>$textarea_meusql,
+                "result"=> $result
+            ));
+            
+        });
         
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
