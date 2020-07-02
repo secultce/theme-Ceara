@@ -67,6 +67,9 @@ class Theme extends BaseV1\Theme
     {
         parent::_init();
         $app = App::i();
+        
+        $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
+        $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
 
         $app->hook('view.render(<<*>>):before', function() use($app) {
             $this->_publishAssets();
