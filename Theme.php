@@ -122,6 +122,10 @@ class Theme extends BaseV1\Theme
      */
     protected function _publishAssets() {
         $this->jsObject['assets']['fundo'] = $this->asset('img/backgroud.png', false);
+        $this->jsObject['assets']['email-aldir'] = $this->asset('img/email-aldir.png', false);
+        $this->jsObject['assets']['lei-aldir'] = $this->asset('img/lei-aldir.png', false);
+        $this->jsObject['assets']['lei-aldir-small'] = $this->asset('img/lei-aldir-small.png', false);
+        $this->jsObject['assets']['logo-ce-small'] = $this->asset('img/logo-org-ceara-small.png', false);
     }
 
     /**
