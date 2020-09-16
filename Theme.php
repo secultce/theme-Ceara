@@ -6,6 +6,41 @@ use MapasCulturais\App;
 
 class Theme extends BaseV1\Theme
 {
+    function __construct(AssetManager $asset_manager) {
+        $app = App::i();
+
+        /* Hook Aldir Blanc Config */
+        $app->hook('aldirblanc.config', function(&$config, &$skipConfig) use($app){
+            $skipConfig = true;
+            $opps = array_values($config['inciso2_opportunity_ids']);
+            $query = $app->em->createQuery("
+                SELECT 
+                    op.id
+                FROM
+                    MapasCulturais\Entities\Opportunity op                
+                WHERE 
+                    op.status = 1 AND op.id in (:opportunitiesIds)
+            ");
+        
+            $params = ['opportunitiesIds' => $opps];    
+            $query->setParameters($params);    
+            $result = $query->getArrayResult();
+
+            $newConfig = [];
+            foreach($config['inciso2_opportunity_ids'] as $cityName => $cityValue) {
+                foreach($result as $item) {
+                    if ((int)$cityValue == (int)$item['id']){
+                        $newConfig[$cityName] = $cityValue;
+                        break;
+                    }
+                }
+            }
+
+            $config['inciso2_opportunity_ids'] = $newConfig;
+        });
+
+        parent::__construct($asset_manager);
+    }
 
     protected static function _getTexts() {
         $self = App::i()->view;
