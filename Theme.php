@@ -3,6 +3,7 @@ namespace Ceara;
 
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\App;
+use MapasCulturais\AssetManager;
 
 class Theme extends BaseV1\Theme
 {
