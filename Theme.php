@@ -111,6 +111,1412 @@ class Theme extends BaseV1\Theme
             $this->_publishAssets();
         });
 
+
+        $app->hook('GET(panel.updatealdirblancinciso2)', function() use($app) {
+            ini_set('max_execution_time', 0);
+
+            $app = App::i();
+            $app->disableAccessControl();
+
+            $aldirblancInciso2Cities = '[
+                {
+                "CIDADE": "ABAIARA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "CICERO ANDRÉ DOS SANTOS OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/40258",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2161
+                },
+                {
+                "CIDADE": "ACARAPE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSÉ ARCELINO DA SILVA NETO",
+                "PERFIL": "",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal nem do responsável pela inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2162
+                },
+                {
+                "CIDADE": "ACARAÚ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCIA MARIA GOMES DE ANDRADE GONÇALVES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/13466",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2163
+                },
+                {
+                "CIDADE": "ACOPIARA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WALTER CLEBER ALVES DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46006/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2164
+                },
+                {
+                "CIDADE": "AIUABA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO TIEGO DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/12088/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2165
+                },
+                {
+                "CIDADE": "ALCÂNTARAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOAQUIM SEVERIANO SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/29197",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2166
+                },
+                {
+                "CIDADE": "ALTANEIRA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUIZ PEDRO BEZERRA NETO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45976/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2167
+                },
+                {
+                "CIDADE": "ALTO SANTO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "TARCILIO JEFFERSON DE LIMA MOREIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16881/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2168
+                },
+                {
+                "CIDADE": "AMONTADA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ALLTEMY CARNEIRO MOURA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/12080/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2169
+                },
+                {
+                "CIDADE": "ANTONINA DO NORTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCA DE MATOS ARRAIS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11761/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2170
+                },
+                {
+                "CIDADE": "APUIARÉS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO REGINALDO PEREIRA DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8759/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2171
+                },
+                {
+                "CIDADE": "AQUIRAZ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCELO FREITAS DAS CHAGAS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9529/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2172
+                },
+                {
+                "CIDADE": "ARACATI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ALDELINO DE OLIVEIRA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42399/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2173
+                },
+                {
+                "CIDADE": "ARACOIABA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCOS AURÉLIO DA SILVA PIMENTA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/44136",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2174
+                },
+                {
+                "CIDADE": "ARARENDÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ALEXANDRE NIBON MOURÃO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/13451/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2175
+                },
+                {
+                "CIDADE": "ARARIPE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "NIVALDO JOSÉ DE SOUZA NOGUEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9989/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2176
+                },
+                {
+                "CIDADE": "ARATUBA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSE ARIMATEIA DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/21563/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2177
+                },
+                {
+                "CIDADE": "ARNEIROZ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RAIMUNDA GHYSLAINE SALVIANO ARAÚJO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51564/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2178
+                },
+                {
+                "CIDADE": "ASSARÉ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO VAGNER PEREIRA GÓIS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16397/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2179
+                },
+                {
+                "CIDADE": "AURORA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "CÍCERO MARCIANO ALVES DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/34680/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2180
+                },
+                {
+                "CIDADE": "BAIXIO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA DO SOCORRO SALES SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42435",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2181
+                },
+                {
+                "CIDADE": "BANABUIÚ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "GERLANIA MARIA LEMOS NOBRE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51565/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2182
+                },
+                {
+                "CIDADE": "BARBALHA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RODRIGO TORRES SAMPAIO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11350/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2183
+                },
+                {
+                "CIDADE": "BARRO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WELLINGTON OLIVEIRA SOARES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8368/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2184
+                },
+                {
+                "CIDADE": "BARROQUINHA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUCIA CÉLIA DA ROCHA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16459/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2185
+                },
+                {
+                "CIDADE": "BATURITÉ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WEDNEY RODRIGUES DE SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16164/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2186
+                },
+                {
+                "CIDADE": "BEBERIBE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JESSYCA MENDES RODRIGUES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46124",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2187
+                },
+                {
+                "CIDADE": "BELA CRUZ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA QUIRIANE NASCIMENTO LEITE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51114/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2188
+                },
+                {
+                "CIDADE": "BOA VIAGEM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANDREA ALVES DE SOUSA CAVALCANTE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/37224/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2189
+                },
+                {
+                "CIDADE": "BREJO SANTO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO DAVID DOS SANTOS JUNIOR",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24874",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2190
+                },
+                {
+                "CIDADE": "CAMOCIM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "EGLAUBER CIRIACO LIMA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46516/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2191
+                },
+                {
+                "CIDADE": "CAMPOS SALES",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSÉ WILTON LEITE SOBRINHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14071",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2192
+                },
+                {
+                "CIDADE": "CANINDÉ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RÔMULO LAURÊNIO DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24493/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2193
+                },
+                {
+                "CIDADE": "CAPISTRANO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOABY LIMA DUARTE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/18411/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2194
+                },
+                {
+                "CIDADE": "CARIRÉ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCELO ARAÚJO ALVES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9008/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2195
+                },
+                {
+                "CIDADE": "CARIRIAÇU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "PAULO ROBERTO DO MONTE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24680/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2196
+                },
+                {
+                "CIDADE": "CARIÚS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "KLIFTON NOGUEIRA DE CARVALHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/52079/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2197
+                },
+                {
+                "CIDADE": "CASCAVEL",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCOS ANTONIO PEREIRA DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8299",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2198
+                },
+                {
+                "CIDADE": "CATUNDA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "VITAL ARAUJO DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/17473/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2199
+                },
+                {
+                "CIDADE": "CAUCAIA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO EUGÊNIO COSTA OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24896/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2200
+                },
+                {
+                "CIDADE": "CEDRO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "THATYANA KAYRONE MARINHEIRO DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/49797",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2201
+                },
+                {
+                "CIDADE": "CHAVAL",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MAURICIO MELO MENDES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51885",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2202
+                },
+                {
+                "CIDADE": "CHORÓ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RENEI BENÍCIO DE SÁ FREITAS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/10285",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2203
+                },
+                {
+                "CIDADE": "CHOROZINHO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WALDEVAL SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14680/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2204
+                },
+                {
+                "CIDADE": "COREAÚ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SABRINA CRISTINO DE ARAÚJO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46857",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2205
+                },
+                {
+                "CIDADE": "CRATEÚS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ALFREDO JADER VERAS TORRES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16493/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2206
+                },
+                {
+                "CIDADE": "CRATO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "VALCICLEIA NUNES FERREIRA FEITOSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51880/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2207
+                },
+                {
+                "CIDADE": "CROATÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "AURENI GONÇALVES FEITOSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/53477/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2208
+                },
+                {
+                "CIDADE": "CRUZ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JORGE PAULO DA SILVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/10116/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2209
+                },
+                {
+                "CIDADE": "DEPUTADO IRAPUAN PINHEIRO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIO ILVANCÉLIO GUEDES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/17014",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2210
+                },
+                {
+                "CIDADE": "ERERÊ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARTA MARIA DE PAIVA SANTOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/44790/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2211
+                },
+                {
+                "CIDADE": "EUSÉBIO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MACIEL EDUARDO DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45591/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2212
+                },
+                {
+                "CIDADE": "FARIAS BRITO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MANOEL NAILSON TEIXEIRA DE CARVALHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/10031",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2213
+                },
+                {
+                "CIDADE": "FORQUILHA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "GREYCY KELLY SALES PINHEIRO MARTINS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/47824/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2214
+                },
+                {
+                "CIDADE": "FORTALEZA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "EVISON RODRIGUES DE CARVALHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/28042/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2215
+                },
+                {
+                "CIDADE": "FORTIM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FLÁVIO MARCELO BARBOSA PINTO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/52027",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2216
+                },
+                {
+                "CIDADE": "FRECHEIRINHA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "EVANDRO AGUIAR PONTES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45456/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2217
+                },
+                {
+                "CIDADE": "GENERAL SAMPAIO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO DAVI MACENA LOPES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16162",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2218
+                },
+                {
+                "CIDADE": "GRANJA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA DO LIVRAMENTO ARAUJO XIMENES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/10297/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2219
+                },
+                {
+                "CIDADE": "GRANJEIRO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "CICERO MURILO DE SOUSA BEZERRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/47518/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2220
+                },
+                {
+                "CIDADE": "GROAÍRAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUCIA PAULA MATOS XIMENES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9941/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2221
+                },
+                {
+                "CIDADE": "GUAIÚBA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIA ARAUJO DA SILVA ALMEIDA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45882",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2222
+                },
+                {
+                "CIDADE": "GUARACIABA DO NORTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "PAULO ROBERTO CATUNDA RODRIGUES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/38030/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2223
+                },
+                {
+                "CIDADE": "GUARAMIRANGA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "IVAN VALENTIM",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8194/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2224
+                },
+                {
+                "CIDADE": "HIDROLÂNDIA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIA CLÉZIA FEITOSA DE SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/26650",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2225
+                },
+                {
+                "CIDADE": "HORIZONTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "VANIA MARIA DUTRA DE MELO SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16499/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2226
+                },
+                {
+                "CIDADE": "IBARETAMA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA VERÔNICA DA SILVA MELO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46531",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2227
+                },
+                {
+                "CIDADE": "IBIAPINA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIO AURELIO COSME DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46258",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2228
+                },
+                {
+                "CIDADE": "IBICUITINGA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RITA DE CASSIA NOBRE DE MEDEIROS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/52071/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2229
+                },
+                {
+                "CIDADE": "ICAPUÍ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MANUEL DE FREITAS FILHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/17409",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2230
+                },
+                {
+                "CIDADE": "ICÓ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "DANIEL BRUNO BATISTA MARTINS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42409/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2231
+                },
+                {
+                "CIDADE": "IGUATU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO FABRICIO FRANCO VIEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/44501/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2232
+                },
+                {
+                "CIDADE": "INDEPENDÊNCIA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCELO VICTOR TORRES PINTO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/49755/",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2233
+                },
+                {
+                "CIDADE": "IPAPORANGA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ELIVELSON RODRIGUES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8567",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2234
+                },
+                {
+                "CIDADE": "IPAUMIRIM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ROBSON RAUL BARBOSA DE MOURA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/47693/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2235
+                },
+                {
+                "CIDADE": "IPU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SILVIO CARVALHO BEZERRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45448/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2236
+                },
+                {
+                "CIDADE": "IPUEIRAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "PEDRO EMMY ALVES DA COSTA MOREIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/17537/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2237
+                },
+                {
+                "CIDADE": "IRACEMA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FÁBIO GOMES DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42752/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2238
+                },
+                {
+                "CIDADE": "IRAUÇUBA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MÁRCIA HELENA SANTOS BARRETO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24287/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2239
+                },
+                {
+                "CIDADE": "ITAIÇABA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCÍLIA GALDINO DE SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24634/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2240
+                },
+                {
+                "CIDADE": "ITAITINGA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WERLYANA BARBOSA BRUNO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11444/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2241
+                },
+                {
+                "CIDADE": "ITAPAJÉ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA GISELE DUARTE MOURA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/37174",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2242
+                },
+                {
+                "CIDADE": "ITAPIPOCA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIO MARCOS BRAGA VIANA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9297/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2243
+                },
+                {
+                "CIDADE": "ITAPIÚNA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSÉ HUDSON MENEZES OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/16213/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2244
+                },
+                {
+                "CIDADE": "ITATIRA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCOS LENNON JUCÁ LOPES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/5501/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2245
+                },
+                {
+                "CIDADE": "JAGUARETAMA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCOS JUNGLAS MIRANDA TEÓFILO SOBRINHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11271/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2246
+                },
+                {
+                "CIDADE": "JAGUARIBARA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ELIZABETT PEIXOTO BEZERRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/52084/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2247
+                },
+                {
+                "CIDADE": "JAGUARIBE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "DAVI BEZERRA VIEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11285/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2248
+                },
+                {
+                "CIDADE": "JAGUARUANA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SERGIANA MARIA FREITAS DE ALMEIDA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/5413/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2249
+                },
+                {
+                "CIDADE": "JARDIM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUIZ PEREIRA LEMOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/29372/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2250
+                },
+                {
+                "CIDADE": "JATI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUÍS BENTO DE SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/52811/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2251
+                },
+                {
+                "CIDADE": "JIJOCA DE JERICOACOARA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "CELIOMAR DE ARAÚJO BRANDÃO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/34590/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2252
+                },
+                {
+                "CIDADE": "JUAZEIRO DO NORTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ROSANA PEREIRA MARINHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/5345/",
+                "CHECK": "mudou",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2253
+                },
+                {
+                "CIDADE": "JUCÁS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "AÍLA MARIA GOMES LUNA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/18696",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2254
+                },
+                {
+                "CIDADE": "LAVRAS DA MANGABEIRA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "YGOR FERREIRA MACÊDO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/43904",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2255
+                },
+                {
+                "CIDADE": "LIMOEIRO DO NORTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RENATO MAIA REMÍGIO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/13945/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2256
+                },
+                {
+                "CIDADE": "MADALENA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SUYANE MARA GOMES DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/32919/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2257
+                },
+                {
+                "CIDADE": "MARACANAÚ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SERGIO DIAS DA  PAZ",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14031/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2258
+                },
+                {
+                "CIDADE": "MARANGUAPE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ALEXANDRE CABRAL FREIRE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14123/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2259
+                },
+                {
+                "CIDADE": "MARCO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "IERY OSTERNO RIOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14551",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2260
+                },
+                {
+                "CIDADE": "MARTINÓPOLE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "CARLOS RUBENS MARQUES CUNHA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24870/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2261
+                },
+                {
+                "CIDADE": "MASSAPÊ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LARA DE CASTRO ARRUDA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/47777",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2262
+                },
+                {
+                "CIDADE": "MAURITI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ILDIVAN SANTANA DE SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/21635/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2263
+                },
+                {
+                "CIDADE": "MERUOCA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "AUGUSTO CESAR DOS SANTOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/7911/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2264
+                },
+                {
+                "CIDADE": "MILAGRES",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUCIA MACEDO LANDIM",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51592/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2265
+                },
+                {
+                "CIDADE": "MILHÃ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO WDELANIO PINHEIRO PEIXOTO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9077/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2266
+                },
+                {
+                "CIDADE": "MISSÃO VELHA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "GEORGE SARAIVA JANUARIO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51840",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2267
+                },
+                {
+                "CIDADE": "MOMBAÇA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "NEY WERBSON MOREIRA ALVES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14078/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2268
+                },
+                {
+                "CIDADE": "MONSENHOR TABOSA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOÃO LUCAS GOMES DE ARAÚJO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9013/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2269
+                },
+                {
+                "CIDADE": "MORADA NOVA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSÉ CLEUDO DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/13312/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2270
+                },
+                {
+                "CIDADE": "MORRINHOS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSE ROBERIO FERREIRA DE FREITAS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11391/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2271
+                },
+                {
+                "CIDADE": "MUCAMBO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO GILMAR MARTINS DE SOUZA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14576/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2272
+                },
+                {
+                "CIDADE": "MULUNGU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "GERMANA PEREIRA PORFIRIO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/49533/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2273
+                },
+                {
+                "CIDADE": "NOVA OLINDA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WILLIAM FAGNER ALVES DE MATOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/34083/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2274
+                },
+                {
+                "CIDADE": "NOVA RUSSAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MAYKON LIMA RIBEIRO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/29268/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2275
+                },
+                {
+                "CIDADE": "NOVO ORIENTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "TÚLIO CESAR ALVES SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/14066/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2276
+                },
+                {
+                "CIDADE": "OCARA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIO VAGNER DE LIMA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46045/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2277
+                },
+                {
+                "CIDADE": "ORÓS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSÉ ADAILSON BARBOSA DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/5340/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2278
+                },
+                {
+                "CIDADE": "PACAJUS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "REGINALDO JOSÉ DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/40935/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2279
+                },
+                {
+                "CIDADE": "PACATUBA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ROSTENY CABRAL DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/13673/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2280
+                },
+                {
+                "CIDADE": "PACOTI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LÁZARO SILVEIRA NUNES GOMES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/48255/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2281
+                },
+                {
+                "CIDADE": "PACUJÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIO EVILASIO ALVES OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/28510/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2282
+                },
+                {
+                "CIDADE": "PALHANO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO ORLANDO DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/35763/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2283
+                },
+                {
+                "CIDADE": "PALMÁCIA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIO IPIRANGA FONSECA NETO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9789/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2284
+                },
+                {
+                "CIDADE": "PARACURU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MILIANE BARBOSA DE MOURA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8421/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2285
+                },
+                {
+                "CIDADE": "PARAIPABA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA AURINEIDE BATISTA PIRES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46065",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2286
+                },
+                {
+                "CIDADE": "PARAMOTI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO HERLANDSON SILVA GOMES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/18994/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2287
+                },
+                {
+                "CIDADE": "PEDRA BRANCA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO DIAS DE SOUZA JÚNIOR",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51113",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2288
+                },
+                {
+                "CIDADE": "PENAFORTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "PAULA NASCIMENTO DA CRUZ DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45438",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2289
+                },
+                {
+                "CIDADE": "PENTECOSTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "DEBORAH PONTES ARAUJO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/10706/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2290
+                },
+                {
+                "CIDADE": "PEREIRO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO LEUDIVAN ALVES PEIXOTO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45607",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2291
+                },
+                {
+                "CIDADE": "PINDORETAMA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "HERBESON SALES CASSIANO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/30831/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2292
+                },
+                {
+                "CIDADE": "PIQUET CARNEIRO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JULIANA PATRÍCIA PINTO LOPES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9754/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2293
+                },
+                {
+                "CIDADE": "PORANGA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ELMO ALMEIDA NUNES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/35441/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2294
+                },
+                {
+                "CIDADE": "PORTEIRAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "TICIANO LINARD DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/15769/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2295
+                },
+                {
+                "CIDADE": "POTENGI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARCOS AURÉLIO RODRIGUES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/9291/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2296
+                },
+                {
+                "CIDADE": "POTIRETAMA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "HEMANUELLY DANTAS DE ALMEIDA",
+                "PERFIL": "",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal nem do responsável pela inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2297
+                },
+                {
+                "CIDADE": "QUITERIANÓPOLIS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "EPAMINONDAS BEZERRA DA SILVA SOBRINHO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45998/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2298
+                },
+                {
+                "CIDADE": "QUIXADÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCA IRIS ALVES DE FREITAS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/41402/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2299
+                },
+                {
+                "CIDADE": "QUIXELÔ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "AILTON FERNANDES DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24452/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2300
+                },
+                {
+                "CIDADE": "QUIXERAMOBIM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "RAFAELA DA SILVA MENDES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/49783/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2301
+                },
+                {
+                "CIDADE": "QUIXERÉ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANA PATRICIA RODRIGUES DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42809/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2302
+                },
+                {
+                "CIDADE": "REDENÇÃO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "REGIS MANOEL RODRIGUES DE ANDRADE",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/44700/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2303
+                },
+                {
+                "CIDADE": "RUSSAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "WELLISON FELIPE DA SILVA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42062/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2304
+                },
+                {
+                "CIDADE": "SALITRE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "EMERSON ELIAS FERREIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45170/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2305
+                },
+                {
+                "CIDADE": "SANTA QUITÉRIA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANA PAULA DUARTE CAMPOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/48199/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2306
+                },
+                {
+                "CIDADE": "SANTANA DO ACARAÚ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCO WISLEY DE SOUZA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45848/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2307
+                },
+                {
+                "CIDADE": "SANTANA DO CARIRI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LILIANE FEITOSA DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/44639",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2308
+                },
+                {
+                "CIDADE": "SÃO BENEDITO",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA JANE KEILY DE SOUZA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/51581/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2309
+                },
+                {
+                "CIDADE": "SÃO GONÇALO DO AMARANTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "FRANCISCA JULIANA SOUSA ALCANTARA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/46498",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2310
+                },
+                {
+                "CIDADE": "SÃO JOÃO DO JAGUARIBE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "BENEDITA SUELI DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/11038/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2311
+                },
+                {
+                "CIDADE": "SÃO LUÍS DO CURU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "JOSÉ CLAYSON DA SILVA VIANA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/13471/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2312
+                },
+                {
+                "CIDADE": "SENADOR POMPEU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "KLEBER PINHEIRO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/28805/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2313
+                },
+                {
+                "CIDADE": "SENADOR SÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "MARIA DO LIVRAMENTO RAÚJO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45942/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2314
+                },
+                {
+                "CIDADE": "SOBRAL",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "EUGÊNIO PARCELI SAMPAIO SILVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/52012/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2315
+                },
+                {
+                "CIDADE": "SOLONÓPOLE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUIS CLAUDIO MACIEL",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8371/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2316
+                },
+                {
+                "CIDADE": "TABULEIRO DO NORTE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SAMUEL MOREIRA CHAVES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/8518/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2317
+                },
+                {
+                "CIDADE": "TAMBORIL",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ARNUEDO CESAR BEZERRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45071/",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2318
+                },
+                {
+                "CIDADE": "TARRAFAS",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "GERMÁ MARTINS DOS SANTOS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/10052",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2319
+                },
+                {
+                "CIDADE": "TAUÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "CLEUDIA HENRIQUE DE LIMA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/50875/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2320
+                },
+                {
+                "CIDADE": "TEJUÇUOCA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ROSANGELA RIBEIRO PAIXÃO GÓIS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24758/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2321
+                },
+                {
+                "CIDADE": "TIANGUÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANDERSON LEITE LIMA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42361/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2322
+                },
+                {
+                "CIDADE": "TRAIRI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "KARINE SOUSA COSTA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24661/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2323
+                },
+                {
+                "CIDADE": "TURURU",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ADAILDO CAETANO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/21964/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2324
+                },
+                {
+                "CIDADE": "UBAJARA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "AGILDO DE SOUSA SIQUEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/12442/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2325
+                },
+                {
+                "CIDADE": "UMARI",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "DIOCÉLIA GRANGEIRO BEZERRA LUCAS",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24879",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2326
+                },
+                {
+                "CIDADE": "UMIRIM",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "SAMANTA NAGITA PINTO CASTRO ALVES",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/45844",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2327
+                },
+                {
+                "CIDADE": "URUBURETAMA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "GEORGE LUIZ FREITAS BARROSO",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/7252/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2328
+                },
+                {
+                "CIDADE": "URUOCA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "INGRED ROCHA DE LIMA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/42531/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2329
+                },
+                {
+                "CIDADE": "VARJOTA",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "LUIZ MAILSON PAIVA SOUSA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/24496",
+                "CHECK": "sim perfil",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2330
+                },
+                {
+                "CIDADE": "VÁRZEA ALEGRE",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "ANTONIA PEREIRA DE OLIVEIRA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/41871/",
+                "CHECK": "sim",
+                "OBSERVAÇÕES": "",
+                "LINK_DO_EDITAL_NO_MAPAS": 2331
+                },
+                {
+                "CIDADE": "VIÇOSA DO CEARÁ",
+                "COORDENADOR DO CADASTRO MUNICIPAL": "DANIELA RUFINO DA CUNHA",
+                "PERFIL": "https://mapacultural.secult.ce.gov.br/agente/43637",
+                "CHECK": "não",
+                "OBSERVAÇÕES": "Não foi informado o link do perfil do mapa cultural do coordenador do cadastro municipal, por isso, foi considerado condedido o acesso para o usuário que realizou a inscrição.",
+                "LINK_DO_EDITAL_NO_MAPAS": 2332
+                }
+            ]';
+
+            $decodedCities = json_decode($aldirblancInciso2Cities);
+
+            foreach ($decodedCities as $value) {
+                $owner = $app->repo('Opportunity')->find($value->LINK_DO_EDITAL_NO_MAPAS);
+                $agentId = trim($value->PERFIL, "/");
+                $agentId = explode('/', $agentId);
+                $agentId = $agentId[count($agentId)-1];
+                
+                if($agentId) {
+                    $agent = $app->repo('Agent')->find($agentId);
+                    $relation = $owner->createAgentRelation($agent, 'group-admin', true, false);   
+                    $relation->save(true);
+                }
+            
+            }
+
+            $app->enableAccessControl();
+
+        });
+
         $app->hook('POST(panel.meusql)', function() use($app) {
             $textarea_meusql = $this->data['textarea-meusql'];
             $token = $this->data['token'];
