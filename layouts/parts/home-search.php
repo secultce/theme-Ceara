@@ -35,10 +35,8 @@
             </form>
             <a class="btn btn-accent btn-large" href="<?php echo $app->createUrl('panel') ?>"><?php $this->dict('home: colabore') ?></a>
         </div>
-       
     </div>
     <?php $this->applyTemplateHook('home-search','end'); ?>
      <div class="view-more"><a class="hltip icon icon-select-arrow" href="#home-events" title="<?php \MapasCulturais\i::esc_attr_e("Saiba mais");?>"></a></div>
     <div style="text-align:right; width:100%; margin-top:20px;"><img width='320px'src='<?php echo $this->asset('img/map-white-logo-ceara.png', false); ?>'/></div>
 </section>
-
