@@ -1517,7 +1517,67 @@ class Theme extends BaseV1\Theme
 
         });
 
-        $app->hook('POST(panel.meusql)', function() use($app) {
+        $app->hook('<<GET|POST>>(registration.remove)', function() use($app) {
+
+            $this->requireAuthentication();
+
+            if (!$app->user->is('admin')){
+                $this->json (array("error"=>"Permissão negada!"));
+                return;
+            }
+
+            if(!isset($this->data['registration_id'])) {
+                $this->json (array("error"=>"Inscrição invalida!"));
+                return;
+            }
+
+            $registration_id = (int) $this->data['registration_id'];
+            $registration = $app->repo('Registration')->find( $registration_id);           
+
+            if(!$registration ) {
+                $this->json (array("error"=>"Inscrição invalida!"));
+                return;
+            }
+
+            $connection = $app->em->getConnection();
+            $statement = $connection->prepare("DELETE FROM registration where id = {$registration_id}");
+
+            try {
+                $statement->execute();
+                $result = $statement->fetchAll();
+                $result_type = "success";
+                $result= "OK";
+
+            } catch (\Exception $e) {
+                $result = $e->getMessage();
+                $result_type = "error";
+            }
+
+            $this->json(array($result_type=> $result));
+            
+        });
+
+        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function() use($app) {
+            if ($app->user->is('admin')) {
+                echo '<th class="registration-status-col">Administrador</th>';
+            }
+        });
+
+        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function() use($app) {
+            if ($app->user->is('admin')) {
+                echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar</button> </td>';
+            }
+        });
+
+        $app->hook('<<GET|POST>>(panel.meusql)', function() use($app) {
+
+            $this->requireAuthentication();
+
+            if(!isset($this->data['textarea-meusql'])) {
+                $this->json (array("error"=>"SQL invalida!"));
+                return;
+            }
+
             $textarea_meusql = $this->data['textarea-meusql'];
             $token = $this->data['token'];
 
