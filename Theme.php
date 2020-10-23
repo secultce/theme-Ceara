@@ -1622,6 +1622,54 @@ class Theme extends BaseV1\Theme
             ]);
         });
 
+        $app->hook('GET(<<project|space|agent|event>>.createOpportunity):before', function() use($app) {
+
+            if (!$app->user->is('admin')){                
+                //$app->redirect($app->request()->getReferer());              
+                $this->json(array("error"=>"Permissão negada!"));
+                return;
+            }
+        });
+
+       
+        $app->hook('PUT(opportunity.single):before', function() use($app) {
+            
+            //Pesquisar edital pelo ID e verificar se o status é 0
+            $opportunity = $app->repo('Opportunity')->find($this->urlData['id']);
+            if (!$opportunity) {
+                $this->json(array("error"=>"Oportunidade não encontrada!"),500);
+                return;
+            }
+            
+            // Verificar se o usuario é um administrador
+            // Verificar se o status é rascunho e mudou para publicado
+            $statusOld = $opportunity->status;
+            $statusNew = (isset($this->data['status'])) ? $this->data['status'] : 1 ;
+            if ( !$app->user->is('admin') && $statusOld == 0 && $statusNew == 1) {
+                $this->json(array("error"=>"Permissão negada!"), 500);
+                return;
+            }
+        });
+
+        $app->hook('template(<<agent|space|event|project>>.<<single>>.main-content):end', function() use ($app) {
+            // É possível acessar a propriedade config pelo o $app;
+            
+            $params = [];
+    
+            if(array_key_exists('compliant',$app->_config)) {
+                $params['compliant'] = $app->_config['compliant']; // Denuncia
+            }
+    
+            if(array_key_exists('suggestion', $app->_config)) {
+                $params['suggestion'] = $app->_config['suggestion']; // Contato
+            }
+            
+            if(array_key_exists('google-recaptcha-sitekey',$app->_config)) {
+                $params['googleRecaptchaSiteKey'] = $app->_config['google-recaptcha-sitekey'];
+            }
+            
+            $this->part('compliant_suggestion_ceara.php', $params);
+        });
     }
     /**
      *
