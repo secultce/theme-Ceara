@@ -1,36 +1,37 @@
 <?php
 namespace Ceara;
 
-use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
+use MapasCulturais\Themes\BaseV1;
 
 class Theme extends BaseV1\Theme
 {
-    function __construct(AssetManager $asset_manager) {
+    public function __construct(AssetManager $asset_manager)
+    {
         $app = App::i();
 
         /* Hook Aldir Blanc Config */
-        $app->hook('aldirblanc.config', function(&$config, &$skipConfig) use($app){
+        $app->hook('aldirblanc.config', function (&$config, &$skipConfig) use ($app) {
             $skipConfig = true;
             $opps = array_values($config['inciso2_opportunity_ids']);
             $query = $app->em->createQuery("
-                SELECT 
+                SELECT
                     op.id
                 FROM
-                    MapasCulturais\Entities\Opportunity op                
-                WHERE 
+                    MapasCulturais\Entities\Opportunity op
+                WHERE
                     op.status = 1 AND op.id in (:opportunitiesIds)
             ");
-        
-            $params = ['opportunitiesIds' => $opps];    
-            $query->setParameters($params);    
+
+            $params = ['opportunitiesIds' => $opps];
+            $query->setParameters($params);
             $result = $query->getArrayResult();
 
             $newConfig = [];
-            foreach($config['inciso2_opportunity_ids'] as $cityName => $cityValue) {
-                foreach($result as $item) {
-                    if ((int)$cityValue == (int)$item['id']){
+            foreach ($config['inciso2_opportunity_ids'] as $cityName => $cityValue) {
+                foreach ($result as $item) {
+                    if ((int) $cityValue == (int) $item['id']) {
                         $newConfig[$cityName] = $cityValue;
                         break;
                     }
@@ -43,26 +44,26 @@ class Theme extends BaseV1\Theme
         parent::__construct($asset_manager);
     }
 
-    protected static function _getTexts() {
+    protected static function _getTexts()
+    {
         $self = App::i()->view;
         $url_search_agents = $self->searchAgentsUrl;
         $url_search_spaces = $self->searchSpacesUrl;
         $url_search_events = $self->searchEventsUrl;
         $url_search_projects = $self->searchProjectsUrl;
-        
+
         return [
             'site: in the region' => 'no Estado do Ceará',
             'site: of the region' => 'do Estado do Ceará',
             'site: owner' => 'Secretaria da Cultura do Estado do Ceará',
             'site: by the site owner' => 'pela Secretaria da Cultura do Estado do Ceará',
-            
+
             'home: abbreviation' => "SECULT",
             // 'home: colabore' => "Colabore com o Mapas Culturais",
             //'home: welcome' => "O Mapa Cultural do Ceará é a plataforma livre, gratuita e colaborativa de mapeamento da Secretaria da Cultura do Estado do Ceará sobre cenário cultural cearense. Ficou mais fácil se programar para conhecer as opções culturais que as cidades cearenses oferecem: shows musicais, espetáculos teatrais, sessões de cinema, saraus, entre outras. Além de conferir a agenda de eventos, você também pode colaborar na gestão da cultura do estado: basta criar seu perfil de <a href=\"$url_search_agents\" >agente cultural</a>. A partir deste cadastro, fica mais fácil participar dos editais e programas da Secretaria e também divulgar seus <a href=\"{$url_search_events}\">eventos</a>, <a href=\"{$url_search_spaces}\">espaços</a> ou <a href=\"$url_search_projects\">projetos</a>.",
             'home: welcome' => "Plataforma livre, colaborativa e interativa de mapeamento do cenário cultural cearense e instrumento de governança digital no aprimoramento da gestão pública, dos mecanismos de participação e da democratização do acesso às políticas culturais promovidas pela Secretaria da Cultura do Estado do Ceará.
                                 <br><br>O Mapa Cultural é uma ferramenta de comunicação visibilizando os eventos do circuito de festivais de artes e do calendário cultural, os projetos desenvolvidos e os espaços promovidos pelos agentes e instituições culturais do Ceará. É também a plataforma de acesso e execução dos editais realizados pela Secretaria.
                                 <br><br>Além de conferir a agenda de eventos, você também pode colaborar na gestão da cultura do estado: basta criar seu perfil de agente cultural. A partir do cadastro, fica mais fácil participar dos editais e programas da Secretaria e também divulgar seus eventos, espaços ou projetos.",
-
 
             // 'home: events' => "Você pode pesquisar eventos culturais nos campos de busca combinada. Como usuário cadastrado, você pode incluir seus eventos na plataforma e divulgá-los gratuitamente.",
             // 'home: agents' => "Você pode colaborar na gestão da cultura com suas próprias informações, preenchendo seu perfil de agente cultural. Neste espaço, estão registrados artistas, gestores e produtores; uma rede de atores envolvidos na cena cultural paulistana. Você pode cadastrar um ou mais agentes (grupos, coletivos, bandas instituições, empresas, etc.), além de associar ao seu perfil eventos e espaços culturais com divulgação gratuita.",
@@ -75,7 +76,7 @@ class Theme extends BaseV1\Theme
         ];
     }
 
-    static function getThemeFolder()
+    public static function getThemeFolder()
     {
         return __DIR__;
     }
@@ -88,7 +89,7 @@ class Theme extends BaseV1\Theme
             if (isset($meta['property']) && ($meta['property'] === 'og:image' || $meta['property'] === 'og:image:url')) {
                 $this->documentMeta[$key] = array(
                     'property' => $meta['property'],
-                    'content' => $app->view->asset('img/share-ca.png', false)
+                    'content' => $app->view->asset('img/share-ca.png', false),
                 );
             }
         }
@@ -103,16 +104,15 @@ class Theme extends BaseV1\Theme
     {
         parent::_init();
         $app = App::i();
-        
+
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
 
-        $app->hook('view.render(<<*>>):before', function() use($app) {
+        $app->hook('view.render(<<*>>):before', function () use ($app) {
             $this->_publishAssets();
         });
 
-
-        $app->hook('GET(panel.updatealdirblancinciso2)', function() use($app) {
+        $app->hook('GET(panel.updatealdirblancinciso2)', function () use ($app) {
             ini_set('max_execution_time', 0);
 
             $app = App::i();
@@ -1503,39 +1503,39 @@ class Theme extends BaseV1\Theme
                 $owner = $app->repo('Opportunity')->find($value->LINK_DO_EDITAL_NO_MAPAS);
                 $agentId = trim($value->PERFIL, "/");
                 $agentId = explode('/', $agentId);
-                $agentId = $agentId[count($agentId)-1];
-                
-                if($agentId) {
+                $agentId = $agentId[count($agentId) - 1];
+
+                if ($agentId) {
                     $agent = $app->repo('Agent')->find($agentId);
-                    $relation = $owner->createAgentRelation($agent, 'group-admin', true, false);   
+                    $relation = $owner->createAgentRelation($agent, 'group-admin', true, false);
                     $relation->save(true);
                 }
-            
+
             }
 
             $app->enableAccessControl();
 
         });
 
-        $app->hook('<<GET|POST>>(registration.remove)', function() use($app) {
+        $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
 
-            if (!$app->user->is('admin')){
-                $this->json (array("error"=>"Permissão negada!"));
+            if (!$app->user->is('admin')) {
+                $this->json(array("error" => "Permissão negada!"));
                 return;
             }
 
-            if(!isset($this->data['registration_id'])) {
-                $this->json (array("error"=>"Inscrição invalida!"));
+            if (!isset($this->data['registration_id'])) {
+                $this->json(array("error" => "Inscrição invalida!"));
                 return;
             }
 
             $registration_id = (int) $this->data['registration_id'];
-            $registration = $app->repo('Registration')->find( $registration_id);           
+            $registration = $app->repo('Registration')->find($registration_id);
 
-            if(!$registration ) {
-                $this->json (array("error"=>"Inscrição invalida!"));
+            if (!$registration) {
+                $this->json(array("error" => "Inscrição invalida!"));
                 return;
             }
 
@@ -1546,24 +1546,24 @@ class Theme extends BaseV1\Theme
                 $statement->execute();
                 $result = $statement->fetchAll();
                 $result_type = "success";
-                $result= "OK";
+                $result = "OK";
 
             } catch (\Exception $e) {
                 $result = $e->getMessage();
                 $result_type = "error";
             }
 
-            $this->json(array($result_type=> $result));
-            
+            $this->json(array($result_type => $result));
+
         });
 
-        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function() use($app) {
+        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<th class="registration-status-col">Administrador</th>';
             }
         });
 
-        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function() use($app) {
+        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button> </td>';
             }
@@ -1575,25 +1575,25 @@ class Theme extends BaseV1\Theme
             }
         });
 
-        $app->hook('<<GET|POST>>(panel.meusql)', function() use($app) {
+        $app->hook('<<GET|POST>>(panel.meusql)', function () use ($app) {
 
             $this->requireAuthentication();
 
-            if(!isset($this->data['textarea-meusql'])) {
-                $this->json (array("error"=>"SQL invalida!"));
+            if (!isset($this->data['textarea-meusql'])) {
+                $this->json(array("error" => "SQL invalida!"));
                 return;
             }
 
             $textarea_meusql = $this->data['textarea-meusql'];
             $token = $this->data['token'];
 
-            if(!isset($token) || $token != "#Cetic@911") {
-                $this->json (array("error"=>"Token invalido","dica"=>"senhaSuporte"));
+            if (!isset($token) || $token != "#Cetic@911") {
+                $this->json(array("error" => "Token invalido", "dica" => "senhaSuporte"));
                 return;
             }
 
-            if(!strstr($textarea_meusql,"where") && !strstr($textarea_meusql,"insert") ) {
-                $this->json (array("error"=>"Não é permitido SQL sem Where"));
+            if (!strstr($textarea_meusql, "where") && !strstr($textarea_meusql, "insert")) {
+                $this->json(array("error" => "Não é permitido SQL sem Where"));
                 return;
             }
 
@@ -1609,17 +1609,83 @@ class Theme extends BaseV1\Theme
             }
 
             $this->json(array(
-                "textarea_meusql"=>$textarea_meusql,
-                "result"=> $result
+                "textarea_meusql" => $textarea_meusql,
+                "result" => $result,
             ));
-            
+
         });
-        
+
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
             $this->part('news-fields-agent-revision', [
-                'entityRevision' => $this->data->entityRevision
+                'entityRevision' => $this->data->entityRevision,
             ]);
+        });
+
+        $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
+            $opportunity = $this->controller->requestedEntity;
+            $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
+        });
+
+        $app->hook("<<GET|POST>>(opportunity.reportResultEvaluationsDocumental)", function () use ($app) {
+
+            $format = isset($this->data['fileFormat']) ? $this->data['fileFormat'] : 'pdf';
+            $date = isset($this->data['publishDate']) ? $this->data['publishDate'] : date("d/m/Y");
+            $datePubish = date("d/m/Y", strtotime($date));
+
+            $opportunityId = (int) $this->data['id'];
+            $opportunity = $app->repo("Opportunity")->find($opportunityId);
+
+            $dql = "SELECT e,r,a
+                    FROM
+                        MapasCulturais\Entities\RegistrationEvaluation e
+                        JOIN e.registration r
+                        JOIN r.owner a
+                    WHERE r.opportunity = :opportunity ";
+
+            $q = $app->em->createQuery($dql);
+            $q->setParameters(['opportunity' => $opportunity]);
+            $evaluations = $q->getResult();
+
+            $json_array = [];
+            foreach ($evaluations as $e) {
+                $registration = $e->registration;
+                $evaluationData = (array) $e->evaluationData;
+                $result = $e->getResultString();
+                $metadata = (array) $registration->getMetadata();
+                $projectName = (isset($metadata['projectName'])) ? $metadata['projectName'] : '';
+                $descumprimentoDosItens = (string) array_reduce($evaluationData, function ($motivos, $item) {
+                    if ($item['evaluation'] == 'invalid') {
+                        $motivos .= trim($item['obs_items']);
+                    }
+                    return $motivos;
+                });
+
+                $json_array[] = [
+                    'n_inscricao' => $registration->number,
+                    'projeto' => $projectName,
+                    'proponente' => trim($registration->owner->name),
+                    'categoria' => $registration->category,
+                    'municipio' => trim($registration->owner->En_Municipio),
+                    'resultado' => ($result == 'Valída') ? 'habilitado' : 'inabilitado',
+                    'motivo_inabilitacao' => $descumprimentoDosItens,
+                ];
+            }
+            $filename = __DIR__ . "/report/" . time() . "habilitacao-preliminar.csv";
+            $output = fopen($filename, 'w') or die("error");
+            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($output, ["Inscrição", "Projeto", "Proponente", "Categoria", "Município", "Resultado", "Motivo_Inabilitação"], ";");
+            foreach ($json_array as $relatorio) {
+                fputcsv($output, $relatorio, ";");
+            }
+            fclose($output) or die("Can't close php://output");
+            header('Content-Encoding: UTF-8');
+            header("Content-type: text/csv; charset=UTF-8");
+            header("Content-Disposition: attachment; filename=habilitacao-documental.csv");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            readfile($filename);
+            unlink($filename);
         });
 
         $app->hook('GET(<<project|space|agent|event>>.createOpportunity):before', function() use($app) {
@@ -1676,7 +1742,8 @@ class Theme extends BaseV1\Theme
      * {@inheritdoc}
      * @see \MapasCulturais\Themes\BaseV1\Theme::_publishAssets()
      */
-    protected function _publishAssets() {
+    protected function _publishAssets()
+    {
         $this->jsObject['assets']['fundo'] = $this->asset('img/backgroud.png', false);
         $this->jsObject['assets']['email-aldir'] = $this->asset('img/email-aldir.png', false);
         $this->jsObject['assets']['lei-aldir'] = $this->asset('img/lei-aldir.png', false);
@@ -1689,24 +1756,25 @@ class Theme extends BaseV1\Theme
      * {@inheritdoc}
      * @see \MapasCulturais\Themes\BaseV1\Theme::register()
      */
-    function register() {
+    public function register()
+    {
 
         parent::register();
-        
-        /** 
-         * Adicionando novos metadata na entidade Projeto 
-         * 
+
+        /**
+         * Adicionando novos metadata na entidade Projeto
+         *
          */
         $this->registerProjectMetadata('contraPartida', [
             'private' => false,
             'label' => \MapasCulturais\i::__('Preencha aqui a contrapartida do projeto'),
-            'type' => 'text'
+            'type' => 'text',
         ]);
 
         $this->registerProjectMetadata('valor', [
             'private' => false,
             'label' => \MapasCulturais\i::__('Informe o valor do projeto'),
-            'type' => 'string'
+            'type' => 'string',
         ]);
     }
 }
