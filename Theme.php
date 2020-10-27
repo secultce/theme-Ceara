@@ -1655,7 +1655,7 @@ class Theme extends BaseV1\Theme
                 $evaluationData = (array) $e->evaluationData;
                 $result = $e->getResultString();
                 $metadata = (array) $registration->getMetadata();
-                var_dump(metadata);
+                var_dump($metadata);
                 if($i == 14)die();
                 $projectName = (isset($metadata['projectName'])) ? $metadata['projectName'] : '';
                 $descumprimentoDosItens = (string) array_reduce($evaluationData, function ($motivos, $item) {
