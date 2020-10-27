@@ -1648,15 +1648,11 @@ class Theme extends BaseV1\Theme
             $evaluations = $q->getResult();
 
             $json_array = [];
-            $i=0;
             foreach ($evaluations as $e) {
-                $i++;
                 $registration = $e->registration;
                 $evaluationData = (array) $e->evaluationData;
                 $result = $e->getResultString();
                 $metadata = (array) $registration->getMetadata();
-                var_dump($metadata);
-                if($i == 14)die();
                 $projectName = (isset($metadata['projectName'])) ? $metadata['projectName'] : '';
                 $descumprimentoDosItens = (string) array_reduce($evaluationData, function ($motivos, $item) {
                     if ($item['evaluation'] == 'invalid') {
@@ -1665,7 +1661,11 @@ class Theme extends BaseV1\Theme
                     return $motivos;
                 });
                 $categoria = $registration->category;
-                $proponente = (strpos($categoria,'JUR') === FALSE)?$registration->owner->nomeCompleto : $registration->owner->nomeCompleto;
+                $proponente = (strpos($categoria,'JUR') === FALSE) ? $registration->owner->nomeCompleto : $registration->getRelatedAgents();
+                if (strpos($categoria,'JUR') === FALSE){
+                var_dump($registration->getRelatedAgents());die();
+                }
+                
 
                 $json_array[] = [
                     'n_inscricao' => $registration->number,
