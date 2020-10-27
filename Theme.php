@@ -1663,7 +1663,7 @@ class Theme extends BaseV1\Theme
                 $categoria = $registration->category;
                 $proponente = (strpos($categoria,'JUR') === FALSE) ? $registration->owner->nomeCompleto : $registration->getRelatedAgents();
                 if (strpos($categoria,'JUR') === FALSE){
-                var_dump($registration->getRelatedAgents());die();
+                var_dump($registration->getAgentRelations());die();
                 }
                 
 
