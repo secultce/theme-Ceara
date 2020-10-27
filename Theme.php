@@ -1664,13 +1664,14 @@ class Theme extends BaseV1\Theme
                     }
                     return $motivos;
                 });
+                $categoria = $registration->category;
                 $proponente = (strpos($categoria,'JUR') === FALSE)?$registration->owner->nomeCompleto : $registration->owner->nomeCompleto;
 
                 $json_array[] = [
                     'n_inscricao' => $registration->number,
                     'projeto' => $projectName,
                     'proponente' => trim($proponente),
-                    'categoria' => $registration->category,
+                    'categoria' => $categoria,
                     'municipio' => trim($registration->owner->En_Municipio),
                     'resultado' => ($result == 'Válida') ? 'HABILITADO' : 'INABILITADO',
                     'motivo_inabilitacao' => $descumprimentoDosItens,
