@@ -4,7 +4,6 @@ namespace Ceara;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
-use PHPJasper\PHPJasper;
 
 class Theme extends BaseV1\Theme
 {
@@ -1624,8 +1623,10 @@ class Theme extends BaseV1\Theme
 
         $app->hook("<<GET|POST>>(opportunity.reportResultEvaluationsDocumental)", function () use ($app) {
 
-            $format = $this->data['fileFormat'];
-            $datePubish = date("d/m/Y", strtotime($this->data['publishDate']));
+            $format = isset($this->data['fileFormat']) ? $this->data['fileFormat'] : 'pdf';
+            $date = isset($this->data['publishDate']) ? $this->data['publishDate'] : date("d/m/Y");
+            $datePubish = date("d/m/Y", strtotime($date));
+
             $opportunityId = (int) $this->data['id'];
             $opportunity = $app->repo("Opportunity")->find($opportunityId);
 
@@ -1661,43 +1662,24 @@ class Theme extends BaseV1\Theme
                     'categoria' => $registration->category,
                     'municipio' => trim($registration->owner->En_Municipio),
                     'resultado' => ($result == 'Valída') ? 'habilitado' : 'inabilitado',
-                    'motivo_inabi' => $descumprimentoDosItens,
+                    'motivo_inabilitacao' => $descumprimentoDosItens,
                 ];
             }
-
-            //require __DIR__ . '/vendor/autoload.php';
-            // $input = __DIR__ . '../Ceara/report/resultado-preliminar.jrxml';
-            // $jasper = new PHPJasper;
-            // $jasper->compile($input)->execute();
-
-            $input = __DIR__ . '../Ceara/report/resultado-preliminar.jasper';
-            $output = __DIR__ . '../Ceara/report';
-
-            //$data_file = __DIR__ . '/dataset-teste-json.json';
-            $data_file = json_encode($json_array);
-            var_dump($data_file);
-
-            $options = [
-                'format' => [$format], // PDF, XLS, DOC, RTF, ODF, etc.
-                'params' => [
-                    "data_divulgacao" => $datePubish,
-                ],
-                'locale' => 'en',
-                'db_connection' => [
-                    'driver' => 'json',
-                    'data_file' => $data_file,
-                    //'json_query' => 'your_json_query'
-                ],
-            ];
-
-            $jasper = new PHPJasper;
-
-            $jasper->process(
-                $input,
-                $output,
-                $options
-            )->execute();
-            $this->json($json_array);
+            $filename = __DIR__ . "/report/" . time() . "habilitacao-preliminar.csv";
+            $output = fopen($filename, 'w') or die("error");
+            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($output, ["Inscrição", "Projeto", "Proponente", "Categoria", "Município", "Resultado", "Motivo_Inabilitação"], ";");
+            foreach ($json_array as $relatorio) {
+                fputcsv($output, $relatorio, ";");
+            }
+            fclose($output) or die("Can't close php://output");
+            header('Content-Encoding: UTF-8');
+            header("Content-type: text/csv; charset=UTF-8");
+            header("Content-Disposition: attachment; filename=habilitacao-documental.csv");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            readfile($filename);
+            unlink($filename);
         });
 
     }
