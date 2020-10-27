@@ -1641,7 +1641,7 @@ class Theme extends BaseV1\Theme
                         MapasCulturais\Entities\RegistrationEvaluation e
                         JOIN e.registration r
                         JOIN r.owner a
-                    WHERE r.opportunity = :opportunity ";
+                    WHERE r.opportunity = :opportunity ORDER BY e.status DESC";
 
             $q = $app->em->createQuery($dql);
             $q->setParameters(['opportunity' => $opportunity]);
