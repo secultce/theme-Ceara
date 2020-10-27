@@ -1667,7 +1667,7 @@ class Theme extends BaseV1\Theme
                     'proponente' => trim($registration->owner->name),
                     'categoria' => $registration->category,
                     'municipio' => trim($registration->owner->En_Municipio),
-                    'resultado' => ($result == 'Valída') ? 'habilitado' : 'inabilitado',
+                    'resultado' => ($result == 'Válida') ? 'HABILITADO' : 'INABILITADO',
                     'motivo_inabilitacao' => $descumprimentoDosItens,
                 ];
             }
