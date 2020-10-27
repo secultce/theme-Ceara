@@ -1661,12 +1661,19 @@ class Theme extends BaseV1\Theme
                     return $motivos;
                 });
                 $categoria = $registration->category;
-                $proponente = (strpos($categoria,'JUR') === FALSE) ? $registration->owner->nomeCompleto : $registration->getRelatedAgents();
-                if (strpos($categoria,'JUR') === FALSE){
-                var_dump($registration->getAgentRelations());die();
+                $agentRelations = $app->repo('RegistrationAgentRelation')->findBy(['owner'=>$registration]);
+                
+                $coletivo = null;
+                
+                if($agentRelations) {
+                   $coletivo = $agentRelations[0]->agent->nomeCompleto;
                 }
                 
-
+                $proponente = $registration->owner->nomeCompleto;
+                if (strpos($categoria,'JURÍDICA') && $coletivo !== null) {
+                   $proponente = $coletivo;
+                } 
+                
                 $json_array[] = [
                     'n_inscricao' => $registration->number,
                     'projeto' => $projectName,
