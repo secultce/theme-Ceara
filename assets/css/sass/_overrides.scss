@@ -43,6 +43,27 @@
     }
 }
 
+.compliant-suggestion-box {
+    // float: right;
+
+    // @media screen and (max-width: $screen-tablet) {
+    //   float: none;
+    //   margin-top: 2%;
+    // }
+
+    display: none;
+}
+
+.compliant-suggestion-box-ceara {
+    float: right;
+
+    @media screen and (max-width: $screen-tablet) {
+      float: none;
+      margin-top: 2%;
+    }
+}
+
+
 /** #home-watermark {
     min-height: calc(100vh); // viewport height minus header height
     background: transparent url(../img/backgroud.png) no-repeat top;
