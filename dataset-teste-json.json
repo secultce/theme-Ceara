@@ -1,0 +1,33 @@
+{
+    "contacts": {
+      "person": [
+        {
+          "n_inscricao": "1231231231231",
+          "projeto": "Fairfax",
+          "proponente": "sjkadhjksahdsjka",
+          "categoria": "sjkadhjksahdsjka",
+          "municipio": "fortaleza",
+          "resultado": "habilitado",
+          "motivo_inabi": "null"
+        },
+        {
+          "n_inscricao": "123123100000",
+          "projeto": "fax",
+          "proponente": "sjkadhjksahdsjka",
+          "categoria": "sjkadjka",
+          "municipio": "fortaleza",
+          "resultado": "habilitado",
+          "motivo_inabi": "null"
+        },
+        {
+          "n_inscricao": "124546498231",
+          "projeto": "Fair",
+          "proponente": "sjkadhjksahdsjka",
+          "categoria": "sdsjka",
+          "municipio": "sobral",
+          "resultado": " NÃO habilitado",
+          "motivo_inabi": "asdhasjkdhasjkdhasjkhdjkas"
+        }
+      ]
+    }
+  }

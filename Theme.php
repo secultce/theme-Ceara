@@ -1665,21 +1665,22 @@ class Theme extends BaseV1\Theme
                     'motivo_inabilitacao' => $descumprimentoDosItens,
                 ];
             }
-            $filename = __DIR__ . "/report/" . time() . "habilitacao-preliminar.csv";
-            $output = fopen($filename, 'w') or die("error");
-            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($output, ["Inscrição", "Projeto", "Proponente", "Categoria", "Município", "Resultado", "Motivo_Inabilitação"], ";");
-            foreach ($json_array as $relatorio) {
-                fputcsv($output, $relatorio, ";");
-            }
-            fclose($output) or die("Can't close php://output");
-            header('Content-Encoding: UTF-8');
-            header("Content-type: text/csv; charset=UTF-8");
-            header("Content-Disposition: attachment; filename=habilitacao-documental.csv");
-            header("Pragma: no-cache");
-            header("Expires: 0");
-            readfile($filename);
-            unlink($filename);
+
+            // $filename = __DIR__ . "/report/" . time() . "habilitacao-preliminar.csv";
+            // $output = fopen($filename, 'w') or die("error");
+            // fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            // fputcsv($output, ["Inscrição", "Projeto", "Proponente", "Categoria", "Município", "Resultado", "Motivo_Inabilitação"], ";");
+            // foreach ($json_array as $relatorio) {
+            //     fputcsv($output, $relatorio, ";");
+            // }
+            // fclose($output) or die("Can't close php://output");
+            // header('Content-Encoding: UTF-8');
+            // header("Content-type: text/csv; charset=UTF-8");
+            // header("Content-Disposition: attachment; filename=habilitacao-documental.csv");
+            // header("Pragma: no-cache");
+            // header("Expires: 0");
+            // readfile($filename);
+            // unlink($filename);
         });
 
     }
