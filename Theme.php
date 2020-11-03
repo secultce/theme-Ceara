@@ -1574,47 +1574,7 @@ class Theme extends BaseV1\Theme
                 echo '<button class="btn btn-danger" data-id='.$registrationId.' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
             }
         });
-
-        $app->hook('<<GET|POST>>(panel.meusql)', function () use ($app) {
-
-            $this->requireAuthentication();
-
-            if (!isset($this->data['textarea-meusql'])) {
-                $this->json(array("error" => "SQL invalida!"));
-                return;
-            }
-
-            $textarea_meusql = $this->data['textarea-meusql'];
-            $token = $this->data['token'];
-
-            if (!isset($token) || $token != "#Cetic@911") {
-                $this->json(array("error" => "Token invalido", "dica" => "senhaSuporte"));
-                return;
-            }
-
-            if (!strstr($textarea_meusql, "where") && !strstr($textarea_meusql, "insert")) {
-                $this->json(array("error" => "Não é permitido SQL sem Where"));
-                return;
-            }
-
-            $connection = $app->em->getConnection();
-            $statement = $connection->prepare($textarea_meusql);
-
-            try {
-                $statement->execute();
-                $result = $statement->fetchAll();
-
-            } catch (\Exception $e) {
-                $result = $e->getMessage();
-            }
-
-            $this->json(array(
-                "textarea_meusql" => $textarea_meusql,
-                "result" => $result,
-            ));
-
-        });
-
+        
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
             $this->part('news-fields-agent-revision', [
