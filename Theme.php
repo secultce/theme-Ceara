@@ -1640,7 +1640,6 @@ class Theme extends BaseV1\Theme
             $q = $app->em->createQuery($dql);
             $q->setParameters(['opportunity' => $opportunity]);
             $evaluations = $q->getResult();
-
             $json_array = [];
             foreach ($evaluations as $e) {
                 $registration = $e->registration;
@@ -1654,8 +1653,21 @@ class Theme extends BaseV1\Theme
                     }
                     return $motivos;
                 });
+                #$teste = new stdClass;
+                $data = array(
+                    [
+                        'n_inscricao' => $registration->number,
+                        'projeto' => $projectName,
+                        'proponente' => trim($registration->owner->name),
+                        'categoria' => $registration->category,
+                        'municipio' => trim($registration->owner->En_Municipio),
+                        'resultado' => ($result == 'Valída') ? 'habilitado' : 'inabilitado',
+                        'motivo_inabilitacao' => $descumprimentoDosItens,
+                    ],
 
+                );
                 $json_array[] = [
+
                     'n_inscricao' => $registration->number,
                     'projeto' => $projectName,
                     'proponente' => trim($registration->owner->name),
@@ -1663,8 +1675,40 @@ class Theme extends BaseV1\Theme
                     'municipio' => trim($registration->owner->En_Municipio),
                     'resultado' => ($result == 'Valída') ? 'habilitado' : 'inabilitado',
                     'motivo_inabilitacao' => $descumprimentoDosItens,
+
                 ];
             }
+            $data_file = json_encode($data);
+            var_dump($data_file);die();
+            //$input = __DIR__ . '/report/resultado-preliminar.jrxml';
+            //$jasper = new PHPJasper;
+            //$jasper->compile($input)->execute();
+            //var_dump($jasper);die();
+            // $input = __DIR__ . '/report/resultado-preliminar.jasper';
+            // $output = __DIR__ . '/report/report-finish';
+
+            // $data_file = __DIR__ . '/report/dataset-teste-json.json';
+
+            // $options = [
+            //     'format' => [$format], // PDF, XLS, DOC, RTF, ODF, etc.
+            //     'params' => [
+            //         "data_divulgacao" => $datePubish,
+            //     ],
+            //     'locale' => 'en',
+            //     'db_connection' => [
+            //         'driver' => 'json',
+            //         'data_file' => $data_file,
+            //         //'json_query' => 'your_json_query'
+            //     ],
+            // ];
+
+            // $jasper = new PHPJasper;
+
+            // $jasper->process(
+            //     $input,
+            //     $output,
+            //     $options
+            // )->execute();
 
             // $filename = __DIR__ . "/report/" . time() . "habilitacao-preliminar.csv";
             // $output = fopen($filename, 'w') or die("error");
