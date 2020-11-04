@@ -5,13 +5,9 @@
 	<subDataset name="Empty Dataset1" uuid="b4a32aa8-adb3-41e8-9e0b-37bda75f6750"/>
 	<parameter name="data_divulgacao" class="java.lang.String"/>
 	<queryString language="JSON">
-		<![CDATA[contacts.person]]>
+		<![CDATA[data]]>
 	</queryString>
-	<field name="n" class="java.lang.Integer">
-		<property name="net.sf.jasperreports.json.field.expression" value="n"/>
-		<fieldDescription><![CDATA[n]]></fieldDescription>
-	</field>
-	<field name="n_inscricao" class="java.lang.Long">
+	<field name="n_inscricao" class="java.lang.String">
 		<property name="net.sf.jasperreports.json.field.expression" value="n_inscricao"/>
 		<fieldDescription><![CDATA[n_inscricao]]></fieldDescription>
 	</field>
@@ -35,9 +31,9 @@
 		<property name="net.sf.jasperreports.json.field.expression" value="resultado"/>
 		<fieldDescription><![CDATA[resultado]]></fieldDescription>
 	</field>
-	<field name="motivo_inabi" class="java.lang.String">
-		<property name="net.sf.jasperreports.json.field.expression" value="motivo_inabi"/>
-		<fieldDescription><![CDATA[motivo_inabi]]></fieldDescription>
+	<field name="motivo_inabilitacao" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="motivo_inabilitacao"/>
+		<fieldDescription><![CDATA[motivo_inabilitacao]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -46,10 +42,10 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="136" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="0" y="96" width="800" height="20" uuid="8a920325-836b-4f83-871b-a27d343673ae"/>
+				<reportElement x="0" y="20" width="800" height="20" uuid="8a920325-836b-4f83-871b-a27d343673ae"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -59,7 +55,7 @@
 				<text><![CDATA[XII EDITAL CEARÁ DE CINEMA E VÍDEO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="76" width="800" height="20" uuid="0632a56d-e7c1-42bc-a770-227531f63afe">
+				<reportElement x="0" y="0" width="800" height="20" uuid="0632a56d-e7c1-42bc-a770-227531f63afe">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -72,7 +68,7 @@
 				<text><![CDATA[RESULTADO PRELIMINAR DA HABILITAÇÃO DA INSCRIÇÃO - DIVULGADO EM ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="116" width="800" height="20" uuid="8a8a13bf-01dc-4aaf-805f-6020d40c23b4">
+				<reportElement x="0" y="40" width="800" height="20" uuid="8a8a13bf-01dc-4aaf-805f-6020d40c23b4">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -85,7 +81,7 @@
 				<text><![CDATA[LISTA DE HABILITADOS E NÃO HABILITADOS]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="600" y="78" width="90" height="16" uuid="7ab45829-d9ca-46f5-bfee-e22d0c9e9b5c"/>
+				<reportElement x="610" y="2" width="90" height="16" uuid="7ab45829-d9ca-46f5-bfee-e22d0c9e9b5c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
@@ -158,16 +154,6 @@
 				<text><![CDATA[Resultado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="650" y="0" width="150" height="35" uuid="d9868053-68db-4b2e-a1e0-15cdb482e762"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Motivo da Inabilitação]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="30" y="0" width="80" height="35" uuid="446c8a26-15ad-4030-8b70-b6d2ec1d1dd8"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
@@ -176,6 +162,16 @@
 					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nº Inscrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="650" y="0" width="150" height="35" uuid="d9868053-68db-4b2e-a1e0-15cdb482e762"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motivo da Inabilitação]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -231,7 +227,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{motivo_inabi}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{motivo_inabilitacao}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="590" y="0" width="60" height="30" uuid="5a8e6906-5917-4c7f-8c4d-020d120ac44e"/>
