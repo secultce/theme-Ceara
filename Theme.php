@@ -1643,6 +1643,7 @@ class Theme extends BaseV1\Theme
             $q->setParameters(['opportunity' => $opportunity]);
             $evaluations = $q->getResult();
             $json_array = [];
+
             foreach ($evaluations as $e) {
                 $registration = $e->registration;
                 $evaluationData = (array) $e->evaluationData;
@@ -1669,65 +1670,96 @@ class Theme extends BaseV1\Theme
                 ];
             }
             //CRIA UM ARQUIVO JSON TEMPORÁIO PARA ALIMENTAR O RELATÓRIO
-            $output_file_jason = __DIR__ . '/report/json-file/data.json';
+            $output_file_jason = __DIR__ . '/report/json-file/resultado-preliminar.json';
             $file = '{"data":' . json_encode($json_array) . "}";
             $arquivo = file_put_contents($output_file_jason, $file);
 
-            //BUILDA O RELATÓRIO .jrxml PARA .jasper
-            $input_build = __DIR__ . '/report/relatorios/resultado-preliminar.jrxml';
-            $jasper = new PHPJasper;
-            $jasper->compile($input_build)->execute();
-
             //GERA O RELATÓRIO NO FORMATO SOLICITADO (PDF, XLS, CSV, DOC ...)
-            $input_jasper = __DIR__ . '/report/relatorios/resultado-preliminar.jasper';
-            $output_jasper = __DIR__ . '/report/report-finish';
-            $data_file = __DIR__ . '/report/json-file/data.json';
+            $jasper_file = __DIR__ . '/report/relatorios/resultado-preliminar.jasper';
+            if (file_exists($jasper_file)) {
+                $output_jasper = __DIR__ . '/report/report-finish';
+                $data_file = __DIR__ . '/report/json-file/resultado-preliminar.json';
 
-            $options = [
-                'format' => [$format], // PDF, XLS, RTF
-                'params' => [
-                    "data_divulgacao" => '19-20-2020',
-                ],
-                'locale' => 'en',
-                'db_connection' => [
-                    'driver' => 'json',
-                    'data_file' => $data_file,
-                    //'json_query' => 'your_json_query'
-                ],
-            ];
+                $options = [
+                    'format' => [$format], // PDF, XLS, DOC
+                    'params' => [
+                        "data_divulgacao" => $datePubish,
+                    ],
+                    'locale' => 'en',
+                    'db_connection' => [
+                        'driver' => 'json',
+                        'data_file' => $data_file,
+                        //'json_query' => 'your_json_query'
+                    ],
+                ];
 
-            $jasper = new PHPJasper;
+                $jasper = new PHPJasper;
 
-            $jasper->process(
-                $input_jasper,
-                $output_jasper,
-                $options
-            )->execute();
+                $jasper->process(
+                    $jasper_file,
+                    $output_jasper,
+                    $options
+                )->execute();
+            } else {
+                //BUILDA O RELATÓRIO .jrxml PARA .jasper
+                $input_build = __DIR__ . '/report/relatorios/resultado-preliminar.jrxml';
+                $jasper = new PHPJasper;
+                $jasper->compile($input_build)->execute();
 
-            //$filename = __DIR__ . "/report/" . time() . "habilitacao-preliminar.csv";
-            $filename = __DIR__ . '/report/report-finish/resultado-preliminar.xls';
-            $output = fopen($filename, 'r') or die("error");
-            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            // fputcsv($output, ["Inscrição", "Projeto", "Proponente", "Categoria", "Município", "Resultado", "Motivo_Inabilitação"], ";");
-            // foreach ($json_array as $relatorio) {
-            //     fputcsv($output, $relatorio, ";");
-            // }
-            fclose($output) or die("Can't close php://output");
-            header('Content-Encoding: UTF-8');
-            header("Content-type: application/excel; charset=UTF-8");
-            header("Content-Disposition: attachment; filename=habilitacao-documental.xls");
-            header("Pragma: no-cache");
-            header("Expires: 0");
-            readfile($filename);
+                $output_jasper = __DIR__ . '/report/report-finish';
+                $data_file = __DIR__ . '/report/json-file/resultado-preliminar.json';
 
-            //APAGA O RELATÓRIO TEMPORÁRIO, JSON TEMPORÁRIO,  e .jasper
-            // $delete_rel = __DIR__ . '/report/report-finish/resultado-preliminar.rtf';
-            // $delete_json_data = __DIR__ . '/report/json-file/data.json';
-            // $delete_jasper = __DIR__ . '/report/relatorios/resultado-preliminar.jasper';
-            // unlink($delete_rel);
-            // unlink($delete_json_data);
-            // unlink($delete_jasper);
-            // unlink($filename);
+                $options = [
+                    'format' => [$format], // PDF, XLS, DOC
+                    'params' => [
+                        "data_divulgacao" => $datePubish,
+                    ],
+                    'locale' => 'en',
+                    'db_connection' => [
+                        'driver' => 'json',
+                        'data_file' => $data_file,
+                        //'json_query' => 'your_json_query'
+                    ],
+                ];
+
+                $jasper = new PHPJasper;
+
+                $jasper->process(
+                    $jasper_file,
+                    $output_jasper,
+                    $options
+                )->execute();
+            }
+
+            $arquivo = __DIR__ . "/report/report-finish/resultado-preliminar.$format"; //$arquivo_xls || $arquivo_odt || $arquivo_pdf;
+            if (isset($arquivo) && file_exists($arquivo)) {
+                // faz o teste se a variavel não esta vazia e se o arquivo realmente existe
+                switch (strtolower(substr(strrchr(basename($arquivo), "."), 1))) {
+                    // verifica a extensão do arquivo para pegar o tipo
+                    case "pdf":$tipo = "application/pdf";break;
+                    case "doc":$tipo = "application/msword";break;
+                    case "xls":$tipo = "application/vnd.ms-excel";break;
+                    case "odt":$tipo = "application/vnd.oasis.opendocument.text";break;
+                    case "php": // deixar vazio por seurança
+                    case "htm": // deixar vazio por seurança
+                    case "html": // deixar vazio por seurança
+                }
+                header("Content-Type: " . $tipo);
+                // informa o tipo do arquivo ao navegador
+                header("Content-Length: " . filesize($arquivo));
+                // informa o tamanho do arquivo ao navegador
+                header("Content-Disposition: attachment; filename=" . basename($arquivo));
+                // informa ao navegador que é tipo anexo e faz abrir a janela de download, tambem informa o nome do arquivo
+                readfile($arquivo); // lê o arquivo
+                //APAGA O RELATÓRIO TEMPORÁRIO, JSON TEMPORÁRIO,  e .jasper
+                $delete_rel = __DIR__ . "/report/report-finish/resultado-preliminar.$format";
+                $delete_json_data = __DIR__ . '/report/json-file/resultado-preliminar.json';
+                unlink($delete_rel);
+                unlink($delete_json_data);
+
+                exit; // aborta pós-ações
+            }
+
         });
 
     }
