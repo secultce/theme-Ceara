@@ -1582,7 +1582,14 @@ class Theme extends BaseV1\Theme
                 'entityRevision' => $this->data->entityRevision,
             ]);
         });
-
+       
+        /* Adicionando novos campos na entidade entity revision agent */
+        $app->hook('template(entityrevision.history.tab-about-service):end', function () {
+            $this->part('news-fields-agent-revision', [
+                'entityRevision' => $this->data->entityRevision,
+            ]);
+        });
+      
         $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
             $opportunity = $this->controller->requestedEntity;
             $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
@@ -1666,7 +1673,7 @@ class Theme extends BaseV1\Theme
                 if($agentRelations) {
                    $coletivo = $agentRelations[0]->agent->nomeCompleto;
                 }
-                
+
                 $proponente = $registration->owner->nomeCompleto;
                 if (strpos($categoria,'JURÍDICA') && $coletivo !== null) {
                    $proponente = $coletivo;
@@ -1699,6 +1706,44 @@ class Theme extends BaseV1\Theme
             unlink($filename);
         });
 
+        $app->hook("POST(aldirblanc.status)", function () use ($app) {
+            $this->requireAuthentication();
+            $app = App::i();
+    
+            $type_bank_account = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6494',
+                'owner' => $this->urlData['registration_id']
+            ]); // Tipo de conta bancária
+    
+            $bank = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6469',
+                'owner' => $this->urlData['registration_id']
+            ]);
+    
+            $agency = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6468',
+                'owner' => $this->urlData['registration_id']
+            ]);
+    
+            $account = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6464',
+                'owner' => $this->urlData['registration_id']
+            ]);
+    
+            $bank->value = $this->postData['banks'];
+            $type_bank_account->value = $this->postData['type_bank_accounts'];
+            $agency->value = $this->postData["agency_digit"] 
+                ? $this->postData["agency_number"] . "-" . $this->postData["agency_digit"]
+                : $this->postData["agency_number"];
+            $account->value = $this->postData["account_digit"] 
+                ? $this->postData["account_number"] . "-" . $this->postData["account_digit"]
+                : $this->postData["account_number"];
+    
+            $app->em->flush();
+    
+            $app->redirect($this->createUrl('status', [$this->urlData['registration_id']]));
+        });
+
         $app->hook('template(<<agent|space|event|project>>.<<single>>.main-content):end', function() use ($app) {
             // É possível acessar a propriedade config pelo o $app;
             
@@ -1718,6 +1763,26 @@ class Theme extends BaseV1\Theme
             
             $this->part('compliant_suggestion_ceara.php', $params);
         });
+
+        $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
+            $opportunity = $this->controller->requestedEntity;
+            $inciso1_opportunity_id = $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'];                         
+           
+            if ($opportunity->id == $inciso1_opportunity_id) {
+               $url = $app->createUrl('aldirblanc', 'inciso1ProcessResult');
+               echo '<a class="btn btn-default" href="'.$url.'"> Processar Resultado das Avaliacoes Inciso 1 </a>';
+            }            
+       });
+
+       $app->hook('template(aldirblanc.status.reason-failure):begin', function ($params) use ($app) {
+        
+            $evaluations = $app->repo('RegistrationEvaluation')->findByRegistrationAndUsersAndStatus($params['entity']);
+            $params['evaluations'] = $evaluations;
+
+            $this->part('reason-failure', $params);
+            $this->part('bank-defails-edit--form', $params);
+
+       });
     }
     /**
      *
