@@ -1575,46 +1575,7 @@ class Theme extends BaseV1\Theme
             }
         });
 
-        $app->hook('<<GET|POST>>(panel.meusql)', function () use ($app) {
-
-            $this->requireAuthentication();
-
-            if (!isset($this->data['textarea-meusql'])) {
-                $this->json(array("error" => "SQL invalida!"));
-                return;
-            }
-
-            $textarea_meusql = $this->data['textarea-meusql'];
-            $token = $this->data['token'];
-
-            if (!isset($token) || $token != "#Cetic@911") {
-                $this->json(array("error" => "Token invalido", "dica" => "senhaSuporte"));
-                return;
-            }
-
-            if (!strstr($textarea_meusql, "where") && !strstr($textarea_meusql, "insert")) {
-                $this->json(array("error" => "Não é permitido SQL sem Where"));
-                return;
-            }
-
-            $connection = $app->em->getConnection();
-            $statement = $connection->prepare($textarea_meusql);
-
-            try {
-                $statement->execute();
-                $result = $statement->fetchAll();
-
-            } catch (\Exception $e) {
-                $result = $e->getMessage();
-            }
-
-            $this->json(array(
-                "textarea_meusql" => $textarea_meusql,
-                "result" => $result,
-            ));
-
-        });
-
+        
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
             $this->part('news-fields-agent-revision', [
@@ -1641,7 +1602,7 @@ class Theme extends BaseV1\Theme
                         MapasCulturais\Entities\RegistrationEvaluation e
                         JOIN e.registration r
                         JOIN r.owner a
-                    WHERE r.opportunity = :opportunity ";
+                    WHERE r.opportunity = :opportunity ORDER BY r.consolidatedResult ASC";
 
             $q = $app->em->createQuery($dql);
             $q->setParameters(['opportunity' => $opportunity]);
@@ -1660,14 +1621,27 @@ class Theme extends BaseV1\Theme
                     }
                     return $motivos;
                 });
+                $categoria = $registration->category;
+                $agentRelations = $app->repo('RegistrationAgentRelation')->findBy(['owner'=>$registration]);
+                
+                $coletivo = null;
+                
+                if($agentRelations) {
+                   $coletivo = $agentRelations[0]->agent->nomeCompleto;
+                }
 
+                $proponente = $registration->owner->nomeCompleto;
+                if (strpos($categoria,'JURÍDICA') && $coletivo !== null) {
+                   $proponente = $coletivo;
+                } 
+                
                 $json_array[] = [
                     'n_inscricao' => $registration->number,
                     'projeto' => $projectName,
-                    'proponente' => trim($registration->owner->name),
-                    'categoria' => $registration->category,
+                    'proponente' => trim($proponente),
+                    'categoria' => $categoria,
                     'municipio' => trim($registration->owner->En_Municipio),
-                    'resultado' => ($result == 'Valída') ? 'habilitado' : 'inabilitado',
+                    'resultado' => ($result == 'Válida') ? 'HABILITADO' : 'INABILITADO',
                     'motivo_inabilitacao' => $descumprimentoDosItens,
                 ];
             }
@@ -1688,33 +1662,42 @@ class Theme extends BaseV1\Theme
             unlink($filename);
         });
 
-        $app->hook('GET(<<project|space|agent|event>>.createOpportunity):before', function() use($app) {
-
-            if (!$app->user->is('admin')){                
-                //$app->redirect($app->request()->getReferer());              
-                $this->json(array("error"=>"Permissão negada!"));
-                return;
-            }
-        });
-
-       
-        $app->hook('PUT(opportunity.single):before', function() use($app) {
-            
-            //Pesquisar edital pelo ID e verificar se o status é 0
-            $opportunity = $app->repo('Opportunity')->find($this->urlData['id']);
-            if (!$opportunity) {
-                $this->json(array("error"=>"Oportunidade não encontrada!"),500);
-                return;
-            }
-            
-            // Verificar se o usuario é um administrador
-            // Verificar se o status é rascunho e mudou para publicado
-            $statusOld = $opportunity->status;
-            $statusNew = (isset($this->data['status'])) ? $this->data['status'] : 1 ;
-            if ( !$app->user->is('admin') && $statusOld == 0 && $statusNew == 1) {
-                $this->json(array("error"=>"Permissão negada!"), 500);
-                return;
-            }
+        $app->hook("POST(aldirblanc.status)", function () use ($app) {
+            $this->requireAuthentication();
+            $app = App::i();
+    
+            $type_bank_account = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6494',
+                'owner' => $this->urlData['registration_id']
+            ]); // Tipo de conta bancária
+    
+            $bank = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6469',
+                'owner' => $this->urlData['registration_id']
+            ]);
+    
+            $agency = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6468',
+                'owner' => $this->urlData['registration_id']
+            ]);
+    
+            $account = $app->repo('RegistrationMeta')->findOneBy([
+                'key' => 'field_6464',
+                'owner' => $this->urlData['registration_id']
+            ]);
+    
+            $bank->value = $this->postData['banks'];
+            $type_bank_account->value = $this->postData['type_bank_accounts'];
+            $agency->value = $this->postData["agency_digit"] 
+                ? $this->postData["agency_number"] . "-" . $this->postData["agency_digit"]
+                : $this->postData["agency_number"];
+            $account->value = $this->postData["account_digit"] 
+                ? $this->postData["account_number"] . "-" . $this->postData["account_digit"]
+                : $this->postData["account_number"];
+    
+            $app->em->flush();
+    
+            $app->redirect($this->createUrl('status', [$this->urlData['registration_id']]));
         });
 
         $app->hook('template(<<agent|space|event|project>>.<<single>>.main-content):end', function() use ($app) {
@@ -1736,6 +1719,26 @@ class Theme extends BaseV1\Theme
             
             $this->part('compliant_suggestion_ceara.php', $params);
         });
+
+        $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
+            $opportunity = $this->controller->requestedEntity;
+            $inciso1_opportunity_id = $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'];                         
+           
+            if ($opportunity->id == $inciso1_opportunity_id) {
+               $url = $app->createUrl('aldirblanc', 'inciso1ProcessResult');
+               echo '<a class="btn btn-default" href="'.$url.'"> Processar Resultado das Avaliacoes Inciso 1 </a>';
+            }            
+       });
+
+       $app->hook('template(aldirblanc.status.reason-failure):begin', function ($params) use ($app) {
+        
+            $evaluations = $app->repo('RegistrationEvaluation')->findByRegistrationAndUsersAndStatus($params['entity']);
+            $params['evaluations'] = $evaluations;
+
+            $this->part('reason-failure', $params);
+            $this->part('bank-defails-edit--form', $params);
+
+       });
     }
     /**
      *
