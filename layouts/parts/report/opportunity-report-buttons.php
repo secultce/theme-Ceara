@@ -3,10 +3,14 @@ use MapasCulturais\App;
 use MapasCulturais\i;
 
 $route = App::i()->createUrl('opportunity', 'reportResultEvaluationsDocumental', [$entity->id]);
-
+$route_btn_antigo = App::i()->createUrl('opportunity', 'reportOld', [$entity->id]);
 ?>
 
 <a class="btn btn-default download btn-report-evaluation-documental"  ng-click="editbox.open('report-evaluation-documental-options', $event)" rel="noopener noreferrer">Imprimir Resultado</a>
+
+<!--Botão antigo-->
+<a class="btn btn-default download"  href="<?php echo$route_btn_antigo?>"><?php i::_e("Baixar inscritos");?>(Botão antigo)</a>
+
 
 <!-- Formulário -->
 <edit-box id="report-evaluation-documental-options" position="top" title="<?php i::esc_attr_e('Imprimir Resultado')?>" cancel-label="Cancelar" close-on-cancel="true">

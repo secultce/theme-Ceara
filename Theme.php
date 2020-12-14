@@ -4,6 +4,7 @@ namespace Ceara;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
+use MapasCulturais\Entities;
 
 class Theme extends BaseV1\Theme
 {
@@ -1574,7 +1575,6 @@ class Theme extends BaseV1\Theme
                 echo '<button class="btn btn-danger" data-id='.$registrationId.' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
             }
         });
-
         
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
@@ -1582,12 +1582,56 @@ class Theme extends BaseV1\Theme
                 'entityRevision' => $this->data->entityRevision,
             ]);
         });
-
+       
+        /* Adicionando novos campos na entidade entity revision agent */
+        $app->hook('template(entityrevision.history.tab-about-service):end', function () {
+            $this->part('news-fields-agent-revision', [
+                'entityRevision' => $this->data->entityRevision,
+            ]);
+        });
+      
         $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
             $opportunity = $this->controller->requestedEntity;
             $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
         });
+        
+        //relatórios de inscritos botão antigo 
+        $app->hook("<<GET|POST>>(opportunity.reportOld)", function()use ($app){
+            //return var_dump("ola");
+            $this->requireAuthentication();
+            // //$app = App::i();
+            
 
+            $entity = $app->repo("Opportunity")->find($this->urlData['id']);
+
+            if(!$entity){
+                $app->pass();
+            }
+
+            $entity->checkPermission('@control');
+
+            $app->controller('Registration')->registerRegistrationMetadata($entity);
+
+            $filename = sprintf(\MapasCulturais\i::__("oportunidade-%s--inscricoes"), $entity->id);
+
+           
+            $response = $app->response();
+            $response['Content-Encoding'] = 'UTF-8';
+            $response['Content-Type'] = 'application/force-download';
+            $response['Content-Disposition'] ='attachment; filename=' . $filename . '.xls';
+            $response['Pragma'] ='no-cache';
+
+            $app->contentType('application/vnd.ms-excel; charset=UTF-8');
+            
+    
+            ob_start();
+            $this->partial("report-old", ['entity' => $entity]);
+            $output = ob_get_clean();
+            echo mb_convert_encoding($output,"HTML-ENTITIES","UTF-8");
+        });
+
+
+        //relatorios de inscritos por data 
         $app->hook("<<GET|POST>>(opportunity.reportResultEvaluationsDocumental)", function () use ($app) {
 
             $format = isset($this->data['fileFormat']) ? $this->data['fileFormat'] : 'pdf';
