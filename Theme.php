@@ -1780,7 +1780,6 @@ class Theme extends BaseV1\Theme
             $params['evaluations'] = $evaluations;
 
             $this->part('reason-failure', $params);
-            $this->part('bank-defails-edit--form', $params);
 
        });
     }
