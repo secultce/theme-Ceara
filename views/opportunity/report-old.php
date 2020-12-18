@@ -1,8 +1,10 @@
 <?php
 use MapasCulturais\Entities\Registration as R;
 use MapasCulturais\Entities\Agent;
-use MapasCulturais\Entities\Space as SpaceRelation;
 use MapasCulturais\i;
+
+$app->disableAccessControl();
+
 
 function echoStatus($registration) {
     switch ($registration->status){
@@ -34,8 +36,6 @@ function showIfField($hasField, $showField) {
 }
 
 $_properties = $app->config['registration.propertiesToExport'];
-$space_properties = $app->config['registration.spaceProperties'];
-
 $custom_fields = [];
 foreach($entity->registrationFieldConfigurations as $field) :
     $custom_fields[$field->displayOrder] = [
@@ -45,6 +45,20 @@ foreach($entity->registrationFieldConfigurations as $field) :
 endforeach;
 
 ksort($custom_fields);
+
+$metas_individual=[];
+$metas_coletivo=[];
+
+$metas = $app->getRegisteredMetadata('MapasCulturais\Entities\Agent', 1);
+foreach($metas as $metadata){
+    $metas_individual[] = $metadata->key;
+}
+
+$metas = $app->getRegisteredMetadata('MapasCulturais\Entities\Agent', 2);
+foreach($metas as $metadata){
+    $metas_coletivo[] = $metadata->key;
+}
+
 ?>
 <style>
     tbody td, table th{
@@ -72,11 +86,21 @@ ksort($custom_fields);
             ?>
 
             <th><?php i::_e('Anexos') ?></th>
+            <?php foreach($entity->getUsedAgentRelations() as $def): ?>
+                <th><?php echo $def->label; ?> - <?php i::_e("Código") ?></th>
 
-            <!-- Cabeçalho com labels das informações dos espaços cadastrados-->
-            <?php foreach($space_properties as $prop): ?>
-                <th><?php echo 'Espaço ' ?> - <?php echo SpaceRelation::getPropertyLabel($prop); ?></th>
-            <?php endforeach; ?>
+                <th><?php echo $def->label; ?> - <?php i::_e("Nome") ?></th>
+
+                <th><?php echo $def->label; ?> - <?php i::_e("Área de Atuação") ?></th>
+                <?php $mdata = ($def->type == 1) ? $metas_individual : $metas_coletivo; ?>
+                <?php foreach($_properties as $prop): ?>
+                    <?php
+                        if($prop === 'name') continue;                        
+                        if (!in_array($prop,$mdata)) continue;
+                    ?>
+                    <th><?php echo $def->label; ?> - <?php echo Agent::getPropertyLabel($prop); ?></th>
+                <?php endforeach; ?>
+            <?php endforeach;?>
         </tr>
     </thead>
     <tbody>
@@ -114,16 +138,53 @@ ksort($custom_fields);
                         <a href="<?php echo $r->files['zipArchive']->url; ?>"><?php i::_e("zip");?></a>
                      <?php endif; ?>
                 </td>
+                <!--ajuste--->
+                <?php
+                    foreach($r->_getDefinitionsWithAgents() as $def):
+                        if($def->use == 'dontUse') continue;
+                        $agent = $def->agent;
+                        $agentsData = $r->_getAgentsData();
+                        $mdata = ($def->type == 1) ? $metas_individual : $metas_coletivo;
+                        $agentsDataGroup = [];
+                        if(!empty($agent) && !empty($agentsData)){
+                            $agentsDataGroup = (isset($agentsData[$def->agentRelationGroupName])) ? $agentsData[$def->agentRelationGroupName] : [];
+                        }
+                    ?>
+                    <?php if($agent): ?>
+                        <td><?php echo $agent->id;?></td>
+                        <td><a href="<?php echo $agent->singleUrl; ?>" target="_blank"><?php echo $agent->name;?></a></td>
 
-                 <!--Informações dos espaços cadastrados-->
-                 <?php foreach($r->getSpaceData() as $field): ?>
-                    <?php if(is_array($field)): ?>
-                        <td><?php echo implode(', ', $field); ?></td>
+                        <td><?php echo implode(', ', $agent->terms['area']); ?></td>
+
+                        <?php                        
+                        foreach($_properties as $prop):
+                            if($prop === 'name') continue;
+                            if (!in_array($prop,$mdata)) continue;
+                            $val = $agent->$prop;                            
+                        ?>
+                        <td>
+                            <?php
+                                if ($prop === 'location')
+                                    echo (isset($val['latitude']) && isset($val['longitude'])) ? "{$val['latitude']},{$val['longitude']}" : '';
+                                else
+                                    echo $val;
+                            ?>
+                        </td>
+
+                        <?php endforeach; ?>
                     <?php else: ?>
-                        <td><?php echo $field; ?></td>
+                        <?php 
+                            echo str_repeat('<td></td>', 3);
+                            foreach($_properties as $prop) {
+                                if($prop === 'name') continue;
+                                if (!in_array($prop,$mdata)) continue;
+                                echo '<td></td>';           
+                            }                
+                        ?>
                     <?php endif; ?>
-                <?php endforeach; ?>
+                <?php endforeach;  ?>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+<?php $app->enableAccessControl(); ?>
