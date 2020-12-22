@@ -7,7 +7,7 @@
             <?php
                 foreach($evaluations as $e) {
                     $data = (array) $e->evaluationData;
-                    if( isset($data['obs']) && !empty($data['obs']) ) print "<li>{$data['obs']}</li>";
+                    if( (isset($data['obs']) && !empty($data['obs'])) && $data['status'] != '10' ) print "<li>{$data['obs']}</li>";
                 }
             ?>
         </ul>
