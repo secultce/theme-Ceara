@@ -123,32 +123,36 @@ foreach ($metas as $metadata) {
                 <?php showIfField($entity->registrationCategories, $r->category); ?>
 
                 <?php
-                try {
-                    foreach ($custom_fields as $field) :
+                foreach ($custom_fields as $field) :
+                    try {
                         $_field_val = (isset($field["field_name"])) ? $r->{$field["field_name"]} : "";
 
                         if (is_array($_field_val) && isset($_field_val[0]) && $_field_val[0] instanceof stdClass) {
                             $_field_val = (array)$_field_val[0];
-                            // echo "<th>";
-                            // echo (is_array($_field_val)) ? implode(", ", $_field_val) : $_field_val;
-                            // echo "</th>";
                         }
                         echo "<th>";
                         echo (is_array($_field_val)) ? implode(", ", $_field_val) : $_field_val;
                         echo "</th>";
-                    endforeach;
-                } catch (Exception $e) {
+                    } catch (Exception $e) {
+                        // echo "<th>";
+                        // echo (is_array($_field_val) && is_array($field)) ? implode(", ", $_field_val) && implode(", ", $field) : $_field_val;
+                        // echo "</th>";
+                        //var_dump($_field_val);
+                        //echo $_field_val;
 
-                    print_r($custom_fields);
-                }
-
+                        // if ($_field_val["Endereço Completo"] || $_field_val[27]) {
+                        //     continue;
+                        // }
+                        //print_r($_field_val);
+                    }
+                endforeach;
                 ?>
-
                 <td>
                     <?php if (key_exists('zipArchive', $r->files)) : ?>
                         <a href="<?php echo $r->files['zipArchive']->url; ?>"><?php i::_e("zip"); ?></a>
                     <?php endif; ?>
                 </td>
+
                 <!--ajuste--->
                 <?php
                 foreach ($r->_getDefinitionsWithAgents() as $def) :
