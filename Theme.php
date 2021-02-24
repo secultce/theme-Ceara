@@ -4,7 +4,6 @@ namespace Ceara;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
-use MapasCulturais\Entities;
 
 class Theme extends BaseV1\Theme
 {
@@ -1518,6 +1517,14 @@ class Theme extends BaseV1\Theme
 
         });
 
+        $app->hook('template(site.index.home-search):end', function () use ($app) {
+            $texto = "Ação do Governo do Estado do Ceará que tem por objetivo conceder aos trabalhadores e trabalhadoras do setor de eventos um auxílio financeiro. Faz parte de um pacote de ações para socorrer o setor de eventos no Estado em meio à pandemia da Covid-19. <br/><br/> O auxílio será pago em duas parcelas de R$ 500, mediante cadastro dos profissionais junto à Secretaria da Cultura do Estado. Cerca de 10 mil profissionais, como músicos, humoristas e técnicos de som, deverão ser beneficiados. Ao todo R$ 10 milhões serão investidos pelo Estado para transferência dessa renda. Estão inclusos músicos, humoristas, profissionais de circo, técnicos de som, luz e imagem, montadores de palcos, etc.";
+            $botao = "Solicite seu auxílio";
+            $titulo = "AUXÍLIO FINANCEIRO AOS PROFISSIONAIS DO SETOR DE EVENTOS";
+
+            $this->part('auxilioeventos/home-search', ['texto' => $texto, 'botao' => $botao, 'titulo' => $titulo]);
+        });
+
         $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
@@ -1582,56 +1589,12 @@ class Theme extends BaseV1\Theme
                 'entityRevision' => $this->data->entityRevision,
             ]);
         });
-       
-        /* Adicionando novos campos na entidade entity revision agent */
-        $app->hook('template(entityrevision.history.tab-about-service):end', function () {
-            $this->part('news-fields-agent-revision', [
-                'entityRevision' => $this->data->entityRevision,
-            ]);
-        });
-      
+
         $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
             $opportunity = $this->controller->requestedEntity;
             $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
         });
-        
-        //relatórios de inscritos botão antigo 
-        $app->hook("<<GET|POST>>(opportunity.reportOld)", function()use ($app){
-            //return var_dump("ola");
-            $this->requireAuthentication();
-            // //$app = App::i();
-            
 
-            $entity = $app->repo("Opportunity")->find($this->urlData['id']);
-
-            if(!$entity){
-                $app->pass();
-            }
-
-            $entity->checkPermission('@control');
-
-            $app->controller('Registration')->registerRegistrationMetadata($entity);
-
-            $filename = sprintf(\MapasCulturais\i::__("oportunidade-%s--inscricoes"), $entity->id);
-
-           
-            $response = $app->response();
-            $response['Content-Encoding'] = 'UTF-8';
-            $response['Content-Type'] = 'application/force-download';
-            $response['Content-Disposition'] ='attachment; filename=' . $filename . '.xls';
-            $response['Pragma'] ='no-cache';
-
-            $app->contentType('application/vnd.ms-excel; charset=UTF-8');
-            
-    
-            ob_start();
-            $this->partial("report-old", ['entity' => $entity]);
-            $output = ob_get_clean();
-            echo mb_convert_encoding($output,"HTML-ENTITIES","UTF-8");
-        });
-
-
-        //relatorios de inscritos por data 
         $app->hook("<<GET|POST>>(opportunity.reportResultEvaluationsDocumental)", function () use ($app) {
 
             $format = isset($this->data['fileFormat']) ? $this->data['fileFormat'] : 'pdf';
@@ -1673,7 +1636,7 @@ class Theme extends BaseV1\Theme
                 if($agentRelations) {
                    $coletivo = $agentRelations[0]->agent->nomeCompleto;
                 }
-
+                
                 $proponente = $registration->owner->nomeCompleto;
                 if (strpos($categoria,'JURÍDICA') && $coletivo !== null) {
                    $proponente = $coletivo;
@@ -1706,44 +1669,6 @@ class Theme extends BaseV1\Theme
             unlink($filename);
         });
 
-        $app->hook("POST(aldirblanc.status)", function () use ($app) {
-            $this->requireAuthentication();
-            $app = App::i();
-    
-            $type_bank_account = $app->repo('RegistrationMeta')->findOneBy([
-                'key' => 'field_6494',
-                'owner' => $this->urlData['registration_id']
-            ]); // Tipo de conta bancária
-    
-            $bank = $app->repo('RegistrationMeta')->findOneBy([
-                'key' => 'field_6469',
-                'owner' => $this->urlData['registration_id']
-            ]);
-    
-            $agency = $app->repo('RegistrationMeta')->findOneBy([
-                'key' => 'field_6468',
-                'owner' => $this->urlData['registration_id']
-            ]);
-    
-            $account = $app->repo('RegistrationMeta')->findOneBy([
-                'key' => 'field_6464',
-                'owner' => $this->urlData['registration_id']
-            ]);
-    
-            $bank->value = $this->postData['banks'];
-            $type_bank_account->value = $this->postData['type_bank_accounts'];
-            $agency->value = $this->postData["agency_digit"] 
-                ? $this->postData["agency_number"] . "-" . $this->postData["agency_digit"]
-                : $this->postData["agency_number"];
-            $account->value = $this->postData["account_digit"] 
-                ? $this->postData["account_number"] . "-" . $this->postData["account_digit"]
-                : $this->postData["account_number"];
-    
-            $app->em->flush();
-    
-            $app->redirect($this->createUrl('status', [$this->urlData['registration_id']]));
-        });
-
         $app->hook('template(<<agent|space|event|project>>.<<single>>.main-content):end', function() use ($app) {
             // É possível acessar a propriedade config pelo o $app;
             
@@ -1763,26 +1688,6 @@ class Theme extends BaseV1\Theme
             
             $this->part('compliant_suggestion_ceara.php', $params);
         });
-
-        $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
-            $opportunity = $this->controller->requestedEntity;
-            $inciso1_opportunity_id = $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'];                         
-           
-            if ($opportunity->id == $inciso1_opportunity_id) {
-               $url = $app->createUrl('aldirblanc', 'inciso1ProcessResult');
-               echo '<a class="btn btn-default" href="'.$url.'"> Processar Resultado das Avaliacoes Inciso 1 </a>';
-            }            
-       });
-
-       $app->hook('template(aldirblanc.status.reason-failure):begin', function ($params) use ($app) {
-        
-            $evaluations = $app->repo('RegistrationEvaluation')->findByRegistrationAndUsersAndStatus($params['entity']);
-            $params['evaluations'] = $evaluations;
-
-            $this->part('reason-failure', $params);
-            $this->part('bank-defails-edit--form', $params);
-
-       });
     }
     /**
      *
