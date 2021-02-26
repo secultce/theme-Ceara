@@ -94,6 +94,10 @@
     #widget-tags {
         display: none;
     }
+
+    .notifications {
+        display: none !important;
+    }
 }
 /** #home-watermark {
     min-height: calc(100vh); // viewport height minus header height
