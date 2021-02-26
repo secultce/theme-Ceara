@@ -90,6 +90,10 @@
     .registrations-table {
         display: table !important;
     }
+
+    #widget-tags {
+        display: none;
+    }
 }
 /** #home-watermark {
     min-height: calc(100vh); // viewport height minus header height
