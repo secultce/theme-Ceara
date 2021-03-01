@@ -63,7 +63,42 @@
     }
 }
 
+@media screen and (max-width: 768px) {
+    .submenu { display: none; }
+    .session-menu { position: relative; }
+    .session-menu .user { float: right; }
+    .menu > li div.icon { position: relative; }
+    .icon.icon-login::after, .icon.icon-login::before { position: absolute; }
 
+
+    .login a { width: 100vw; }
+    .icon.icon-login::before { left: 0vw; }
+    .icon.icon-login::after { left: -1vw; }
+
+    #filter-opportunitys > .ng-hide {
+        display: block !important;
+    }
+
+    #filter-opportunitys .icon-show-advanced-search {
+        display: none;
+    }
+
+    .alert.danger {
+        display: none !important;
+    }
+
+    .registrations-table {
+        display: table !important;
+    }
+
+    #widget-tags {
+        display: none;
+    }
+
+    .notifications {
+        display: none !important;
+    }
+}
 /** #home-watermark {
     min-height: calc(100vh); // viewport height minus header height
     background: transparent url(../img/backgroud.png) no-repeat top;
