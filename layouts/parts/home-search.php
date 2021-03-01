@@ -1,6 +1,12 @@
 <section id="home-intro" style="background-image:url('<?php echo $this->asset('img/home-background-tja.jpg', false); ?>');  background-size: cover;" class="js-page-menu-item home-entity clearfix">
     <div class="box">
-        <div style="margin:auto; width:320px;"><img width='320px'src='<?php echo $this->asset('img/map-white-logo.png', false); ?>'/></div>
+        <div style="margin:auto; width:320px;"><img width='320px'src='<?php echo $this->asset('img/map-white-logo.png', false); ?>'/></div>    
+    </div>
+    
+    <?php $this->applyTemplateHook('home-search','begin'); ?>    
+    
+    <div class="box">
+        
         <div class="box" style="background-color: rgba(8,94,85, 0.3);">
             <h1><?php echo $app->view->renderMarkdown($this->dict('home: title',false)); ?></h1>
             <p><?php echo $app->view->renderMarkdown($this->dict('home: welcome',false)); ?></p>
