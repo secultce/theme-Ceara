@@ -1,8 +1,8 @@
 <div class="box">
-    <h1><?= $titulo ?></h1>
+<a href="<?= $titulo_url ?>"> <h1><?= $titulo ?></h1> </a>
     <p style="text-align:justify">
         <?= $texto ?>
     </p>
 
-    <a class="btn btn-accent btn-large" href="<?php echo $app->createUrl("") ?>"><?= $botao ?></a>
+    <a class="btn btn-accent btn-large" href="<?= $botao_url ?>"><?= $botao ?></a>
 </div> 
