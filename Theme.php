@@ -1793,6 +1793,16 @@ class Theme extends BaseV1\Theme
             $this->part('reason-failure', $params);
 
        });
+
+        $theme = $this;
+
+        $app->hook('auth.createUser:after', function () use ($app, $theme) {
+            $theme->fixAgentPermission();            
+        });
+
+        $app->hook('auth.successful', function () use ($app, $theme) {
+            $theme->fixAgentPermission();
+        });
     }
     /**
      *
@@ -1833,5 +1843,51 @@ class Theme extends BaseV1\Theme
             'label' => \MapasCulturais\i::__('Informe o valor do projeto'),
             'type' => 'string',
         ]);
+    }
+
+    /**
+     * Fix agent Permission
+     *
+     * @return void
+     */
+    public function fixAgentPermission(){
+        $app = App::i();
+        
+        //Cache
+        $cache_id = 'fixAgentPermission:' . $app->user->id;
+        if ($app->cache->contains($cache_id)) return;
+        $app->cache->save($cache_id, true);
+        
+
+        $conn = $app->em->getConnection();            
+        $agents = $app->repo('Agent')->findBy(['user' => $app->user ]);           
+        $actions = ['@control','create','remove','destroy','changeOwner','archive','view','modify','viewPrivateFiles'
+        ,'viewPrivateData','createAgentRelation','createAgentRelationWithControl','removeAgentRelation'
+        ,'removeAgentRelationWithControl','createSealRelation','removeSealRelation'];
+
+        //Para cada agent individual adiciona as permissoes que podem estar faltando
+        foreach ($agents as $agent){
+            if($agent->type == 2) continue;
+            $pcaches = $conn->fetchAll('select action from pcache where user_id = ' . $app->user->id . ' and object_id = ' . $agent->id  );
+            foreach ($actions as $action) {
+                $has_permission = false ;                    
+                foreach ($pcaches as $p) {
+                    if ($p['action'] == $action) {
+                        $has_permission = true;
+                        break;
+                    }
+                }
+                if ($has_permission === false){
+                    $permission = new \MapasCulturais\Entities\AgentPermissionCache();
+                    $permission->owner = $agent;
+                    $permission->action = $action;
+                    $permission->user = $app->user;
+                    $permission->createTimestamp = new \DateTime;
+                    $permission->save();
+                    $app->em->persist($permission);
+                    $app->em->flush();
+                }
+            }                
+        }
     }
 }
