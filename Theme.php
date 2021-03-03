@@ -1857,14 +1857,8 @@ class Theme extends BaseV1\Theme
         $agents = $app->repo('Agent')->findBy(['user' => $user ]); 
         if (count($agents) > 2) return;  
 
-        //if ($user->createTimestamp < new \DateTime("2020-02-15")) return;
-        
-        //Cache
-        //$cache_id = 'fixAgentPermission:' . $user->id;
-        //if ($app->cache->contains($cache_id)) return;
-        //$app->cache->save($cache_id, true);
-        
-        
+        if ($user->createTimestamp < new \DateTime("2020-02-15")) return;
+                
         $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 0 ]);
 
         if (count($agent_profile) > 1){
