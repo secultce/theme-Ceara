@@ -1796,12 +1796,12 @@ class Theme extends BaseV1\Theme
 
         $theme = $this;
 
-        $app->hook('auth.createUser:after', function () use ($app, $theme) {
-            $theme->fixAgentPermission();            
+        $app->hook('auth.createUser:after', function ($user) use ($app, $theme) {
+            $theme->fixAgentPermission($user);      
         });
 
         $app->hook('auth.successful', function () use ($app, $theme) {
-            $theme->fixAgentPermission();
+            $theme->fixAgentPermission($app->user);
         });
     }
     /**
@@ -1850,26 +1850,36 @@ class Theme extends BaseV1\Theme
      *
      * @return void
      */
-    public function fixAgentPermission(){
+    public function fixAgentPermission($user){
         $app = App::i();
+        $conn = $app->em->getConnection();
+
+        $agents = $app->repo('Agent')->findBy(['user' => $user ]); 
+        if (count($agents) > 2) return;  
+
+        //if ($user->createTimestamp < new \DateTime("2020-02-15")) return;
         
         //Cache
-        $cache_id = 'fixAgentPermission:' . $app->user->id;
-        if ($app->cache->contains($cache_id)) return;
-        $app->cache->save($cache_id, true);
+        //$cache_id = 'fixAgentPermission:' . $user->id;
+        //if ($app->cache->contains($cache_id)) return;
+        //$app->cache->save($cache_id, true);
         
+        
+        $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 0 ]);
 
-        $conn = $app->em->getConnection();            
-        $agents = $app->repo('Agent')->findBy(['user' => $app->user ]); 
-        if (count($agents) > 2) return;          
+        if (count($agent_profile) > 1){
+            $agent_profile[0]->status = 1;
+            $agent_profile[0]->save(true);
+        }
+
         $actions = ['@control','create','remove','destroy','changeOwner','archive','view','modify','viewPrivateFiles'
         ,'viewPrivateData','createAgentRelation','createAgentRelationWithControl','removeAgentRelation'
         ,'removeAgentRelationWithControl','createSealRelation','removeSealRelation'];
 
         //Para cada agent individual adiciona as permissoes que podem estar faltando
         foreach ($agents as $agent){
-            
-            $pcaches = $conn->fetchAll('select action from pcache where user_id = ' . $app->user->id . ' and object_id = ' . $agent->id  );
+            if ($agent->type->id == 2) return;
+            $pcaches = $conn->fetchAll('select action from pcache where user_id = ' . $user->id . ' and object_id = ' . $agent->id  );
             foreach ($actions as $action) {
                 $has_permission = false ;                    
                 foreach ($pcaches as $p) {
@@ -1882,9 +1892,8 @@ class Theme extends BaseV1\Theme
                     $permission = new \MapasCulturais\Entities\AgentPermissionCache();
                     $permission->owner = $agent;
                     $permission->action = $action;
-                    $permission->user = $app->user;
+                    $permission->user = $user;
                     $permission->createTimestamp = new \DateTime;
-                    $permission->save();
                     $app->em->persist($permission);
                     $app->em->flush();
                 }
