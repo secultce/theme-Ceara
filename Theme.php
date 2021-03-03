@@ -1860,14 +1860,15 @@ class Theme extends BaseV1\Theme
         
 
         $conn = $app->em->getConnection();            
-        $agents = $app->repo('Agent')->findBy(['user' => $app->user ]);           
+        $agents = $app->repo('Agent')->findBy(['user' => $app->user ]); 
+        if (count($agents) > 2) return;          
         $actions = ['@control','create','remove','destroy','changeOwner','archive','view','modify','viewPrivateFiles'
         ,'viewPrivateData','createAgentRelation','createAgentRelationWithControl','removeAgentRelation'
         ,'removeAgentRelationWithControl','createSealRelation','removeSealRelation'];
 
         //Para cada agent individual adiciona as permissoes que podem estar faltando
         foreach ($agents as $agent){
-            if($agent->type == 2) continue;
+            
             $pcaches = $conn->fetchAll('select action from pcache where user_id = ' . $app->user->id . ' and object_id = ' . $agent->id  );
             foreach ($actions as $action) {
                 $has_permission = false ;                    
