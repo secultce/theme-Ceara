@@ -1777,7 +1777,7 @@ class Theme extends BaseV1\Theme
 
         $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
             $opportunity = $this->controller->requestedEntity;
-            $inciso1_opportunity_id = $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'];                         
+            $inciso1_opportunity_id = isset($app->_config['plugins']['AldirBlanc']) ? $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'] : 0;                         
            
             if ($opportunity->id == $inciso1_opportunity_id) {
                $url = $app->createUrl('aldirblanc', 'inciso1ProcessResult');
