@@ -66,7 +66,7 @@ return [
             \MapasCulturais\i::__('Novas Mídias'),
             \MapasCulturais\i::__('Patrimônio Imaterial'),
             \MapasCulturais\i::__('Patrimônio Material'),
-            \MapasCulturais\i::__('Performace'),
+            \MapasCulturais\i::__('Performance'),
             \MapasCulturais\i::__('Pesquisa'),
             \MapasCulturais\i::__('Produção'),
             \MapasCulturais\i::__('Produção Cultural'),
