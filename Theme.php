@@ -1,4 +1,5 @@
 <?php
+
 namespace Ceara;
 
 use MapasCulturais\App;
@@ -1511,16 +1512,14 @@ class Theme extends BaseV1\Theme
                     $relation = $owner->createAgentRelation($agent, 'group-admin', true, false);
                     $relation->save(true);
                 }
-
             }
 
             $app->enableAccessControl();
-
         });
 
         $app->hook('template(site.index.home-search):begin', function () use ($app) {
-           return;
-           /*
+            return;
+            /*
             $titulo = "AUXÍLIO FINANCEIRO AOS PROFISSIONAIS DO SETOR DE EVENTOS";
             $titulo_url =  $app->createUrl('opportunity','single', [2852]);
             $texto = "Ação do Governo do Estado do Ceará que tem por objetivo conceder aos trabalhadores e trabalhadoras do setor de eventos um auxílio financeiro. Faz parte de um pacote de ações para socorrer o setor de eventos no Estado em meio à pandemia da Covid-19. <br/><br/> O auxílio será pago em duas parcelas de R$ 500, mediante cadastro dos profissionais junto à Secretaria da Cultura do Estado, através do Mapa Cultural do Ceará. Cerca de 10 mil profissionais, como músicos, humoristas e técnicos de som, deverão ser beneficiados. Ao todo R$ 10 milhões serão investidos pelo Estado para transferência dessa renda. Estão inclusos músicos, humoristas, profissionais de circo, técnicos de som, luz e imagem, montadores de palcos, etc.";
@@ -1530,7 +1529,7 @@ class Theme extends BaseV1\Theme
             $this->part('auxilioeventos/home-search', ['texto' => $texto, 'botao' => $botao, 'titulo' => $titulo, 'titulo_url'=> $titulo_url, 'botao_url' => $botao_url]);
             */
         });
-        
+
         $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
@@ -1561,14 +1560,12 @@ class Theme extends BaseV1\Theme
                 $result = $statement->fetchAll();
                 $result_type = "success";
                 $result = "OK";
-
             } catch (\Exception $e) {
                 $result = $e->getMessage();
                 $result_type = "error";
             }
 
             $this->json(array($result_type => $result));
-
         });
 
         $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
@@ -1583,41 +1580,41 @@ class Theme extends BaseV1\Theme
             }
         });
 
-        $app->hook('template.opportunity.single.header.registration-item', function($registrationId) use($app) {
+        $app->hook('template.opportunity.single.header.registration-item', function ($registrationId) use ($app) {
             if ($app->user->is('admin')) {
-                echo '<button class="btn btn-danger" data-id='.$registrationId.' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
+                echo '<button class="btn btn-danger" data-id=' . $registrationId . ' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
             }
         });
-        
+
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
             $this->part('news-fields-agent-revision', [
                 'entityRevision' => $this->data->entityRevision,
             ]);
         });
-       
+
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
             $this->part('news-fields-agent-revision', [
                 'entityRevision' => $this->data->entityRevision,
             ]);
         });
-      
+
         $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
             $opportunity = $this->controller->requestedEntity;
             $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
         });
-        
+
         //relatórios de inscritos botão antigo 
-        $app->hook("<<GET|POST>>(opportunity.reportOld)", function()use ($app){
+        $app->hook("<<GET|POST>>(opportunity.reportOld)", function () use ($app) {
             //return var_dump("ola");
             $this->requireAuthentication();
             // //$app = App::i();
-            
+
 
             $entity = $app->repo("Opportunity")->find($this->urlData['id']);
 
-            if(!$entity){
+            if (!$entity) {
                 $app->pass();
             }
 
@@ -1627,20 +1624,20 @@ class Theme extends BaseV1\Theme
 
             $filename = sprintf(\MapasCulturais\i::__("oportunidade-%s--inscricoes"), $entity->id);
 
-           
+
             $response = $app->response();
             $response['Content-Encoding'] = 'UTF-8';
             $response['Content-Type'] = 'application/force-download';
-            $response['Content-Disposition'] ='attachment; filename=' . $filename . '.xls';
-            $response['Pragma'] ='no-cache';
+            $response['Content-Disposition'] = 'attachment; filename=' . $filename . '.xls';
+            $response['Pragma'] = 'no-cache';
 
             $app->contentType('application/vnd.ms-excel; charset=UTF-8');
-            
-    
+
+
             ob_start();
             $this->partial("report-old", ['entity' => $entity]);
             $output = ob_get_clean();
-            echo mb_convert_encoding($output,"HTML-ENTITIES","UTF-8");
+            echo mb_convert_encoding($output, "HTML-ENTITIES", "UTF-8");
         });
 
 
@@ -1679,19 +1676,19 @@ class Theme extends BaseV1\Theme
                     return $motivos;
                 });
                 $categoria = $registration->category;
-                $agentRelations = $app->repo('RegistrationAgentRelation')->findBy(['owner'=>$registration]);
-                
+                $agentRelations = $app->repo('RegistrationAgentRelation')->findBy(['owner' => $registration]);
+
                 $coletivo = null;
-                
-                if($agentRelations) {
-                   $coletivo = $agentRelations[0]->agent->nomeCompleto;
+
+                if ($agentRelations) {
+                    $coletivo = $agentRelations[0]->agent->nomeCompleto;
                 }
 
                 $proponente = $registration->owner->nomeCompleto;
-                if (strpos($categoria,'JURÍDICA') && $coletivo !== null) {
-                   $proponente = $coletivo;
-                } 
-                
+                if (strpos($categoria, 'JURÍDICA') && $coletivo !== null) {
+                    $proponente = $coletivo;
+                }
+
                 $json_array[] = [
                     'n_inscricao' => $registration->number,
                     'projeto' => $projectName,
@@ -1722,84 +1719,83 @@ class Theme extends BaseV1\Theme
         $app->hook("POST(aldirblanc.status)", function () use ($app) {
             $this->requireAuthentication();
             $app = App::i();
-    
+
             $type_bank_account = $app->repo('RegistrationMeta')->findOneBy([
                 'key' => 'field_6494',
                 'owner' => $this->urlData['registration_id']
             ]); // Tipo de conta bancária
-    
+
             $bank = $app->repo('RegistrationMeta')->findOneBy([
                 'key' => 'field_6469',
                 'owner' => $this->urlData['registration_id']
             ]);
-    
+
             $agency = $app->repo('RegistrationMeta')->findOneBy([
                 'key' => 'field_6468',
                 'owner' => $this->urlData['registration_id']
             ]);
-    
+
             $account = $app->repo('RegistrationMeta')->findOneBy([
                 'key' => 'field_6464',
                 'owner' => $this->urlData['registration_id']
             ]);
-    
+
             $bank->value = $this->postData['banks'];
             $type_bank_account->value = $this->postData['type_bank_accounts'];
-            $agency->value = $this->postData["agency_digit"] 
+            $agency->value = $this->postData["agency_digit"]
                 ? $this->postData["agency_number"] . "-" . $this->postData["agency_digit"]
                 : $this->postData["agency_number"];
-            $account->value = $this->postData["account_digit"] 
+            $account->value = $this->postData["account_digit"]
                 ? $this->postData["account_number"] . "-" . $this->postData["account_digit"]
                 : $this->postData["account_number"];
-    
+
             $app->em->flush();
-    
+
             $app->redirect($this->createUrl('status', [$this->urlData['registration_id']]));
         });
 
-        $app->hook('template(<<agent|space|event|project>>.<<single>>.main-content):end', function() use ($app) {
+        $app->hook('template(<<agent|space|event|project>>.<<single>>.main-content):end', function () use ($app) {
             // É possível acessar a propriedade config pelo o $app;
-            
+
             $params = [];
-    
-            if(array_key_exists('compliant',$app->_config)) {
+
+            if (array_key_exists('compliant', $app->_config)) {
                 $params['compliant'] = $app->_config['compliant']; // Denuncia
             }
-    
-            if(array_key_exists('suggestion', $app->_config)) {
+
+            if (array_key_exists('suggestion', $app->_config)) {
                 $params['suggestion'] = $app->_config['suggestion']; // Contato
             }
-            
-            if(array_key_exists('google-recaptcha-sitekey',$app->_config)) {
+
+            if (array_key_exists('google-recaptcha-sitekey', $app->_config)) {
                 $params['googleRecaptchaSiteKey'] = $app->_config['google-recaptcha-sitekey'];
             }
-            
+
             $this->part('compliant_suggestion_ceara.php', $params);
         });
 
         $app->hook('template(opportunity.single.header-inscritos):end', function () use ($app) {
             $opportunity = $this->controller->requestedEntity;
-            $inciso1_opportunity_id = isset($app->_config['plugins']['AldirBlanc']) ? $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'] : 0;                         
-           
-            if ($opportunity->id == $inciso1_opportunity_id) {
-               $url = $app->createUrl('aldirblanc', 'inciso1ProcessResult');
-               echo '<a class="btn btn-default" href="'.$url.'"> Processar Resultado das Avaliacoes Inciso 1 </a>';
-            }            
-       });
+            $inciso1_opportunity_id = isset($app->_config['plugins']['AldirBlanc']) ? $app->_config['plugins']['AldirBlanc']['config']['inciso1_opportunity_id'] : 0;
 
-       $app->hook('template(aldirblanc.status.reason-failure):begin', function ($params) use ($app) {
-        
+            if ($opportunity->id == $inciso1_opportunity_id) {
+                $url = $app->createUrl('aldirblanc', 'inciso1ProcessResult');
+                echo '<a class="btn btn-default" href="' . $url . '"> Processar Resultado das Avaliacoes Inciso 1 </a>';
+            }
+        });
+
+        $app->hook('template(aldirblanc.status.reason-failure):begin', function ($params) use ($app) {
+
             $evaluations = $app->repo('RegistrationEvaluation')->findByRegistrationAndUsersAndStatus($params['entity']);
             $params['evaluations'] = $evaluations;
 
             $this->part('reason-failure', $params);
-
-       });
+        });
 
         $theme = $this;
 
         $app->hook('auth.createUser:after', function ($user) use ($app, $theme) {
-            $theme->fixAgentPermission($user);      
+            $theme->fixAgentPermission($user);
         });
 
         $app->hook('auth.successful', function () use ($app, $theme) {
@@ -1852,39 +1848,40 @@ class Theme extends BaseV1\Theme
      *
      * @return void
      */
-    public function fixAgentPermission($user){
+    public function fixAgentPermission($user)
+    {
         $app = App::i();
         $conn = $app->em->getConnection();
 
-        $agents = $app->repo('Agent')->findBy(['user' => $user ]); 
-        if (count($agents) > 2) return;  
+        $agents = $app->repo('Agent')->findBy(['user' => $user]);
+        if (count($agents) > 2) return;
 
         if ($user->createTimestamp < new \DateTime("2020-02-15")) return;
-                
-        $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 0 ]);
 
-        if (count($agent_profile) > 1){
+        $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 0]);
+
+        if (count($agent_profile) > 1) {
             $agent_profile[0]->status = 1;
             $agent_profile[0]->save(true);
         }
 
-        $actions = ['@control','create','remove','destroy','changeOwner','archive','view','modify','viewPrivateFiles'
-        ,'viewPrivateData','createAgentRelation','createAgentRelationWithControl','removeAgentRelation'
-        ,'removeAgentRelationWithControl','createSealRelation','removeSealRelation'];
+        $actions = [
+            '@control', 'create', 'remove', 'destroy', 'changeOwner', 'archive', 'view', 'modify', 'viewPrivateFiles', 'viewPrivateData', 'createAgentRelation', 'createAgentRelationWithControl', 'removeAgentRelation', 'removeAgentRelationWithControl', 'createSealRelation', 'removeSealRelation'
+        ];
 
         //Para cada agent individual adiciona as permissoes que podem estar faltando
-        foreach ($agents as $agent){
+        foreach ($agents as $agent) {
             if ($agent->type->id == 2) return;
-            $pcaches = $conn->fetchAll('select action from pcache where user_id = ' . $user->id . ' and object_id = ' . $agent->id  );
+            $pcaches = $conn->fetchAll('select action from pcache where user_id = ' . $user->id . ' and object_id = ' . $agent->id);
             foreach ($actions as $action) {
-                $has_permission = false ;                    
+                $has_permission = false;
                 foreach ($pcaches as $p) {
                     if ($p['action'] == $action) {
                         $has_permission = true;
                         break;
                     }
                 }
-                if ($has_permission === false){
+                if ($has_permission === false) {
                     $permission = new \MapasCulturais\Entities\AgentPermissionCache();
                     $permission->owner = $agent;
                     $permission->action = $action;
@@ -1893,7 +1890,7 @@ class Theme extends BaseV1\Theme
                     $app->em->persist($permission);
                     $app->em->flush();
                 }
-            }                
+            }
         }
     }
 }
