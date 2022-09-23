@@ -71,6 +71,7 @@ return [
             \MapasCulturais\i::__('Produção'),
             \MapasCulturais\i::__('Produção Cultural'),
             \MapasCulturais\i::__('Povos Tradicionais de Matriz Africana'),
+            \MapasCulturais\i::__('Ponto de Cultura - CE'),
             \MapasCulturais\i::__('Quilombola'),
             \MapasCulturais\i::__('Rádio'),
             \MapasCulturais\i::__('Saúde'),
