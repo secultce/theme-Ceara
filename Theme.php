@@ -108,6 +108,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
 
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
+        $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
 
         $app->hook('view.render(<<*>>):before', function () use ($app) {
