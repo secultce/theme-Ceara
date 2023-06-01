@@ -15,9 +15,19 @@ if($this->controller->action === 'create')
 <?php if ($this->isEditable() || $gallery): ?>
     <h3><?php \MapasCulturais\i::_e("Galeria");?></h3>
     <div class="clearfix js-gallery">
-        <?php if($gallery): foreach($gallery as $img): ?>
-            <div id="file-<?php echo $img->id ?>" class="image-gallery-item" >
-                <a href="<?php echo $img->url; ?>" title="<?php echo htmlspecialchars($img->description, ENT_QUOTES); ?> - Cadastrado em <?php echo $img->createTimestamp->format('d/m/Y á\s H:i:s')?>"><img src="<?php echo $img->transform('galleryThumb')->url; ?>" /></a>
+    <?php if($gallery): foreach($gallery as $img): ?>
+            <div id="file-<?php echo $img->id ?>" class="image-gallery-item" >                
+                <a href="<?php echo $img->url; ?>" title="<?php echo htmlspecialchars($img->description, ENT_QUOTES); ?> - Cadastrado em <?php echo $img->createTimestamp->format('d/m/Y á\s H:i:s')?>">
+                    <?php 
+                    //add essa condição para o agente que tem muitos arquivos
+                    //ideal é criar uma páginação
+                    if($entity->id == 11854): ?>    
+                        <small>Visualizar</small>
+                    <?php else: ?>                        
+                        <img src="<?php echo $img->transform('galleryThumb')->url; ?>" />
+                    <?php endif; ?>
+                </a>
+
                 <?php if($this->isEditable()): ?>
 
                     <a data-href="<?php echo $img->deleteUrl?>" data-target="#file-<?php echo $img->id ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir");?>"></a>
