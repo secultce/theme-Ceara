@@ -23,10 +23,10 @@ if ($this->isEditable()) {
 $this->enqueueScript('app', 'events', '/js/events.js', array('mapasculturais'));
 $this->localizeScript('singleEvents', [
             'correctErrors' => \MapasCulturais\i::__('Corrija os erros indicados abaixo.'),
-            'requestAddToSpace' => \MapasCulturais\i::__('Sua requisi��o para adicionar este evento no espa�o %s foi enviada.'),
-            'notAllowed' => \MapasCulturais\i::__('Voc� n�o tem permiss�o para criar eventos nesse espa�o.'),
+            'requestAddToSpace' => \MapasCulturais\i::__('Sua requisição para adicionar este evento no espaço %s foi enviada.'),
+            'notAllowed' => \MapasCulturais\i::__('Você não tem permissão para criar eventos nesse espaço.'),
             'unexpectedError' => \MapasCulturais\i::__('Erro inesperado.'),
-            'confirmDescription' => \MapasCulturais\i::__('As datas foram alteradas mas a descri��o n�o. Tem certeza que deseja salvar?'),
+            'confirmDescription' => \MapasCulturais\i::__('As datas foram alteradas mas a descrição não. Tem certeza que deseja salvar?'),
             'Erro'=> \MapasCulturais\i::__('Erro'),
         ]);
 
@@ -43,19 +43,19 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
             <h3 class="alignleft"><a href="{{space.singleUrl}}" rel='noopener noreferrer'>{{space.name}}</a></h3>
             <a class="toggle-mapa" href="#" rel='noopener noreferrer'><span class="ver-mapa"><?php \MapasCulturais\i::_e("ver mapa");?></span><span class="ocultar-mapa"><?php \MapasCulturais\i::_e("ocultar mapa");?></span> <span class="icon icon-show-map"></span></a>
         </header>
-        {{#pending}}<div class="alert warning pending"><?php \MapasCulturais\i::_e("Aguardando confirma��o");?></div>{{/pending}}
+        {{#pending}}<div class="alert warning pending"><?php \MapasCulturais\i::_e("Aguardando confirmação");?></div>{{/pending}}
         <div id="occurrence-map-{{id}}" class="mapa js-map" data-lat="{{space.location.latitude}}" data-lng="{{space.location.longitude}}"></div>
         <!-- .mapa -->
         <div class="infos">
-            <p><span class="label"><?php \MapasCulturais\i::_e("Descri��o Leg�vel");?>: </span>{{#rule.description}}{{rule.description}}{{/rule.description}}{{^rule.description}}<?php \MapasCulturais\i::_e("N�o Informado");?>.{{/rule.description}}</p>
-            <p><span class="label"><?php \MapasCulturais\i::_e("Pre�o");?>:</span> {{#rule.price}}{{rule.price}}{{/rule.price}}{{^rule.price}}<?php \MapasCulturais\i::_e("N�o Informado");?>.{{/rule.price}}</p>
-            <p><span class="label"><?php \MapasCulturais\i::_e("Hor�rio inicial");?>:</span> {{rule.startsAt}}</p>
+            <p><span class="label"><?php \MapasCulturais\i::_e("Descrição Legível");?>: </span>{{#rule.description}}{{rule.description}}{{/rule.description}}{{^rule.description}}<?php \MapasCulturais\i::_e("Não Informado");?>.{{/rule.description}}</p>
+            <p><span class="label"><?php \MapasCulturais\i::_e("Preço");?>:</span> {{#rule.price}}{{rule.price}}{{/rule.price}}{{^rule.price}}<?php \MapasCulturais\i::_e("Não Informado");?>.{{/rule.price}}</p>
+            <p><span class="label"><?php \MapasCulturais\i::_e("Horário inicial");?>:</span> {{rule.startsAt}}</p>
             {{#rule.duration}}
-                <p><span class="label"><?php \MapasCulturais\i::_e("Dura��o");?>:</span> {{rule.duration}} <?php \MapasCulturais\i::_e("min");?></p>
+                <p><span class="label"><?php \MapasCulturais\i::_e("Duração");?>:</span> {{rule.duration}} <?php \MapasCulturais\i::_e("min");?></p>
             {{/rule.duration}}
-            <p><span class="label"><?php \MapasCulturais\i::_e("Hor�rio final");?>:</span> {{rule.endsAt }}</p>
+            <p><span class="label"><?php \MapasCulturais\i::_e("Horário final");?>:</span> {{rule.endsAt }}</p>
             <?php if($this->isEditable()): ?>
-                <p class="privado"><span class="icon icon-private-info"></span><span class="label"><?php \MapasCulturais\i::_e("Frequ�ncia");?>:</span> {{rule.screen_frequency}}</p>
+                <p class="privado"><span class="icon icon-private-info"></span><span class="label"><?php \MapasCulturais\i::_e("Frequência");?>:</span> {{rule.screen_frequency}}</p>
             <?php endif; ?>
             <p><span class="label"><?php \MapasCulturais\i::_e("Data inicial");?>:</span> {{rule.screen_startsOn}}</p>
             {{#rule.screen_until}}
@@ -88,9 +88,9 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
         <div class="infos">
             <p class="descricao-legivel">{{occurrencesDescription}}</p>
             {{#occurrencesPrice}}
-                <p><span class="label"><?php \MapasCulturais\i::_e("Pre�o");?>:</span> {{occurrencesPrice}}</p>
+                <p><span class="label"><?php \MapasCulturais\i::_e("Preço");?>:</span> {{occurrencesPrice}}</p>
             {{/occurrencesPrice}}
-            <p><span class="label"><?php \MapasCulturais\i::_e("Endere�o");?>:</span> {{space.endereco}}</p>
+            <p><span class="label"><?php \MapasCulturais\i::_e("Endereço");?>:</span> {{space.endereco}}</p>
         </div>
         <!-- .infos -->
     </div>
@@ -131,7 +131,7 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                 <?php if ($this->isEditable() || $entity->subTitle): ?>
                     <?php $this->applyTemplateHook('subtitle','before'); ?>
                     <h4 class="event-subtitle">
-                        <span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"subTitle") && $editEntity? 'required': '');?>" data-edit="subTitle" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Subt�tulo");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira um subt�tulo para o evento");?>" data-tpl='<input tyle="text" maxlength="140"></textarea>'><?php echo $entity->subTitle; ?></span>
+                        <span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"subTitle") && $editEntity? 'required': '');?>" data-edit="subTitle" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Subtítulo");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira um subtítulo para o evento");?>" data-tpl='<input tyle="text" maxlength="140"></textarea>'><?php echo $entity->subTitle; ?></span>
                     </h4>
                     <?php $this->applyTemplateHook('subtitle','after'); ?>
                 <?php endif; ?>
@@ -160,18 +160,18 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                         <?php $this->part('widget-tags', array('entity'=>$entity)); ?>
             </div>
             <?php if($this->isEditable() && $entity->shortDescription && mb_strlen($entity->shortDescription) > 400): ?>
-                    <div class="alert warning"><?php \MapasCulturais\i::_e("O limite de caracteres da descri��o curta foi diminuido para 400, mas seu texto atual possui");?> <?php echo mb_strlen($entity->shortDescription) ?> <?php \MapasCulturais\i::_e("caracteres. Voc� deve alterar seu texto ou este ser� cortado ao salvar.");?></div>
+                    <div class="alert warning"><?php \MapasCulturais\i::_e("O limite de caracteres da descrição curta foi diminuido para 400, mas seu texto atual possui");?> <?php echo mb_strlen($entity->shortDescription) ?> <?php \MapasCulturais\i::_e("caracteres. Vocé deve alterar seu texto ou este será cortado ao salvar.");?></div>
                 <?php endif; ?>
                 <div class="widget">
                     <?php if ($this->isEditable() || $entity->shortDescription): ?>
-                        <h3 class=" <?php echo ($entity->isPropertyRequired($entity,"shortDescription") && $editEntity? 'required': '');?>"> <?php \MapasCulturais\i::_e("Descri��o curta");?> <?php if($this->isEditable()){ ?>(<span data-element='countLength'><?=mb_strlen($entity->shortDescription)?></span><?php \MapasCulturais\i::_e("/400 Caracteres)");?></span><?php } ?></h3>
-                        <span class="js-editable" data-edit="shortDescription" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Descri��o Curta");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira uma descri��o curta para o evento");?>" data-tpl='<textarea data-element="shortDescription" maxlength="400"></textarea>'><?php echo $this->isEditable() ? $entity->shortDescription : nl2br($entity->shortDescription); ?></span>
+                        <h3 class=" <?php echo ($entity->isPropertyRequired($entity,"shortDescription") && $editEntity? 'required': '');?>"> <?php \MapasCulturais\i::_e("Descrição curta");?> <?php if($this->isEditable()){ ?>(<span data-element='countLength'><?=mb_strlen($entity->shortDescription)?></span><?php \MapasCulturais\i::_e("/400 Caracteres)");?></span><?php } ?></h3>
+                        <span class="js-editable" data-edit="shortDescription" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Descrição Curta");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira uma descrição curta para o evento");?>" data-tpl='<textarea data-element="shortDescription" maxlength="400"></textarea>'><?php echo $this->isEditable() ? $entity->shortDescription : nl2br($entity->shortDescription); ?></span>
                     <?php endif; ?>
                     </div>
                 <?php if ($this->isEditable() || $entity->site): ?>
                         <div class="widget"><h3 <?php echo ($entity->isPropertyRequired($entity,"site") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Site");?></h3>
                             <?php if ($this->isEditable()): ?>
-                                <span class="js-editable" data-edit="site" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Site");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Informe o endere�o do site do evento");?>"><?php echo $entity->site; ?></span>
+                                <span class="js-editable" data-edit="site" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Site");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Informe o endereço do site do evento");?>"><?php echo $entity->site; ?></span>
                         <?php else: ?>
                             <a class="url" href="<?php echo $entity->site; ?>"><?php echo $entity->site; ?></a>
                         <?php endif; ?>
@@ -206,17 +206,17 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                 <div class="servico">
                     <?php $this->applyTemplateHook('tab-about-service','begin'); ?>
                     <?php if ($this->isEditable() || $entity->registrationInfo): ?>
-                        <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"registrationInfo") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Inscri��es");?>:</span><span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"registrationInfo") && $editEntity? 'required': '');?>" data-edit="registrationInfo" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Inscri��es");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Informa��es sobre as inscri��es");?>">   <?php echo $this->autoLinkString($entity->registrationInfo); ?></span></p>
+                        <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"registrationInfo") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Inscrições");?>:</span><span class="js-editable <?php echo ($entity->isPropertyRequired($entity,"registrationInfo") && $editEntity? 'required': '');?>" data-edit="registrationInfo" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Inscrições");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Informações sobre as inscrições");?>">   <?php echo $this->autoLinkString($entity->registrationInfo); ?></span></p>
                     <?php endif; ?>
 
                     <?php if ($this->isEditable() || $entity->classificacaoEtaria): ?>
-                        <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"classificacaoEtaria") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Classifica��o Et�ria");?>: </span><span class="js-editable" data-edit="classificacaoEtaria" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Classifica��o Et�ria");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Informe a classifica��o et�ria do evento");?>"><?php echo $entity->classificacaoEtaria; ?></span></p>
+                        <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"classificacaoEtaria") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Classificação Etária");?>: </span><span class="js-editable" data-edit="classificacaoEtaria" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Classificação Etária");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Informe a classificação etária do evento");?>"><?php echo $entity->classificacaoEtaria; ?></span></p>
                     <?php endif; ?>
 
                     
 
                     <?php if($this->isEditable() || $entity->telefonePublico): ?>
-                        <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"telefonePublico") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Mais Informa��es");?>:</span> <span class="js-editable js-mask-phone" data-edit="telefonePublico" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Mais Informa��es");?>" data-emptytext="(000) 0000-0000"><?php echo $entity->telefonePublico; ?></span></p>
+                        <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"telefonePublico") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Mais Informações");?>:</span> <span class="js-editable js-mask-phone" data-edit="telefonePublico" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Mais Informações");?>" data-emptytext="(000) 0000-0000"><?php echo $entity->telefonePublico; ?></span></p>
                     <?php endif; ?>
 
                     <?php if($this->isEditable() || $entity->traducaoLibras || $entity->descricaoSonora): ?>
@@ -225,11 +225,11 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                             <span><?php \MapasCulturais\i::_e("Acessibilidade");?>:</span>
 
                             <?php if($this->isEditable() || $entity->traducaoLibras): ?>
-                                <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"traducaoLibras") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Tradu��o para LIBRAS");?>: </span><span class="js-editable" data-edit="traducaoLibras" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Tradu��o para LIBRAS");?>"><?php echo $entity->traducaoLibras; ?></span></p>
+                                <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"traducaoLibras") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("Tradução para LIBRAS");?>: </span><span class="js-editable" data-edit="traducaoLibras" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Tradução para LIBRAS");?>"><?php echo $entity->traducaoLibras; ?></span></p>
                             <?php endif; ?>
 
                             <?php if($this->isEditable() || $entity->descricaoSonora): ?>
-                                <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"descricaoSonora") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("�udio Descri��o");?>: </span><span class="js-editable" data-edit="descricaoSonora" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Descri��o Sonora");?>"><?php echo $entity->descricaoSonora; ?></span></p>
+                                <p><span class="label <?php echo ($entity->isPropertyRequired($entity,"descricaoSonora") && $editEntity? 'required': '');?>"><?php \MapasCulturais\i::_e("áudio Descrição");?>: </span><span class="js-editable" data-edit="descricaoSonora" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Descrição Sonora");?>"><?php echo $entity->descricaoSonora; ?></span></p>
                             <?php endif; ?>
                         </p>
                     <?php endif; ?>
@@ -357,7 +357,7 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                 <?php endif; ?>
                 <div id="dialog-event-occurrence" class="js-dialog">
                     <?php if($this->controller->action == 'create'): ?>
-                        <span class="js-dialog-disabled" data-message="<?php \MapasCulturais\i::esc_attr_e("Para adicionar local e data, primeiro � preciso salvar o evento");?>"></span>
+                        <span class="js-dialog-disabled" data-message="<?php \MapasCulturais\i::esc_attr_e("Para adicionar local e data, primeiro é preciso salvar o evento");?>"></span>
                     <?php else: ?>
                         <div class="js-dialog-content js-dialog-event-occurrence"></div>
                     <?php endif; ?>
@@ -367,8 +367,8 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
 
             <?php if ( $this->isEditable() || $entity->longDescription ): ?>
 
-                <h3><?php \MapasCulturais\i::_e("Descri��o");?></h3>
-                <span class="descricao js-editable" data-edit="longDescription" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Descri��o do Evento");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira uma descri��o do evento");?>" ><?php echo $this->isEditable() ? $entity->longDescription : nl2br($entity->longDescription); ?></span>
+                <h3><?php \MapasCulturais\i::_e("Descrição");?></h3>
+                <span class="descricao js-editable" data-edit="longDescription" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Descrição do Evento");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Insira uma descrição do evento");?>" ><?php echo $this->isEditable() ? $entity->longDescription : nl2br($entity->longDescription); ?></span>
             <?php endif; ?>
 
             <!-- Video Gallery BEGIN -->
@@ -427,7 +427,7 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                     <?php echo $entity->project ? $entity->project->name : ''; ?>
                 </a>
             <?php endif; ?>
-            <span class="warning pending js-pending-project hltip" data-hltip-classes="hltip-warning" hltitle="<?php \MapasCulturais\i::esc_attr_e("Aguardando confirma��o");?>" <?php if(!$request_project) echo 'style="display:none"'; ?>></span>
+            <span class="warning pending js-pending-project hltip" data-hltip-classes="hltip-warning" hltitle="<?php \MapasCulturais\i::esc_attr_e("Aguardando confirmação");?>" <?php if(!$request_project) echo 'style="display:none"'; ?>></span>
         </div>
     <?php elseif($entity->project): ?>
         <div class="widget">
@@ -446,7 +446,7 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
 
     <?php if($this->controller->action == 'create'): ?>
         <div class="widget">
-            <p class="alert info"><?php \MapasCulturais\i::_e("Para adicionar arquivos para download ou links, primeiro � preciso salvar o evento");?>.<span class="close"></span></p>
+            <p class="alert info"><?php \MapasCulturais\i::_e("Para adicionar arquivos para download ou links, primeiro é preciso salvar o evento");?>.<span class="close"></span></p>
         </div>
     <?php endif; ?>
 
