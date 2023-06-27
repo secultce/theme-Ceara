@@ -158,7 +158,7 @@ foreach ($metas as $metadata) {
                 foreach ($r->_getDefinitionsWithAgents() as $def) :
                     if ($def->use == 'dontUse') continue;
                     $agent = $def->agent;
-                    $agentsData = $r->_getAgentsData();
+                    $agentsData = $r->getAgentsData();
                     $mdata = ($def->type == 1) ? $metas_individual : $metas_coletivo;
                     $agentsDataGroup = [];
                     if (!empty($agent) && !empty($agentsData)) {
