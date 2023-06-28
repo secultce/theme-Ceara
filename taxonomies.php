@@ -77,6 +77,7 @@ return [
             \MapasCulturais\i::__('Saúde'),
             \MapasCulturais\i::__('Sociologia'),
             \MapasCulturais\i::__('Teatro'),
+            \MapasCulturais\i::__('Teatro de Bonecos'),
             \MapasCulturais\i::__('Técnico Cenografia'),
             \MapasCulturais\i::__('Técnico de Sonorização'),
             \MapasCulturais\i::__('Técnico Figurino'),
@@ -360,5 +361,7 @@ return [
             \MapasCulturais\i::__('Várzea Alegre'),
             \MapasCulturais\i::__('Viçosa do Ceará')
         ]
-    ]
+        ]
+
+
 ];
