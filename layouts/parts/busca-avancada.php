@@ -154,7 +154,7 @@
     <?php $this->applyTemplateHook('header', 'begin'); ?>
            
         <?php if ($app->config['maintenance.enabled']): ?>
-            <div class="maintenance-message" style="background-color: red; text-align:center; color:white">
+            <div class="maintenance-message" style="background-color: #DC143C;color:white; text-align:center">
                 <b><?php echo $app->config['maintenance.message']; ?></b>
             </div>
         <?php endif; ?>

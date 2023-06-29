@@ -5,7 +5,7 @@
     <?php $this->applyTemplateHook('settings-nav','end'); ?>
 
     <?php if ($app->config['maintenance.enabled']): ?>
-    <div class="maintenance-message" style="border-radius: 5px;box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.22);padding:5px;margin: 10px;width: 320px;text-align:justify; background-color:red;color:white">
+    <div class="maintenance-message" style="border-radius: 5px;box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.22);padding:5px;margin: 10px;width: 320px;text-align:justify; background-color:#DC143C;color:white">
         <b><?php echo $app->config['maintenance.message']; ?></b>
     </div>
 <?php endif; ?>
