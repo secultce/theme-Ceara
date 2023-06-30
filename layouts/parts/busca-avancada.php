@@ -153,9 +153,10 @@
     </div>
     <?php $this->applyTemplateHook('header', 'begin'); ?>
            
-        <?php if ($app->config['maintenance.enabled']): ?>
-            <div class="maintenance-message" style="background-color: #DC143C;color:white; text-align:center">
-                <b><?php echo $app->config['maintenance.message']; ?></b>
+        <?php 
+        if ($app->_config['maintenance_enabled']): ?>
+            <div  class="alert danger ng-binding ng-scope" style="text-align:center">
+                <b><?php echo $app->_config['maintenance_message']; ?></b>
             </div>
         <?php endif; ?>
         <?php $this->applyTemplateHook('header', 'end'); ?>
