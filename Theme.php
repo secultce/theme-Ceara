@@ -107,7 +107,7 @@ class Theme extends BaseV1\Theme
         parent::_init();
         $app = App::i();
 
-        $app->_config['maintenance_enabled'] = true;
+        $app->_config['maintenance_enabled'] = false;
         $app->_config['maintenance_message'] = 'Sr(@), o Mapa Cultural passará por atualizações nos próximos dias. Não deixe sua inscrição para última hora';
 
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
