@@ -106,7 +106,9 @@ class Theme extends BaseV1\Theme
     {
         parent::_init();
         $app = App::i();
-
+        //Chamada  da função de alerta nas views
+        $this->alertMessageMaintenance();
+    
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
@@ -1802,6 +1804,16 @@ class Theme extends BaseV1\Theme
         $app->hook('auth.successful', function () use ($app, $theme) {
             $theme->fixAgentPermission($app->user);
         });
+    }
+
+    /**
+     * atribuindo mensagem de alerta para manutenção
+     */
+    function alertMessageMaintenance(){
+        $app = App::i();
+    
+        $app->_config['maintenance_enabled'] = false;
+        $app->_config['maintenance_message'] = 'Sr(@), o Mapa Cultural passará por atualizações nos próximos dias. Não deixe sua inscrição para última hora';
     }
     /**
      *
