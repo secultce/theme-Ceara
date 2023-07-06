@@ -32,13 +32,15 @@ if(!is_object($entity)):?>
     <h3><?php \MapasCulturais\i::_e("Galeria");?></h3>
     <div class="clearfix js-gallery" id="gallery-img-agent">
     <?php if($gallery): 
-        foreach($results as $img): ?>
+        $counteImage = 0;
+        foreach($results as $key => $img): 
+        ?>
             <div id="file-<?php echo $img['id']; ?>" class="image-gallery-item" >        
             <?php $counteImage++ ;?> 
            <a href="<?php echo $url.$img['name'] ;?>"> <img src="<?php echo $url.$img['name']; ?>" /> </a>
                 <?php if($this->isEditable()): ?>
 
-                    <a data-href="<?php echo $img->deleteUrl?>" data-target="#file-<?php echo $img->id ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir");?>"></a>
+                    <a data-href="<?php echo $gallery[$key]->deleteUrl; ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir");?>"></a>
 
                 <?php endif; ?>
             </div>
@@ -48,7 +50,10 @@ if(!is_object($entity)):?>
     </div>
     
     <?php
-        $number =  $_REQUEST['page'];
+        $number =  0;
+        if(isset($_GET['page'])) {
+            $number =  $_GET['page'];
+        }
         if($number > 1 ){
             echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
         }
