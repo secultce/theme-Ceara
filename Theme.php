@@ -97,6 +97,43 @@ class Theme extends BaseV1\Theme
         }
     }
 
+    public function addPagination()
+    {
+        $app = App::i();
+        $entity=$this->data->entity;
+        $profile = $entity->id;
+        // dump($profile);die;
+
+
+        $sql = "select * from public.file where object_id = $profile  AND grp='gallery'";
+
+        // Paginação
+        $currentPage = $_GET['page'] ?? 1;
+        $itemsPerPage = 24;
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        $sql .= ' LIMIT ' . $itemsPerPage . ' OFFSET ' . $offset;
+
+        $stmt = $app->em->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+        $url= $app->config['base.url'].'files/agent/'.$profile.'/';                
+        return ['results'=>$results, 'url'=>$url, 'currentPage'=>$currentPage];
+    }
+
+    public function seeButtons()
+    {
+        $number =  0;
+        if(isset($_GET['page'])) {
+            $number =  $_GET['page'];
+        }
+        if($number > 1 ){
+            echo '<a id="prev-page" href="?page=' . ($results['currentPage'] - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
+        }
+        if( $counteImage != ''){
+            echo '<a id="next-page" href="?page=' . ($results['currentPage'] + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
+        }
+    }
+
     /**
      *
      * {@inheritdoc}
