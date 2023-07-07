@@ -1,9 +1,9 @@
 <?php
 use MapasCulturais\App;
+//Chamada da função da paginação do Theme.php
 $results=$this->addPagination();
 if($this->controller->action === 'create')
     return;
-
 
 if(!is_object($entity)):?>
     <div class="alert info"><?php MapasCulturais\i::__("Nenhuma imagem disponível");?></div>
@@ -35,9 +35,11 @@ if(!is_object($entity)):?>
 
     endif;?>
     </div>
-    
-    <?php        
         
+    <?php $currentPage = isset($results['currentPage']) ? $results['currentPage'] : 1;
+    // Chamada da função dos botões paginação da Theme.php
+    $this->seeButtons($results, $currentPage); ?> 
+    <?php 
         if($this->isEditable()): ?>
             <p class="gallery-footer">
                 <a class="btn btn-default add js-open-editbox" data-target="#editbox-gallery-image" href="#"><?php \MapasCulturais\i::_e("Adicionar imagem");?></a>

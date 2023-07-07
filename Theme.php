@@ -104,7 +104,6 @@ class Theme extends BaseV1\Theme
         $profile = $entity->id;
         // dump($profile);die;
 
-
         $sql = "select * from public.file where object_id = $profile  AND grp='gallery'";
 
         // Paginação
@@ -119,18 +118,20 @@ class Theme extends BaseV1\Theme
         $url= $app->config['base.url'].'files/agent/'.$profile.'/';                
         return ['results'=>$results, 'url'=>$url, 'currentPage'=>$currentPage];
     }
-
-    public function seeButtons()
+        
+    //Mostra botões de paginação na gallery
+    public function seeButtons($results, $currentPage)
     {
-        $number =  0;
-        if(isset($_GET['page'])) {
-            $number =  $_GET['page'];
+        $counteImage = count($results['results']);
+        $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
+        $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
+
+        if ($currentPage > 1) {
+            echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
         }
-        if($number > 1 ){
-            echo '<a id="prev-page" href="?page=' . ($results['currentPage'] - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
-        }
-        if( $counteImage != ''){
-            echo '<a id="next-page" href="?page=' . ($results['currentPage'] + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
+
+        if ($counteImage > 0) {
+            echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
         }
     }
 
