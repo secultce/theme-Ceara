@@ -7,6 +7,8 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities;
 
+use function MapasCulturais\Controllers\dump;
+
 class Theme extends BaseV1\Theme
 {
     public function __construct(AssetManager $asset_manager)
@@ -162,7 +164,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         //Chamada  da função de alerta nas views
         $this->alertMessageMaintenance();
-    
+
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
@@ -1865,9 +1867,10 @@ class Theme extends BaseV1\Theme
     /**
      * atribuindo mensagem de alerta para manutenção
      */
-    function alertMessageMaintenance(){
+    function alertMessageMaintenance()
+    {
         $app = App::i();
-    
+
         $app->_config['maintenance_enabled'] = false;
         $app->_config['maintenance_message'] = 'Sr(@), o Mapa Cultural passará por atualizações nos próximos dias. Não deixe sua inscrição para última hora';
     }
@@ -1915,8 +1918,8 @@ class Theme extends BaseV1\Theme
             'private' => false,
             'label' => \MapasCulturais\i::__('CPF ou CNPJ'),
             'validations' => array(
-               'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
-               'required' => \MapasCulturais\i::__('O CPF é obrigatório'),
+                'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
+                'required' => \MapasCulturais\i::__('O CPF é obrigatório'),
             ),
             'available_for_opportunities' => false
         ]);
@@ -2117,7 +2120,12 @@ class Theme extends BaseV1\Theme
             )
         ]);
     }
+<<<<<<< HEAD
     
+=======
+
+
+>>>>>>> 20671fb (Versão da paginação com botões de números)
     /**
      * Fix agent Permission
      *
