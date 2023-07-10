@@ -102,29 +102,27 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         $entity = $this->data->entity;
         $profile = $entity->id;
-    
-        // Consulta SQL sem limite inicial
-        $sql = "SELECT COUNT(*) FROM public.file WHERE object_id = $profile AND grp='gallery'";
-    
-        $stmt = $app->em->getConnection()->prepare($sql);
-        $stmt->execute();
-        $totalResults = $stmt->fetchColumn();
-    
-        // Paginação
+
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 24;
         $offset = ($currentPage - 1) * $itemsPerPage;
     
-        // Nova consulta SQL com limite e ordem
+        // Consulta SQL sem limite inicial
         $sql = "SELECT * FROM public.file WHERE object_id = $profile AND grp='gallery' ORDER BY id DESC LIMIT $itemsPerPage OFFSET $offset";
     
         $stmt = $app->em->getConnection()->prepare($sql);
         $stmt->execute();
-        $results = $stmt->fetchAll();
+        $results = $stmt->fetchAll();        
+            
+        // Paginação
+        
         $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
     
         // Cálculo do número total de páginas
-        $totalPages = ceil($totalResults / $itemsPerPage);
+        $totalPages = ceil(count($results) / $itemsPerPage);
+        // dump($totalPages);
+        // print_r (count($results));
+        // die();
     
         return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage, 'totalPages' => $totalPages];
     }
