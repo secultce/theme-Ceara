@@ -44,7 +44,7 @@ class Theme extends BaseV1\Theme
         });
 
         parent::__construct($asset_manager);
-    }
+    }    
 
     protected static function _getTexts()
     {
@@ -100,39 +100,64 @@ class Theme extends BaseV1\Theme
     public function addPagination()
     {
         $app = App::i();
-        $entity=$this->data->entity;
+        $entity = $this->data->entity;
         $profile = $entity->id;
-        // dump($profile);die;
-
-        $sql = "select * from public.file where object_id = $profile  AND grp='gallery'";
-
+    
+        // Consulta SQL sem limite inicial
+        $sql = "SELECT COUNT(*) FROM public.file WHERE object_id = $profile AND grp='gallery'";
+    
+        $stmt = $app->em->getConnection()->prepare($sql);
+        $stmt->execute();
+        $totalResults = $stmt->fetchColumn();
+    
         // Paginação
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 24;
         $offset = ($currentPage - 1) * $itemsPerPage;
-        $sql .= ' LIMIT ' . $itemsPerPage . ' OFFSET ' . $offset;
-
+    
+        // Nova consulta SQL com limite e ordem
+        $sql = "SELECT * FROM public.file WHERE object_id = $profile AND grp='gallery' ORDER BY id DESC LIMIT $itemsPerPage OFFSET $offset";
+    
         $stmt = $app->em->getConnection()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
-        $url= $app->config['base.url'].'files/agent/'.$profile.'/';                
-        return ['results'=>$results, 'url'=>$url, 'currentPage'=>$currentPage];
+        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+    
+        // Cálculo do número total de páginas
+        $totalPages = ceil($totalResults / $itemsPerPage);
+    
+        return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage, 'totalPages' => $totalPages];
     }
-        
-    //Mostra botões de paginação na gallery
-    public function seeButtons($results, $currentPage)
+
+    // Mostra botões de paginação na galeria
+    public function seeButtons($results, $currentPage, $totalPages)
     {
-        $counteImage = count($results['results']);
-        $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
-        $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
+        $countImage = count($results['results']);
 
+        // Verifica se há páginas anteriores
         if ($currentPage > 1) {
-            echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
+            echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp;&nbsp;';
         }
 
-        if ($counteImage > 0) {
-            echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
+        // Mostra os números de página
+        for ($i = 1; $i <= $totalPages; $i++) {
+            echo '<a href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp;';
         }
+
+        // Verifica se há próximas páginas
+        if ($currentPage < $totalPages) {
+            echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
+        }
+        $this->applyTemplateHook('footer', 'begin'); 
+           echo '<script>
+                window.onload = function(){
+                    var gallerySection = document.getElementById("gallery-img-agent");
+                    if(gallerySection){
+                        gallerySection.scrollIntoView();
+                    }
+                };
+           </script>';    
+        $this->applyTemplateHook('footer', 'end');
     }
 
     /**

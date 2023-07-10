@@ -2,6 +2,7 @@
 use MapasCulturais\App;
 //Chamada da função da paginação do Theme.php
 $results=$this->addPagination();
+$totalPages = $results['totalPages'];
 if($this->controller->action === 'create')
     return;
 
@@ -19,11 +20,11 @@ if(!is_object($entity)):?>
     <h3><?php \MapasCulturais\i::_e("Galeria");?></h3>
     <div class="clearfix js-gallery" id="gallery-img-agent">
     <?php if($gallery): 
-        $counteImage = 0;        
+        $countImage = 0;        
         foreach($results['results'] as $key => $img): 
         ?>
             <div id="file-<?php echo $img['id']; ?>" class="image-gallery-item" >        
-            <?php $counteImage++ ;?> 
+            <?php $countImage++ ;?> 
            <a href="<?php echo $results['url'].$img['name'] ;?>"> <img src="<?php echo $results['url'].$img['name']; ?>" /> </a>
                 <?php if($this->isEditable()): ?>
 
@@ -38,7 +39,7 @@ if(!is_object($entity)):?>
         
     <?php $currentPage = isset($results['currentPage']) ? $results['currentPage'] : 1;
     // Chamada da função dos botões paginação da Theme.php
-    $this->seeButtons($results, $currentPage); ?> 
+    $this->seeButtons($results, $currentPage, $results['totalPages']); ?> 
     <?php 
         if($this->isEditable()): ?>
             <p class="gallery-footer">
