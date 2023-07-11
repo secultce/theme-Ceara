@@ -115,7 +115,6 @@ class Theme extends BaseV1\Theme
         $stmt = $app->em->getConnection()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
-
         $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
 
         return [

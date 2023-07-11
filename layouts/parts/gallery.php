@@ -1,4 +1,5 @@
 <?php
+
 use MapasCulturais\App;
 //Chamada da função da paginação do Theme.php
 $results=$this->addPagination();
@@ -6,18 +7,18 @@ $results=$this->addPagination();
 if($this->controller->action === 'create')
     return;
 
-if(!is_object($entity)):?>
-    <div class="alert info"><?php MapasCulturais\i::__("Nenhuma imagem disponível");?></div>
-    <?php return;?>
-<?php endif;?>
+if (!is_object($entity)) : ?>
+    <div class="alert info"><?php MapasCulturais\i::__("Nenhuma imagem disponível"); ?></div>
+    <?php return; ?>
+<?php endif; ?>
 
 <?php $gallery = $entity->getFiles('gallery'); ?>
-<?php if(is_array($gallery) && count($gallery) <= 0 && $this->controller == 'registration'):?>
-    <div class="alert info"><?php i::__("Nenhuma imagem disponível");?></div>
-<?php endif;?>
+<?php if (is_array($gallery) && count($gallery) <= 0 && $this->controller == 'registration') : ?>
+    <div class="alert info"><?php i::__("Nenhuma imagem disponível"); ?></div>
+<?php endif; ?>
 
-<?php if ($this->isEditable() || $gallery): ?>
-    <h3><?php \MapasCulturais\i::_e("Galeria");?></h3>
+<?php if ($this->isEditable() || $gallery) : ?>
+    <h3><?php \MapasCulturais\i::_e("Galeria"); ?></h3>
     <div class="clearfix js-gallery" id="gallery-img-agent">
     <?php if($gallery): 
         $countImage = 0;        
@@ -36,7 +37,7 @@ if(!is_object($entity)):?>
 
     endif;?>
     </div>
-        
+
     <?php $currentPage = isset($results['currentPage']) ? $results['currentPage'] : 1;
     // Chamada da função dos botões paginação da Theme.php
     $this->seeButtons($currentPage); ?> 
