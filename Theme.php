@@ -106,7 +106,7 @@ class Theme extends BaseV1\Theme
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 24;
         $offset = ($currentPage - 1) * $itemsPerPage;
-
+        if(isset($entity->files['gallery'])){
         // Consulta SQL para obter os resultados paginados
         $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
 
@@ -114,24 +114,15 @@ class Theme extends BaseV1\Theme
         $stmt->execute();
         $results = $stmt->fetchAll();
 
-        // Consulta SQL para obter o número total de resultados
-        // $totalCountSql = "SELECT COUNT(*) FROM public.file WHERE object_id = $profile AND grp='gallery'";
-        // $totalCountStmt = $app->em->getConnection()->prepare($totalCountSql);
-        // $totalCountStmt->execute();
-        // $totalCount = $totalCountStmt->fetchColumn();
-
-        // Cálculo do número total de páginas
-        // $totalPages = ceil($totalCount / $itemsPerPage);
-
         $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
 
         return [
             'results' => $results,
             'url' => $url,
-            'currentPage' => $currentPage,
-            // 'totalPages' => $totalPages,
+            'currentPage' => $currentPage,            
         ];
-    }
+    }        
+    }    
 
     // Mostra botões de paginação na galeria
     public function seeButtons($currentPage)//, $totalPages)
@@ -140,7 +131,7 @@ class Theme extends BaseV1\Theme
         $entity = $this->data->entity;
         $itemsPerPage = 24; 
         $countImage = count($entity->files['gallery']);
-        $totalPages = ceil($countImage / $itemsPerPage);
+        $totalPages = ceil($countImage / $itemsPerPage);        
 
         // Verifica se há páginas anteriores
         if ($currentPage > 1) {
@@ -157,7 +148,7 @@ class Theme extends BaseV1\Theme
             echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
         }
         //chamada do arquivo js para scroll na paginação        
-        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');       
     }
 
     /**
