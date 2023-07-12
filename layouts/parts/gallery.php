@@ -1,22 +1,10 @@
 <?php
 use MapasCulturais\App;
+//Chamada da função da paginação do Theme.php
+$results=$this->addPagination();
+// $totalPages = $results['totalPages'];
 if($this->controller->action === 'create')
     return;
-$app = App::i();
-$profile = $entity->id;
-
-$sql = "select * from public.file where object_id = $profile  AND grp='gallery'";
-
-// Paginação
-$currentPage = $_GET['page'] ?? 1;
-$itemsPerPage = 24;
-$offset = ($currentPage - 1) * $itemsPerPage;
-$sql .= ' LIMIT ' . $itemsPerPage . ' OFFSET ' . $offset;
-
-$stmt = $app->em->getConnection()->prepare($sql);
-$stmt->execute();
-$results = $stmt->fetchAll(); 
-$url= $app->config['base.url'].'files/agent/'.$profile.'/';
 
 if(!is_object($entity)):?>
     <div class="alert info"><?php MapasCulturais\i::__("Nenhuma imagem disponível");?></div>
@@ -32,12 +20,12 @@ if(!is_object($entity)):?>
     <h3><?php \MapasCulturais\i::_e("Galeria");?></h3>
     <div class="clearfix js-gallery" id="gallery-img-agent">
     <?php if($gallery): 
-        $counteImage = 0;
-        foreach($results as $key => $img): 
+        $countImage = 0;        
+        foreach($results['results'] as $key => $img): 
         ?>
             <div id="file-<?php echo $img['id']; ?>" class="image-gallery-item" >        
-            <?php $counteImage++ ;?> 
-           <a href="<?php echo $url.$img['name'] ;?>"> <img src="<?php echo $url.$img['name']; ?>" /> </a>
+            <?php $countImage++ ;?> 
+           <a href="<?php echo $results['url'].$img['name'] ;?>"> <img src="<?php echo $results['url'].$img['name']; ?>" /> </a>
                 <?php if($this->isEditable()): ?>
 
                     <a data-href="<?php echo $gallery[$key]->deleteUrl; ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir");?>"></a>
@@ -48,19 +36,11 @@ if(!is_object($entity)):?>
 
     endif;?>
     </div>
-    
-    <?php
-        $number =  0;
-        if(isset($_GET['page'])) {
-            $number =  $_GET['page'];
-        }
-        if($number > 1 ){
-            echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
-        }
-        if( $counteImage != ''){
-            echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
-        }
         
+    <?php $currentPage = isset($results['currentPage']) ? $results['currentPage'] : 1;
+    // Chamada da função dos botões paginação da Theme.php
+    $this->seeButtons($currentPage); ?> 
+    <?php 
         if($this->isEditable()): ?>
             <p class="gallery-footer">
                 <a class="btn btn-default add js-open-editbox" data-target="#editbox-gallery-image" href="#"><?php \MapasCulturais\i::_e("Adicionar imagem");?></a>

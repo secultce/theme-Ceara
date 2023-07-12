@@ -44,7 +44,7 @@ class Theme extends BaseV1\Theme
         });
 
         parent::__construct($asset_manager);
-    }
+    }    
 
     protected static function _getTexts()
     {
@@ -97,6 +97,60 @@ class Theme extends BaseV1\Theme
         }
     }
 
+    public function addPagination()
+    {
+        $app = App::i();
+        $entity = $this->data->entity;
+        $profile = $entity->id;
+        
+        $currentPage = $_GET['page'] ?? 1;
+        $itemsPerPage = 24;
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        if(isset($entity->files['gallery'])){
+        // Consulta SQL para obter os resultados paginados
+        $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
+
+        $stmt = $app->em->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+
+        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+
+        return [
+            'results' => $results,
+            'url' => $url,
+            'currentPage' => $currentPage,            
+        ];
+    }        
+    }    
+
+    // Mostra botões de paginação na galeria
+    public function seeButtons($currentPage)//, $totalPages)
+    {
+        $app = App::i();
+        $entity = $this->data->entity;
+        $itemsPerPage = 24; 
+        $countImage = count($entity->files['gallery']);
+        $totalPages = ceil($countImage / $itemsPerPage);        
+
+        // Verifica se há páginas anteriores
+        if ($currentPage > 1) {
+            echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp;&nbsp;';
+        }
+
+        // Mostra os números de página
+        for ($i = 1; $i <= $totalPages; $i++) {
+            echo '<a href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp;';
+        }
+
+        // Verifica se há próximas páginas
+        if ($currentPage < $totalPages) {
+            echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
+        }
+        //chamada do arquivo js para scroll na paginação        
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');       
+    }
+
     /**
      *
      * {@inheritdoc}
@@ -112,6 +166,8 @@ class Theme extends BaseV1\Theme
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
+        //chamada do arquivo js que contém o ocultar botão + da modal criação
+        $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
 
         $app->hook('view.render(<<*>>):before', function () use ($app) {
             $this->_publishAssets();
@@ -1803,7 +1859,7 @@ class Theme extends BaseV1\Theme
 
         $app->hook('auth.successful', function () use ($app, $theme) {
             $theme->fixAgentPermission($app->user);
-        });
+        });      
     }
 
     /**
@@ -2060,10 +2116,7 @@ class Theme extends BaseV1\Theme
 
             )
         ]);
-
-        
     }
-
     
     /**
      * Fix agent Permission
