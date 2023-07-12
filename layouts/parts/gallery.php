@@ -17,6 +17,13 @@ if (!is_object($entity)) : ?>
     <div class="alert info"><?php i::__("Nenhuma imagem disponível"); ?></div>
 <?php endif; ?>
 
+<?php
+$url = $_SERVER['HTTP_HOST'];
+$profile = $this->data->entity->id;
+$word = explode("/", $_SERVER['REQUEST_URI']);
+$sub = $word[1];
+?>
+
 <?php if ($this->isEditable() || $gallery) : ?>
     <h3><?php \MapasCulturais\i::_e("Galeria"); ?></h3>
     <div class="clearfix js-gallery" id="gallery-img-agent">
