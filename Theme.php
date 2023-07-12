@@ -102,35 +102,45 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         $entity = $this->data->entity;
         $profile = $entity->id;
-
+        
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 24;
         $offset = ($currentPage - 1) * $itemsPerPage;
-    
-        // Consulta SQL sem limite inicial
-        $sql = "SELECT * FROM public.file WHERE object_id = $profile AND grp='gallery' ORDER BY id DESC LIMIT $itemsPerPage OFFSET $offset";
-    
+
+        // Consulta SQL para obter os resultados paginados
+        $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
+
         $stmt = $app->em->getConnection()->prepare($sql);
         $stmt->execute();
-        $results = $stmt->fetchAll();        
-            
-        // Paginação
-        
-        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-    
+        $results = $stmt->fetchAll();
+
+        // Consulta SQL para obter o número total de resultados
+        // $totalCountSql = "SELECT COUNT(*) FROM public.file WHERE object_id = $profile AND grp='gallery'";
+        // $totalCountStmt = $app->em->getConnection()->prepare($totalCountSql);
+        // $totalCountStmt->execute();
+        // $totalCount = $totalCountStmt->fetchColumn();
+
         // Cálculo do número total de páginas
-        $totalPages = ceil(count($results) / $itemsPerPage);
-        // dump($totalPages);
-        // print_r (count($results));
-        // die();
-    
-        return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage, 'totalPages' => $totalPages];
+        // $totalPages = ceil($totalCount / $itemsPerPage);
+
+        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+
+        return [
+            'results' => $results,
+            'url' => $url,
+            'currentPage' => $currentPage,
+            // 'totalPages' => $totalPages,
+        ];
     }
 
     // Mostra botões de paginação na galeria
-    public function seeButtons($results, $currentPage, $totalPages)
+    public function seeButtons($currentPage)//, $totalPages)
     {
-        $countImage = count($results['results']);
+        $app = App::i();
+        $entity = $this->data->entity;
+        $itemsPerPage = 24; 
+        $countImage = count($entity->files['gallery']);
+        $totalPages = ceil($countImage / $itemsPerPage);
 
         // Verifica se há páginas anteriores
         if ($currentPage > 1) {
@@ -146,16 +156,8 @@ class Theme extends BaseV1\Theme
         if ($currentPage < $totalPages) {
             echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
         }
-        $this->applyTemplateHook('footer', 'begin'); 
-           echo '<script>
-                window.onload = function(){
-                    var gallerySection = document.getElementById("gallery-img-agent");
-                    if(gallerySection){
-                        gallerySection.scrollIntoView();
-                    }
-                };
-           </script>';    
-        $this->applyTemplateHook('footer', 'end');
+        //chamada do arquivo js para scroll na paginação        
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');
     }
 
     /**
@@ -173,6 +175,8 @@ class Theme extends BaseV1\Theme
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
+        //chamada do arquivo js que contém o ocultar botão + da modal criação
+        $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
 
         $app->hook('view.render(<<*>>):before', function () use ($app) {
             $this->_publishAssets();
@@ -1864,7 +1868,7 @@ class Theme extends BaseV1\Theme
 
         $app->hook('auth.successful', function () use ($app, $theme) {
             $theme->fixAgentPermission($app->user);
-        });
+        });      
     }
 
     /**
@@ -2121,10 +2125,7 @@ class Theme extends BaseV1\Theme
 
             )
         ]);
-
-        
     }
-
     
     /**
      * Fix agent Permission

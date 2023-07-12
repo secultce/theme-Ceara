@@ -2,7 +2,7 @@
 use MapasCulturais\App;
 //Chamada da função da paginação do Theme.php
 $results=$this->addPagination();
-$totalPages = $results['totalPages'];
+// $totalPages = $results['totalPages'];
 if($this->controller->action === 'create')
     return;
 
@@ -39,7 +39,7 @@ if(!is_object($entity)):?>
         
     <?php $currentPage = isset($results['currentPage']) ? $results['currentPage'] : 1;
     // Chamada da função dos botões paginação da Theme.php
-    $this->seeButtons($results, $currentPage, $results['totalPages']); ?> 
+    $this->seeButtons($currentPage); ?> 
     <?php 
         if($this->isEditable()): ?>
             <p class="gallery-footer">

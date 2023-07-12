@@ -64,13 +64,12 @@
             </li>
             <?php $this->applyTemplateHook('nav.dropdown.projects','after'); ?>
         <?php endif; ?>
-
+        <!-- Inserida id na tag a para ocultar botão + da modal criar oportunidade-->
         <?php if($app->isEnabled('opportunities')): ?>
-            <?php $this->applyTemplateHook('nav.dropdown.opportunities','before'); ?>
-            <?php $baseUrl = "http://localhost"; $page = "/painel/opportunities"; $url= $baseUrl.$page; ?>
-                <li>
-                    <a href="<?php echo $url; ?>"><?php \MapasCulturais\i::_e("Minhas Oportunidades");?></a>
-                    <a class=" add" href="<?php echo $url;?>"></a>
+            <?php $this->applyTemplateHook('nav.dropdown.opportunities','before'); ?>          
+                <li>                    
+                    <a href="<?php echo $app->createUrl('panel', 'opportunities') ?>"><?php \MapasCulturais\i::_e("Minhas Oportunidades");?></a>
+                    <a id="id_hide_button" class=" add" href="<?php echo$app->createUrl('panel', 'opportunities') ?>"></a>
                 </li>
             <?php $this->applyTemplateHook('nav.dropdown.opportunities','after'); ?>
         <?php endif; ?>
