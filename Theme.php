@@ -107,7 +107,7 @@ class Theme extends BaseV1\Theme
 
         // Paginação
         $currentPage = $_GET['page'] ?? 1;
-        $itemsPerPage = 100;
+        $itemsPerPage = 12;
         $offset = ($currentPage - 1) * $itemsPerPage;
 
         if (isset($entity->files['gallery'])) {
@@ -119,14 +119,28 @@ class Theme extends BaseV1\Theme
             return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage];
         }
         
-    }    
+    }
+
+    public function identifyURL($app)
+    {
+        $app = App::i();
+        $app->config['base.url'];
+        $profile = $this->data->entity->id;
+        $app = explode("/", $_SERVER['REQUEST_URI']);
+        $sub = $app[1];
+
+        // if (!empty($_SERVER['HTTPS'])) 
+        //     $http = 'https';
+        // else
+        //     $http = 'http';     
+    }
 
     // Mostra botões de paginação na galeria
     public function seeButtons($currentPage)//, $totalPages)
     {
         $app = App::i();
         $entity = $this->data->entity;
-        $itemsPerPage = 100;
+        $itemsPerPage = 12;
 
         if (isset($entity->files['gallery'])) {
             $numberPerPage = count($entity->files['gallery']);
