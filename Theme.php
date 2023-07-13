@@ -141,7 +141,7 @@ class Theme extends BaseV1\Theme
 
             $currentPage = $_GET['page'] ?? 1;
 
-            if (isset($currentPage)) {
+            if (isset($currentPage) && $fixedNumber > 1) {
                 $color = (int)$currentPage;
                 for ($i = 1; $i <= $fixedNumber; $i++) {
                     if ($i != $color) {

@@ -21,6 +21,11 @@ $url = $_SERVER['HTTP_HOST'];
 $profile = $this->data->entity->id;
 $word = explode("/", $_SERVER['REQUEST_URI']);
 $sub = $word[1];
+
+if (!empty($_SERVER['HTTPS'])) 
+    $http = 'https';
+else
+    $http = 'http';
 ?>
 
 <?php if ($this->isEditable() || $gallery) : ?>
@@ -31,37 +36,37 @@ $sub = $word[1];
                 <div id="file-<?php echo $img['id']; ?>" class="image-gallery-item">
                     
                     <?php if ($sub == 'evento'  || $sub == 'eventos' ) { ?>
-                        <a href="<?php echo 'http://' . $url . '/files/event/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo 'http://' . $url . '/files/event/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
+                        <a href="<?php echo $http.'://' . $url . '/files/event/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo $http.'://' . $url . '/files/event/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
                         <?php if ($this->isEditable()) : ?>
-                            <a data-href="<?php echo 'http://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
+                            <a data-href="<?php echo $http.'://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
                     <?php } ?>
 
                     <?php if ($sub == 'agente' || $sub == 'agentes' ) { ?>
                         <a href="<?php echo $results['url'] . $img['name']; ?>"> <img src="<?php echo $results['url'] . $img['name']; ?>" class="image-gallery-item" /> </a>
                         <?php if ($this->isEditable()) : ?>
-                            <a data-href="<?php echo 'http://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
+                            <a data-href="<?php echo $http.'://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
                     <?php } ?>
 
                     <?php if ($sub == 'espaco' || $sub == 'espacos') { ?>
-                        <a href="<?php echo 'http://' . $url . '/files/space/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo 'http://' . $url . '/files/space/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
+                        <a href="<?php echo $http.'://' . $url . '/files/space/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo $http.'://' . $url . '/files/space/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
                         <?php if ($this->isEditable()) : ?>
-                            <a data-href="<?php echo 'http://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
+                            <a data-href="<?php echo $http.'://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
                     <?php } ?>
 
                     <?php if ($sub == 'projeto' || $sub == 'projetos') { ?>
-                        <a href="<?php echo 'http://' . $url . '/files/project/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo 'http://' . $url . '/files/project/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
+                        <a href="<?php echo $http.'://' . $url . '/files/project/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo $http.'://' . $url . '/files/project/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
                         <?php if ($this->isEditable()) : ?>
-                            <a data-href="<?php echo 'http://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
+                            <a data-href="<?php echo $http.'://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
                     <?php } ?>
 
                     <?php if ($sub == 'oportunidade' || $sub == 'oportunidades') { ?>
-                        <a href="<?php echo 'http://' . $url . '/files/opportunity/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo 'http://' . $url . '/files/opportunity/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
+                        <a href="<?php echo $http.'://' . $url . '/files/opportunity/' . $profile . '/' . $img['name']; ?>"> <img src="<?php echo $http.'://' . $url . '/files/opportunity/' . $profile . '/' . $img['name']; ?>" class="image-gallery-item" /> </a>
                         <?php if ($this->isEditable()) : ?>
-                            <a data-href="<?php echo 'http://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
+                            <a data-href="<?php echo $http.'://' . $url . '/arquivos/apaga/' . $img['id'] ?>" data-target="#file-<?php echo $img['id'] ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
                     <?php } ?>
                 </div>
