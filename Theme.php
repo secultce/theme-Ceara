@@ -104,16 +104,9 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         $entity = $this->data->entity;
         $profile = $entity->id;
-<<<<<<< HEAD
-        
-=======
-
-        // Paginação
->>>>>>> 27b0ca0 (Correção na exibição de imagens e select da gallery)
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 100;
         $offset = ($currentPage - 1) * $itemsPerPage;
-<<<<<<< HEAD
         if(isset($entity->files['gallery'])){
         // Consulta SQL para obter os resultados paginados
         $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
@@ -122,18 +115,6 @@ class Theme extends BaseV1\Theme
         $stmt->execute();
         $results = $stmt->fetchAll();
         $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-=======
-
-        if (isset($entity->files['gallery'])) {
-            $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
-            $stmt = $app->em->getConnection()->prepare($sql);
-            $stmt->execute();
-            $results = $stmt->fetchAll();
-            $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-            return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage];
-        }
-    }
->>>>>>> 27b0ca0 (Correção na exibição de imagens e select da gallery)
 
         return [
             'results' => $results,
@@ -148,7 +129,6 @@ class Theme extends BaseV1\Theme
     {
         $app = App::i();
         $entity = $this->data->entity;
-<<<<<<< HEAD
         $itemsPerPage = 24; 
         $countImage = count($entity->files['gallery']);
         $totalPages = ceil($countImage / $itemsPerPage);        
@@ -156,40 +136,6 @@ class Theme extends BaseV1\Theme
         // Verifica se há páginas anteriores
         if ($currentPage > 1) {
             echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp;&nbsp;';
-=======
-        $itemsPerPage = 100;
-
-        if (isset($entity->files['gallery'])) {
-            $numberPerPage = count($entity->files['gallery']);
-            $fixedNumber = ceil($numberPerPage / $itemsPerPage);
-
-            $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
-            $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
-
-            if ($currentPage > 1) {
-                echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
-            }
-
-            $currentPage = $_GET['page'] ?? 1;
-
-            if (isset($currentPage)) {
-                $color = (int)$currentPage;
-                for ($i = 1; $i <= $fixedNumber; $i++) {
-                    if ($i != $color) {
-                        echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp&nbsp';
-                    }
-
-                    if ($i == $color) {
-                        echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-success">' . $i . '</a>&nbsp&nbsp';
-                    }
-                }
-            }
-            if (isset($currentPage) && $numberPerPage > $itemsPerPage) {
-                if ($currentPage != $fixedNumber) {
-                    echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
-                }
-            }
->>>>>>> 27b0ca0 (Correção na exibição de imagens e select da gallery)
         }
 
         // Mostra os números de página
@@ -2172,12 +2118,6 @@ class Theme extends BaseV1\Theme
             )
         ]);
     }
-<<<<<<< HEAD
-    
-=======
-
-
->>>>>>> 20671fb (Versão da paginação com botões de números)
     /**
      * Fix agent Permission
      *
