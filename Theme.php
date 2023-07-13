@@ -104,29 +104,21 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         $entity = $this->data->entity;
         $profile = $entity->id;
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
         // Paginação
->>>>>>> 0f4ecc3 (Alterações e inserções: paginação, scroll, ocultar botão)
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 100;
         $offset = ($currentPage - 1) * $itemsPerPage;
-        if(isset($entity->files['gallery'])){
-        // Consulta SQL para obter os resultados paginados
-        $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
 
-        $stmt = $app->em->getConnection()->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-
-        return [
-            'results' => $results,
-            'url' => $url,
-            'currentPage' => $currentPage,            
-        ];
-    }        
+        if (isset($entity->files['gallery'])) {
+            $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
+            $stmt = $app->em->getConnection()->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+            $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+            return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage];
+        }
+        
     }    
 
     // Mostra botões de paginação na galeria
@@ -134,64 +126,7 @@ class Theme extends BaseV1\Theme
     {
         $app = App::i();
         $entity = $this->data->entity;
-<<<<<<< HEAD
-        $itemsPerPage = 24; 
-        $countImage = count($entity->files['gallery']);
-        $totalPages = ceil($countImage / $itemsPerPage);        
-
-        // Verifica se há páginas anteriores
-        if ($currentPage > 1) {
-            echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp;&nbsp;';
-        }
-
-        // Mostra os números de página
-        for ($i = 1; $i <= $totalPages; $i++) {
-            echo '<a href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp;';
-        }
-
-=======
         $itemsPerPage = 100;
-=======
-        
-        $currentPage = $_GET['page'] ?? 1;
-        $itemsPerPage = 24;
-        $offset = ($currentPage - 1) * $itemsPerPage;
-
-        // Consulta SQL para obter os resultados paginados
-        $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
-
-        $stmt = $app->em->getConnection()->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-
-        // Consulta SQL para obter o número total de resultados
-        // $totalCountSql = "SELECT COUNT(*) FROM public.file WHERE object_id = $profile AND grp='gallery'";
-        // $totalCountStmt = $app->em->getConnection()->prepare($totalCountSql);
-        // $totalCountStmt->execute();
-        // $totalCount = $totalCountStmt->fetchColumn();
-
-        // Cálculo do número total de páginas
-        // $totalPages = ceil($totalCount / $itemsPerPage);
-
-        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-
-        return [
-            'results' => $results,
-            'url' => $url,
-            'currentPage' => $currentPage,
-            // 'totalPages' => $totalPages,
-        ];
-    }
-
-    // Mostra botões de paginação na galeria
-    public function seeButtons($currentPage)//, $totalPages)
-    {
-        $app = App::i();
-        $entity = $this->data->entity;
-        $itemsPerPage = 24; 
-        $countImage = count($entity->files['gallery']);
-        $totalPages = ceil($countImage / $itemsPerPage);
->>>>>>> e333f4c (Alterações e inserções: paginação, scroll, ocultar botão)
 
         if (isset($entity->files['gallery'])) {
             $numberPerPage = count($entity->files['gallery']);
@@ -200,7 +135,6 @@ class Theme extends BaseV1\Theme
             $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
             $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
 
-<<<<<<< HEAD
             if ($currentPage > 1) {
                 echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
             }
@@ -225,19 +159,7 @@ class Theme extends BaseV1\Theme
                 }
             }
         }
-=======
->>>>>>> 0f4ecc3 (Alterações e inserções: paginação, scroll, ocultar botão)
-        // Verifica se há próximas páginas
-        if ($currentPage < $totalPages) {
-            echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
-        }
-        //chamada do arquivo js para scroll na paginação        
-<<<<<<< HEAD
-        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');       
-=======
->>>>>>> e333f4c (Alterações e inserções: paginação, scroll, ocultar botão)
-        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');
->>>>>>> 0f4ecc3 (Alterações e inserções: paginação, scroll, ocultar botão)
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');     
     }
 
     /**
@@ -2207,15 +2129,6 @@ class Theme extends BaseV1\Theme
             )
         ]);
     }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-
-=======
-    
->>>>>>> e333f4c (Alterações e inserções: paginação, scroll, ocultar botão)
->>>>>>> 0f4ecc3 (Alterações e inserções: paginação, scroll, ocultar botão)
     /**
      * Fix agent Permission
      *
