@@ -7,6 +7,8 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities;
 
+use function MapasCulturais\Controllers\dump;
+
 class Theme extends BaseV1\Theme
 {
     public function __construct(AssetManager $asset_manager)
@@ -102,26 +104,21 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         $entity = $this->data->entity;
         $profile = $entity->id;
-        
+
+        // Paginação
         $currentPage = $_GET['page'] ?? 1;
-        $itemsPerPage = 24;
+        $itemsPerPage = 100;
         $offset = ($currentPage - 1) * $itemsPerPage;
-        if(isset($entity->files['gallery'])){
-        // Consulta SQL para obter os resultados paginados
-        $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
 
-        $stmt = $app->em->getConnection()->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-
-        $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-
-        return [
-            'results' => $results,
-            'url' => $url,
-            'currentPage' => $currentPage,            
-        ];
-    }        
+        if (isset($entity->files['gallery'])) {
+            $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
+            $stmt = $app->em->getConnection()->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+            $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+            return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage];
+        }
+        
     }    
 
     // Mostra botões de paginação na galeria
@@ -129,26 +126,40 @@ class Theme extends BaseV1\Theme
     {
         $app = App::i();
         $entity = $this->data->entity;
-        $itemsPerPage = 24; 
-        $countImage = count($entity->files['gallery']);
-        $totalPages = ceil($countImage / $itemsPerPage);        
+        $itemsPerPage = 100;
 
-        // Verifica se há páginas anteriores
-        if ($currentPage > 1) {
-            echo '<a id="prev-page" href="?page=' . ($currentPage - 1) . '#gallery-img-agent" class="btn btn-primary">Página anterior</a>&nbsp;&nbsp;';
-        }
+        if (isset($entity->files['gallery'])) {
+            $numberPerPage = count($entity->files['gallery']);
+            $fixedNumber = ceil($numberPerPage / $itemsPerPage);
 
-        // Mostra os números de página
-        for ($i = 1; $i <= $totalPages; $i++) {
-            echo '<a href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp;';
-        }
+            $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
+            $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
 
-        // Verifica se há próximas páginas
-        if ($currentPage < $totalPages) {
-            echo '<a id="next-page" href="?page=' . ($currentPage + 1) . '#gallery-img-agent" class="btn btn-primary">Próxima página</a>';
+            if ($currentPage > 1) {
+                echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
+            }
+
+            $currentPage = $_GET['page'] ?? 1;
+
+            if (isset($currentPage) && $fixedNumber > 1) {
+                $color = (int)$currentPage;
+                for ($i = 1; $i <= $fixedNumber; $i++) {
+                    if ($i != $color) {
+                        echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp&nbsp';
+                    }
+
+                    if ($i == $color) {
+                        echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-success">' . $i . '</a>&nbsp&nbsp';
+                    }
+                }
+            }
+            if (isset($currentPage) && $numberPerPage > $itemsPerPage) {
+                if ($currentPage != $fixedNumber) {
+                    echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
+                }
+            }
         }
-        //chamada do arquivo js para scroll na paginação        
-        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');       
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');     
     }
 
     /**
@@ -162,7 +173,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         //Chamada  da função de alerta nas views
         $this->alertMessageMaintenance();
-    
+
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
@@ -1865,9 +1876,10 @@ class Theme extends BaseV1\Theme
     /**
      * atribuindo mensagem de alerta para manutenção
      */
-    function alertMessageMaintenance(){
+    function alertMessageMaintenance()
+    {
         $app = App::i();
-    
+
         $app->_config['maintenance_enabled'] = false;
         $app->_config['maintenance_message'] = 'Sr(@), o Mapa Cultural passará por atualizações nos próximos dias. Não deixe sua inscrição para última hora';
     }
@@ -1915,8 +1927,8 @@ class Theme extends BaseV1\Theme
             'private' => false,
             'label' => \MapasCulturais\i::__('CPF ou CNPJ'),
             'validations' => array(
-               'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
-               'required' => \MapasCulturais\i::__('O CPF é obrigatório'),
+                'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
+                'required' => \MapasCulturais\i::__('O CPF é obrigatório'),
             ),
             'available_for_opportunities' => false
         ]);
@@ -2117,7 +2129,6 @@ class Theme extends BaseV1\Theme
             )
         ]);
     }
-    
     /**
      * Fix agent Permission
      *
