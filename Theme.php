@@ -109,30 +109,44 @@ class Theme extends BaseV1\Theme
         $currentPage = $_GET['page'] ?? 1;
         $itemsPerPage = 12;
         $offset = ($currentPage - 1) * $itemsPerPage;
-
+        $res=abs($offset-$itemsPerPage);
+        dump(abs($offset)); dump($res);
         if (isset($entity->files['gallery'])) {
-            $sql = "select * from public.file where object_id = $profile  AND grp='gallery' ORDER BY id DESC  LIMIT " . $itemsPerPage . ' OFFSET ' . $offset;
-            $stmt = $app->em->getConnection()->prepare($sql);
-            $stmt->execute();
-            $results = $stmt->fetchAll();
-            $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-            return ['results' => $results, 'url' => $url, 'currentPage' => $currentPage];
+            for($i=$res; $i<=$offset; $i++)
+            {
+                $images = $entity->files['gallery'];            
+                $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+                return ['images' => $images, 'url' => $url, 'currentPage' => $currentPage ];
+            }
+            
         }
-        
     }
 
-    public function identifyURL($app)
+    public function scroll(){
+        $anchor = '';
+        if((isset($_GET['page'])) && ($_GET['page']) != null){
+            $anchor = 'gallery-img-agent';
+        }else{
+            $anchor = '';
+        }
+        return $anchor;
+    }    
+
+    public function getGalleryUrl()
     {
         $app = App::i();
-        $app->config['base.url'];
+        $url = $app->config['base.url'];
+        $afterBar = $app->auth->opauth->env['request_uri'];
         $profile = $this->data->entity->id;
-        $app = explode("/", $_SERVER['REQUEST_URI']);
-        $sub = $app[1];
-
-        // if (!empty($_SERVER['HTTPS'])) 
-        //     $http = 'https';
-        // else
-        //     $http = 'http';     
+        $word = explode("/", $afterBar);
+        $sub = $word[1];
+        $className = $this->controller->id;        
+        return [
+            'url' => $url,
+            'profile' => $profile,
+            'sub' => $sub,
+            'className' => $className
+        ];
     }
 
     // Mostra botões de paginação na galeria
@@ -145,18 +159,18 @@ class Theme extends BaseV1\Theme
         if (isset($entity->files['gallery'])) {
             $numberPerPage = count($entity->files['gallery']);
             $fixedNumber = ceil($numberPerPage / $itemsPerPage);
-
+            
             $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
             $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
 
             if ($currentPage > 1) {
                 echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
             }
-
+            
             $currentPage = $_GET['page'] ?? 1;
 
             if (isset($currentPage) && $fixedNumber > 1) {
-                $color = (int)$currentPage;
+                $color = (int)$currentPage;                
                 for ($i = 1; $i <= $fixedNumber; $i++) {
                     if ($i != $color) {
                         echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp&nbsp';
@@ -167,11 +181,16 @@ class Theme extends BaseV1\Theme
                     }
                 }
             }
-            if (isset($currentPage) && $numberPerPage > $itemsPerPage) {
+            if (isset($currentPage) && $numberPerPage < $itemsPerPage) {
                 if ($currentPage != $fixedNumber) {
                     echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
-                }
+                }                
             }
+            // if (isset($currentPage) && $numberPerPage > $itemsPerPage) {
+            //     if ($currentPage != $fixedNumber) {
+            //         echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
+            //     }                
+            // }
         }
         $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');     
     }
