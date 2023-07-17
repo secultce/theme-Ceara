@@ -137,15 +137,12 @@ class Theme extends BaseV1\Theme
     {
         $app = App::i();
         $url = $app->config['base.url'];
-        $afterBar = $app->auth->opauth->env['request_uri'];
+    
         $profile = $this->data->entity->id;
-        $word = explode("/", $afterBar);
-        $sub = $word[1];
-        $className = $this->controller->id;        
+        $className = $this->controller->id;
         return [
             'url' => $url,
-            'profile' => $profile,
-            'sub' => $sub,
+            'profile' => $profile,          
             'className' => $className
         ];
     }
