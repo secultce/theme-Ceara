@@ -9,7 +9,7 @@ use MapasCulturais\Entities;
 
 use function MapasCulturais\Controllers\dump;
 // Constante para definir itens por página
-define("ITEMS_PER_PAGE", 12);
+define("ITEMS_PER_PAGE", 100);
 class Theme extends BaseV1\Theme
 {
     public function __construct(AssetManager $asset_manager)
