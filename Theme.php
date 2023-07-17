@@ -8,7 +8,8 @@ use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities;
 
 use function MapasCulturais\Controllers\dump;
-
+// Constante para definir itens por página
+define("ITEMS_PER_PAGE", 12);
 class Theme extends BaseV1\Theme
 {
     public function __construct(AssetManager $asset_manager)
@@ -106,23 +107,23 @@ class Theme extends BaseV1\Theme
         $profile = $entity->id;
 
         // Paginação
-        $currentPage = $_GET['page'] ?? 1;
-        $itemsPerPage = 12;
-        $offset = ($currentPage - 1) * $itemsPerPage;
-        $res=abs($offset-$itemsPerPage);
-        dump(abs($offset)); dump($res);
+        $currentPage = $_GET['page'] ?? 1;        
+        $offset = ($currentPage - 1) * ITEMS_PER_PAGE;
+
         if (isset($entity->files['gallery'])) {
-            for($i=$res; $i<=$offset; $i++)
-            {
-                $images = $entity->files['gallery'];            
-                $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
-                return ['images' => $images, 'url' => $url, 'currentPage' => $currentPage ];
-            }
-            
+            $gallery = $entity->files['gallery'];
+            $images = array_slice($gallery, $offset, ITEMS_PER_PAGE);
+            $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+            return [
+                'images' => $images,
+                'url' => $url,
+                'currentPage' => $currentPage
+            ];
         }
     }
 
     public function scroll(){
+        
         $anchor = '';
         if((isset($_GET['page'])) && ($_GET['page']) != null){
             $anchor = 'gallery-img-agent';
@@ -150,28 +151,32 @@ class Theme extends BaseV1\Theme
     }
 
     // Mostra botões de paginação na galeria
-    public function seeButtons($currentPage)//, $totalPages)
+    public function seeButtons($currentPage)
     {
         $app = App::i();
-        $entity = $this->data->entity;
-        $itemsPerPage = 12;
-
+        $entity = $this->data->entity;       
         if (isset($entity->files['gallery'])) {
-            $numberPerPage = count($entity->files['gallery']);
-            $fixedNumber = ceil($numberPerPage / $itemsPerPage);
-            
+            $totalImages = count($entity->files['gallery']);
+            $totalPages = ceil($totalImages / ITEMS_PER_PAGE);
+
+            // Verificar se o número de página é válido
+        if ($currentPage > $totalPages) {
+            // Redirecionar para a página mais próxima existente            
+            $redirectUrl = '?page=' . $totalPages . '#gallery-img-agent';
+            header('Location: ' . $redirectUrl);
+            exit();
+        }
+
             $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
             $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
 
             if ($currentPage > 1) {
                 echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
             }
-            
-            $currentPage = $_GET['page'] ?? 1;
 
-            if (isset($currentPage) && $fixedNumber > 1) {
-                $color = (int)$currentPage;                
-                for ($i = 1; $i <= $fixedNumber; $i++) {
+            if (isset($currentPage) && $totalPages > 1) {
+                $color = (int) $currentPage;
+                for ($i = 1; $i <= $totalPages; $i++) {
                     if ($i != $color) {
                         echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp&nbsp';
                     }
@@ -181,18 +186,11 @@ class Theme extends BaseV1\Theme
                     }
                 }
             }
-            if (isset($currentPage) && $numberPerPage < $itemsPerPage) {
-                if ($currentPage != $fixedNumber) {
-                    echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
-                }                
-            }
-            // if (isset($currentPage) && $numberPerPage > $itemsPerPage) {
-            //     if ($currentPage != $fixedNumber) {
-            //         echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
-            //     }                
-            // }
-        }
-        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');     
+            if (isset($currentPage) && $currentPage < $totalPages) {
+                echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
+            }            
+        }   
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');   
     }
 
     /**

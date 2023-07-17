@@ -5,8 +5,7 @@ use MapasCulturais\App;
 $results = $this->addPagination();
 //chamada da função de busca da url
 $galleryUrl = $this->getGalleryUrl();
-
-// dump($entity->files['gallery']);die;            
+            
 if ($this->controller->action === 'create')
     return;
 
@@ -28,14 +27,14 @@ if (!is_object($entity)) : ?>
         <?php if ($gallery && isset($results)) :
             foreach ($results['images'] as $key => $img) : ?>
                 <div id="file-<?php echo $img->id; ?>" class="image-gallery-item">
-                <?php if (isset($galleryUrl['className'])) { ?>
-                    <a href="<?php echo $galleryUrl['url'] . 'files/'.$galleryUrl['className'].'/' . $galleryUrl['profile'] . '/' . $img->name; ?>"> <img src="<?php echo $galleryUrl['url'] . 'files/'.$galleryUrl['className'].'/' . $galleryUrl['profile'] . '/' . $img->name; ?>" class="image-gallery-item" /> </a>
+                    <?php if (isset($galleryUrl['className'])) { ?>
+                        <a href="<?php echo $galleryUrl['url'] . 'files/' . $galleryUrl['className'] . '/' . $galleryUrl['profile'] . '/' . $img->name; ?>"> <img src="<?php echo $galleryUrl['url'] . 'files/' . $galleryUrl['className'] . '/' . $galleryUrl['profile'] . '/' . $img->name; ?>" class="image-gallery-item" /> </a>
                         <?php if ($this->isEditable()) : ?>
                             <a data-href="<?php echo $galleryUrl['url'] . '/arquivos/apaga/' . $img->id ?>" data-target="#file-<?php echo $img->id ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
                     <?php } ?>
                 </div>
-        <?php endforeach;
+            <?php endforeach;
         endif; ?>
     </div>
 
