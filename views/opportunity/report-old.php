@@ -3,6 +3,8 @@
 use MapasCulturais\Entities\Registration as R;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\i;
+ini_set('memory_limit', '256M');
+ini_set('max_execution_time', '200');
 
 $app->disableAccessControl();
 
