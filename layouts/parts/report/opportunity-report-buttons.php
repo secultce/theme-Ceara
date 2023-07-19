@@ -6,35 +6,19 @@ use MapasCulturais\i;
 $route = App::i()->createUrl('opportunity', 'reportResultEvaluationsDocumental', [$entity->id]);
 $route_btn_antigo = App::i()->createUrl('opportunity', 'reportOld', [$entity->id]);
 ?>
-
 <!-- <a class="btn btn-default download btn-report-evaluation-documental"  ng-click="editbox.open('report-evaluation-documental-options', $event)" rel="noopener noreferrer">Imprimir Resultado</a> -->
 
 <!--Botão antigo-->
-<a class="btn btn-default download" id="Clique" href="<?php echo $route_btn_antigo ?>"><?php i::_e("Baixar inscritos"); ?>(Botão antigo)</a>
+<a class="btn btn-default download" id="msg" target="_blank" href="<?php echo $route_btn_antigo ?>"><?php i::_e("Baixar inscritos"); ?>(Botão antigo)</a>
 
-<div id="" style="display: none;">
-    <div ng-if="data.findingRegistrations">
-        <h3 class="alert warning ">Aguarde para baixar a planilha</h3>
-        <img src="<?php $this->asset('img/spinner_192.gif') ?>" width="48">
+<div id="hidden" style="display: none;">
+    <div id='status-info' class="alert warning">
+        <p><?php i::_e("ATENÇÃO"); ?></p>
+        <ul>
+            <li>Aguarde o carregamento da página de download ao lado.</li>
+        </ul>
+        <div class="close"></div>
     </div>
-</div>
-
-<script>
-    $("#Clique").click(function() {
-        $("#escondido").css("display", "block");
-    });
-
-    //detectar se o browse está baixando algo
-    const download = browser_is_downloading();
-    if (download) {
-       
-    }
-</script>
-
-
-<div id="escondido" style="display: none;">
-    <h3 class="alert warning ">Aguarde para baixar a planilha</h3>
-    <img src="<?php $this->asset('img/spinner_192.gif') ?>" width="48">
 </div>
 
 <!-- Formulário -->

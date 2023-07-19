@@ -201,7 +201,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         //Chamada  da função de alerta nas views
         $this->alertMessageMaintenance();
-
+        $this->enqueueScript('app', 'load', 'js/load.js');
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
