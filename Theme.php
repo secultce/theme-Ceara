@@ -1898,7 +1898,31 @@ class Theme extends BaseV1\Theme
 
         $app->hook('auth.successful', function () use ($app, $theme) {
             $theme->fixAgentPermission($app->user);
-        });      
+        });
+
+        //disparo de e-mail quando iniciar uma inscrição
+        $app->hook("entity(Registration).insert:finish", function () use ($app){
+            //Array com dados para preencher o template do email
+            //@ParaMelhorar: chamar os dados atraves dos métodos mágicos
+            $dataValue = [
+                'siteName' => $app->view->dict('site: name', false),
+                'baseUrl' => $app->getBaseUrl(),
+                'userName' => $app->auth->authenticatedUser->profile->name,
+                'projectId' => $this->entity['opportunity']->id,
+                'projectName' => $this->entity['opportunity']->name,
+                'registrationId' => $this->entity['id'],
+                'registrationNumber' => $this->entity['number']
+            ];
+            
+            $message = $app->renderMailerTemplate('start_registration',$dataValue);
+            $app->createAndSendMailMessage([
+                'from' => $app->config['mailer.from'],
+                'to' => $app->auth->authenticatedUser->profile->user->email,
+                'subject' => $message['title'],
+                'body' => $message['body']
+            ]);
+            
+        });
     }
 
     /**
