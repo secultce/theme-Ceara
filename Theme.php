@@ -2312,7 +2312,7 @@ class Theme extends BaseV1\Theme
             i::__("Vitrinista"),
         );
         //ID É O VALOR DO INDICE DO ARRAY DO ARQUIVO TAXONOMI
-        $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, true);
+        $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, false);
         $app->registerTaxonomy('MapasCulturais\Entities\Agent', $def);
     }
     /**

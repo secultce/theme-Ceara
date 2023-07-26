@@ -33,6 +33,7 @@ return [
             \MapasCulturais\i::__('Cinema'),
             \MapasCulturais\i::__('Circo'),
             \MapasCulturais\i::__('Comunicação'),
+            \MapasCulturais\i::__('Contação de Estórias'),
             \MapasCulturais\i::__('Cultura Afro-brasileira'),
             \MapasCulturais\i::__('Cultura Cigana'),
             \MapasCulturais\i::__('Cultura Digital'),
