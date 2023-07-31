@@ -187,7 +187,7 @@ class Theme extends BaseV1\Theme
                 echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
             }            
         }   
-        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');   
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');
     }
 
     /**
@@ -1666,12 +1666,19 @@ class Theme extends BaseV1\Theme
             $this->json(array($result_type => $result));
         });
 
+        //HOOK PARA FORÇAR A INCLUSAO DE PERFIL INDIVIDUAL E COLETIVO
+        $app->hook('template(agent.edit.type):before', function () use ($app) {
+            $entity = $this->controller->requestedEntity;
+            $app->view->enqueueScript('app', 'edit-type', 'js/agents/edit-agent.js');   
+            $this->part('singles/agents/type', ['entity' => $entity]);
+        });
+
         $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<th class="registration-status-col">Administrador</th>';
             }
         });
-
+        
         $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button> </td>';
