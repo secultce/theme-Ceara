@@ -1,5 +1,8 @@
 <style>
     /* ESTILIZANDO PARA SUBISTITUIR O LAYOUT DO PLUGIN PARA ADD A MENSAGEM DO TEMA */
+    .login-area > .alerta.sucesso{
+        display: none
+    }
     .login-area > .alerta.sucesso.feedback-auth {
         display: block
     }
