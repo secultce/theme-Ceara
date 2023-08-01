@@ -1931,6 +1931,16 @@ class Theme extends BaseV1\Theme
             ]);
             
         });
+
+        //EM CASOS DE RECUPERAÇÃO DE SENHA, FOI CRIADO UM HOOK PARA SUBISTITUIR A MENSAGEM DE FEEDBACK
+        $app->hook("template(auth.recover.head):begin", function() use($app){
+            // O $this é o contexto do plugin multipleLocal
+            $feedback_success = $this->feedback_success = true;
+            $this->feedback_msg = i::__('Sucesso!!! Um e-mail foi enviado para com instruções para sua caixa de entrada ou consulte o span para recuperação
+            da senha. '."\n\n".' E-mail: '. $app->request->post('email'), 'multipleLocal');
+            //CRIADO UMA VIEW PARA MOSTRAR A MENSAGEM
+            $this->part('auth/feedback', ['feedback_success' => $feedback_success, 'feedback_msg' => $this->feedback_msg]);
+        });
     }
 
     /**
@@ -2188,6 +2198,9 @@ class Theme extends BaseV1\Theme
 
             )
         ]);
+
+        $app->registerController('cearacontrollers', Controllers\CearaController::class);
+        //$app->registerController('cearacontroller', Controller::class);
                 
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
