@@ -1936,8 +1936,7 @@ class Theme extends BaseV1\Theme
         $app->hook("template(auth.recover.head):begin", function() use($app){
             // O $this é o contexto do plugin multipleLocal
             $feedback_success = $this->feedback_success = true;
-            $this->feedback_msg = i::__('Sucesso!!! Um e-mail foi enviado para com instruções para sua caixa de entrada ou consulte o spam para recuperação
-            da senha. '."\n\n".' E-mail: '. $app->request->post('email'), 'multipleLocal');
+            $this->feedback_msg = i::__('Sucesso! Um e-mail foi enviado para a sua caixa de entrada. Caso não tenha recebido, favor verificar no spam ou lixo eletrônico. '."\n\n".' E-mail: '. $app->request->post('email'), 'multipleLocal');
             //PARA OCULTAR A DIV COM A MENSAGEM DO PLUGIN
             $this->enqueueScript('app', 'auth', 'js/auth/auth.js');
             //CRIADO UMA VIEW PARA MOSTRAR A MENSAGEM
