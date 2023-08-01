@@ -1938,6 +1938,8 @@ class Theme extends BaseV1\Theme
             $feedback_success = $this->feedback_success = true;
             $this->feedback_msg = i::__('Sucesso!!! Um e-mail foi enviado para com instruções para sua caixa de entrada ou consulte o spam para recuperação
             da senha. '."\n\n".' E-mail: '. $app->request->post('email'), 'multipleLocal');
+            //PARA OCULTAR A DIV COM A MENSAGEM DO PLUGIN
+            $this->enqueueScript('app', 'auth', 'js/auth/auth.js');
             //CRIADO UMA VIEW PARA MOSTRAR A MENSAGEM
             $this->part('auth/feedback', ['feedback_success' => $feedback_success, 'feedback_msg' => $this->feedback_msg]);
         });
