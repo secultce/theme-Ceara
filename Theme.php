@@ -6,8 +6,8 @@ use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\i;
+use MapasCulturais\Utils;
 
-use function MapasCulturais\Controllers\dump;
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
 class Theme extends BaseV1\Theme
@@ -2200,9 +2200,26 @@ class Theme extends BaseV1\Theme
             )
         ]);
 
-        $app->registerController('cearacontrollers', Controllers\CearaController::class);
-        //$app->registerController('cearacontroller', Controller::class);
-                
+        $this->registerAgentMetadata('cnpj', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('CNPJ'),
+            'serialize' => function($value, $entity = null){
+                $app = \MapasCulturais\App::i();
+                /**@var MapasCulturais\App $this */
+                $key = "hook:cnpj:{$entity}";
+                if(!$app->cache->contains($key)){
+                    if($entity->type && $entity->type->id == 2){
+                        $entity->documento = $value;
+                    }
+                    $app->cache->save($key, 1);
+                }
+                return Utils::formatCnpjCpf($value);
+            },
+            'validations' => array(
+                'v::cnpj()' => \MapasCulturais\i::__('O número de CNPJ informado é inválido.')
+             ),
+            'available_for_opportunities' => true,
+        ]);
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
             i::__("Aderecista"),
@@ -2359,7 +2376,7 @@ class Theme extends BaseV1\Theme
             //DESABILITA O CONTROLE DE ACESSO DOS DADOS
             $app->disableAccessControl();
             //ALTERA O STATUS E SALVA
-            $agents[0]->status = 0;
+            // $agents[0]->status = 0;
             $agents[0]->save(true);
             //HABILITA NOVAMENTE O CONTROLE DE ACESSO
             $app->enableAccessControl();
