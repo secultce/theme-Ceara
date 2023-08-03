@@ -2005,7 +2005,7 @@ class Theme extends BaseV1\Theme
             'label' => \MapasCulturais\i::__('CPF ou CNPJ'),
             'validations' => array(
                 'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
-                'required' => \MapasCulturais\i::__('O CPF é obrigatório'),
+                // 'required' => \MapasCulturais\i::__('O CPF é obrigatório'),//VALIDAÇÃO ATUALMENTE PELO AGENT-TYPES
             ),
             'available_for_opportunities' => false
         ]);
