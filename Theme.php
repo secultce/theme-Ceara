@@ -1898,10 +1898,16 @@ class Theme extends BaseV1\Theme
         });
 
         $theme = $this;
-
-        $app->hook('auth.createUser:after', function ($user) use ($app, $theme) {
-           
+        //HOOK PARA TROCAR O STATUS DO AGENTE APOS A CRIAÇÃO DE UM USUARIO P/ RASCUNHO
+        $app->hook('auth.createUser:after', function ($user) use ($app, $theme) {           
             $theme->fixAgentPermission($user);
+                       
+            $app->disableAccessControl();
+            //Buscando o agente desse usuário
+            $agent = $app->repo('Agent')->find($user->profile->id);
+            $agent->status = 0;//alterando o status para rascunho
+            $agent->save();
+            $app->enableAccessControl();
         });
 
         $app->hook('auth.successful', function () use ($app, $theme) {
@@ -2369,17 +2375,11 @@ class Theme extends BaseV1\Theme
         if (count($agents) > 2) return;
 
         if ($user->createTimestamp < new \DateTime("2020-02-15")) return;
-        //VERIFICANDO OS AGENTE DO MESMO PERFIL NO USUÁRIO COM STATUS ATIVO
-        $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 1]);
-        //SE ENCONTRAR 1 AGENTE ENTRA NO ID
-        if (count($agent_profile) == 1) {
-            //DESABILITA O CONTROLE DE ACESSO DOS DADOS
-            $app->disableAccessControl();
-            //ALTERA O STATUS E SALVA
-            // $agents[0]->status = 0;
-            $agents[0]->save(true);
-            //HABILITA NOVAMENTE O CONTROLE DE ACESSO
-            $app->enableAccessControl();
+        $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 0]);
+
+        if (count($agent_profile) > 1) {
+            $agent_profile[0]->status = 1;
+            $agent_profile[0]->save(true);
         }
 
         $actions = [
