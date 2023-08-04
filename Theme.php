@@ -1632,6 +1632,9 @@ class Theme extends BaseV1\Theme
         $app->hook('template(site.index.nav.main.events):before', function () use ($app) {
             $this->part('site/header');
         });
+        $app->hook('template(panel.index.nav.main.events):before', function () use ($app) {
+            $this->part('site/header');
+        });
 
         $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
