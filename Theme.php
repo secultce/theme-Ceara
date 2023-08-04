@@ -1628,6 +1628,11 @@ class Theme extends BaseV1\Theme
             */
         });
 
+        //Add hook para criar um botão de suporte junto aos menus
+        $app->hook('template(site.index.nav.main.events):before', function () use ($app) {
+            $this->part('site/header');
+        });
+
         $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
