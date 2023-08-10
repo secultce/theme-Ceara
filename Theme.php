@@ -6,8 +6,11 @@ use \MapasCulturais\i;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
-use MapasCulturais\Entities;
+use MapasCulturais\i;
+use MapasCulturais\Utils;
 
+// Constante para definir itens por página
+define("ITEMS_PER_PAGE", 100);
 class Theme extends BaseV1\Theme
 {
     public function __construct(AssetManager $asset_manager)
@@ -45,7 +48,7 @@ class Theme extends BaseV1\Theme
         });
 
         parent::__construct($asset_manager);
-    }
+    }    
 
     protected static function _getTexts()
     {
@@ -98,6 +101,96 @@ class Theme extends BaseV1\Theme
         }
     }
 
+    public function addPagination()
+    {
+        $app = App::i();
+        $entity = $this->data->entity;
+        $profile = $entity->id;
+
+        // Paginação
+        $currentPage = $_GET['page'] ?? 1;        
+        $offset = ($currentPage - 1) * ITEMS_PER_PAGE;
+
+        if (isset($entity->files['gallery'])) {
+            $gallery = $entity->files['gallery'];
+            $images = array_slice($gallery, $offset, ITEMS_PER_PAGE);
+            $url = $app->config['base.url'] . 'files/agent/' . $profile . '/';
+            return [
+                'images' => $images,
+                'url' => $url,
+                'currentPage' => $currentPage
+            ];
+        }
+    }
+
+    public function scroll(){
+        
+        $anchor = '';
+        if((isset($_GET['page'])) && ($_GET['page']) != null){
+            $anchor = 'gallery-img-agent';
+        }else{
+            $anchor = '';
+        }
+        return $anchor;
+    }    
+
+    public function getGalleryUrl()
+    {
+        $app = App::i();
+        $url = $app->config['base.url'];
+    
+        $profile = $this->data->entity->id;
+        $className = $this->controller->id;
+        return [
+            'url' => $url,
+            'profile' => $profile,          
+            'className' => $className
+        ];
+    }
+
+    // Mostra botões de paginação na galeria
+    public function seeButtons($currentPage)
+    {
+        $app = App::i();
+        $entity = $this->data->entity;       
+        if (isset($entity->files['gallery'])) {
+            $totalImages = count($entity->files['gallery']);
+            $totalPages = ceil($totalImages / ITEMS_PER_PAGE);
+
+            // Verificar se o número de página é válido
+        if ($currentPage > $totalPages) {
+            // Redirecionar para a página mais próxima existente            
+            $redirectUrl = '?page=' . $totalPages . '#gallery-img-agent';
+            header('Location: ' . $redirectUrl);
+            exit();
+        }
+
+            $prevPageUrl = '?page=' . ($currentPage - 1) . '#gallery-img-agent';
+            $nextPageUrl = '?page=' . ($currentPage + 1) . '#gallery-img-agent';
+
+            if ($currentPage > 1) {
+                echo '<a id="prev-page" href="' . $prevPageUrl . '" class="btn btn-primary">Página anterior</a>&nbsp&nbsp';
+            }
+
+            if (isset($currentPage) && $totalPages > 1) {
+                $color = (int) $currentPage;
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    if ($i != $color) {
+                        echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-primary">' . $i . '</a>&nbsp&nbsp';
+                    }
+
+                    if ($i == $color) {
+                        echo '<a id="prev-page" href="?page=' . $i . '#gallery-img-agent" class="btn btn-success">' . $i . '</a>&nbsp&nbsp';
+                    }
+                }
+            }
+            if (isset($currentPage) && $currentPage < $totalPages) {
+                echo '<a id="next-page" href="' . $nextPageUrl . '" class="btn btn-primary">Próxima página</a>';
+            }            
+        }   
+        $app->view->enqueueScript('app', 'scroll', 'js/scroll.js');
+    }
+
     /**
      *
      * {@inheritdoc}
@@ -107,10 +200,14 @@ class Theme extends BaseV1\Theme
     {
         parent::_init();
         $app = App::i();
+        //Chamada  da função de alerta nas views
+        $this->alertMessageMaintenance();
 
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
+        //chamada do arquivo js que contém o ocultar botão + da modal criação
+        $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
 
         $app->hook('view.render(<<*>>):before', function () use ($app) {
             $this->_publishAssets();
@@ -1532,6 +1629,20 @@ class Theme extends BaseV1\Theme
             */
         });
 
+        //Add hook para criar um botão de suporte junto aos menus
+        $app->hook('template(site.index.nav.main.events):before', function () use ($app) {
+            $this->part('site/header');
+        });
+        $app->hook('template(site.search.nav.main.events):before', function () use ($app) {
+            $this->part('site/header');
+        });
+       
+        $app->hook('template(panel.index.nav.main.events):before', function () use ($app) {
+            $this->part('site/header');
+        });
+        $app->hook('template(<<*>>.<<single|edit>>.nav.main.events):before', function () use ($app) {
+            $this->part('site/header');
+        });
         $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
@@ -1570,12 +1681,19 @@ class Theme extends BaseV1\Theme
             $this->json(array($result_type => $result));
         });
 
+        //HOOK PARA FORÇAR A INCLUSAO DE PERFIL INDIVIDUAL E COLETIVO
+        $app->hook('template(agent.edit.type):before', function () use ($app) {
+            $entity = $this->controller->requestedEntity;
+            $app->view->enqueueScript('app', 'edit-type', 'js/agents/edit-agent.js');   
+            $this->part('singles/agents/type', ['entity' => $entity]);
+        });
+
         $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<th class="registration-status-col">Administrador</th>';
             }
         });
-
+        
         $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button> </td>';
@@ -1795,14 +1913,67 @@ class Theme extends BaseV1\Theme
         });
 
         $theme = $this;
-
-        $app->hook('auth.createUser:after', function ($user) use ($app, $theme) {
+        //HOOK PARA TROCAR O STATUS DO AGENTE APOS A CRIAÇÃO DE UM USUARIO P/ RASCUNHO
+        $app->hook('auth.createUser:after', function ($user) use ($app, $theme) {           
             $theme->fixAgentPermission($user);
+                       
+            $app->disableAccessControl();
+            //Buscando o agente desse usuário
+            $agent = $app->repo('Agent')->find($user->profile->id);
+            $agent->status = 0;//alterando o status para rascunho
+            $agent->save();
+            $app->enableAccessControl();
         });
 
         $app->hook('auth.successful', function () use ($app, $theme) {
             $theme->fixAgentPermission($app->user);
         });
+
+        //disparo de e-mail quando iniciar uma inscrição
+        $app->hook("entity(Registration).insert:finish", function () use ($app){
+            //Array com dados para preencher o template do email
+            //@ParaMelhorar: chamar os dados atraves dos métodos mágicos
+            $dataValue = [
+                'siteName' => $app->view->dict('site: name', false),
+                'baseUrl' => $app->getBaseUrl(),
+                'userName' => $app->auth->authenticatedUser->profile->name,
+                'projectId' => $this->entity['opportunity']->id,
+                'projectName' => $this->entity['opportunity']->name,
+                'registrationId' => $this->entity['id'],
+                'registrationNumber' => $this->entity['number']
+            ];
+            
+            $message = $app->renderMailerTemplate('start_registration',$dataValue);
+            $app->createAndSendMailMessage([
+                'from' => $app->config['mailer.from'],
+                'to' => $app->auth->authenticatedUser->profile->user->email,
+                'subject' => $message['title'],
+                'body' => $message['body']
+            ]);
+            
+        });
+
+        //EM CASOS DE RECUPERAÇÃO DE SENHA, FOI CRIADO UM HOOK PARA SUBISTITUIR A MENSAGEM DE FEEDBACK
+        $app->hook("template(auth.recover.head):begin", function() use($app){
+            // O $this é o contexto do plugin multipleLocal
+            $feedback_success = $this->feedback_success = true;
+            $this->feedback_msg = i::__('Sucesso! Um e-mail foi enviado para a sua caixa de entrada. Caso não tenha recebido, favor verificar no spam ou lixo eletrônico. '."\n\n".' E-mail: '. $app->request->post('email'), 'multipleLocal');
+            //PARA OCULTAR A DIV COM A MENSAGEM DO PLUGIN
+            $this->enqueueScript('app', 'auth', 'js/auth/auth.js');
+            //CRIADO UMA VIEW PARA MOSTRAR A MENSAGEM
+            $this->part('auth/feedback', ['feedback_success' => $feedback_success, 'feedback_msg' => $this->feedback_msg]);
+        });
+    }
+
+    /**
+     * atribuindo mensagem de alerta para manutenção
+     */
+    function alertMessageMaintenance()
+    {
+        $app = App::i();
+
+        $app->_config['maintenance_enabled'] = false;
+        $app->_config['maintenance_message'] = 'Sr(@), o Mapa Cultural passará por atualizações nos próximos dias. Não deixe sua inscrição para última hora';
     }
     /**
      *
@@ -1848,8 +2019,8 @@ class Theme extends BaseV1\Theme
             'private' => false,
             'label' => \MapasCulturais\i::__('CPF ou CNPJ'),
             'validations' => array(
-               'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
-               'required' => \MapasCulturais\i::__('O CPF é obrigatório'),
+                'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
+                // 'required' => \MapasCulturais\i::__('O CPF é obrigatório'),//VALIDAÇÃO ATUALMENTE PELO AGENT-TYPES
             ),
             'available_for_opportunities' => false
         ]);
@@ -2049,9 +2220,161 @@ class Theme extends BaseV1\Theme
 
             )
         ]);
-    }
 
-    
+        $this->registerAgentMetadata('cnpj', [
+            'private' => true,
+            'label' => \MapasCulturais\i::__('CNPJ'),
+            'serialize' => function($value, $entity = null){
+                $app = \MapasCulturais\App::i();
+                /**@var MapasCulturais\App $this */
+                $key = "hook:cnpj:{$entity}";
+                if(!$app->cache->contains($key)){
+                    if($entity->type && $entity->type->id == 2){
+                        $entity->documento = $value;
+                    }
+                    $app->cache->save($key, 1);
+                }
+                return Utils::formatCnpjCpf($value);
+            },
+            'validations' => array(
+                'v::cnpj()' => \MapasCulturais\i::__('O número de CNPJ informado é inválido.')
+             ),
+            'available_for_opportunities' => true,
+        ]);
+        //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
+        $newsTaxo = array(
+            i::__("Aderecista"),
+            i::__("Adestrador(a) para Artes Cênicas"),
+            i::__("Afinador de Instrumentos"),
+            i::__("Ajudante de Câmera"),
+            i::__("Ajudante de Locação"),
+            i::__("Ajudante de Objetos"),
+            i::__("Ajudante de Produção"),
+            i::__("Amestrador(a)"),
+            i::__("Aplicador(a) de sign"),
+            i::__("Armeiro(a)"),
+            i::__("Assessor(a) de Comunicação"),
+            i::__("Assistente Administrativo"),
+            i::__("Assistente de Arte"),
+            i::__("Assistente de Artista Gráfico"),
+            i::__("Assistente de Backstage"),
+            i::__("Assistente de Camarim"),
+            i::__("Assistente de Câmera"),
+            i::__("Assistente de Cenotécnica"),
+            i::__("Assistente de Continuidade"),
+            i::__("Assistente de Controller"),
+            i::__("Assistente de Criação Artística"),
+            i::__("Assistente de Edição"),
+            i::__("Assistente de Edição de Som"),
+            i::__("Assistente de Eletricista"),
+            i::__("Assistente de Figurino"),
+            i::__("Assistente de Ilha de Edição"),
+            i::__("Assistente de Maquiagem"),
+            i::__("Assistente de Maquinaria"),
+            i::__("Assistente de Montagem"),
+            i::__("Assistente de Objetos"),
+            i::__("Assistente de Pós Produção"),
+            i::__("Assistente de Produção (Base ou Set"),
+            i::__("Assistente de Produção de Arte"),
+            i::__("Assistente de Produção de Elenco"),
+            i::__("Assistente de Produção de Locação"),
+            i::__("Assistente de Produção em geral"),
+            i::__("Assistente de Produção Musical"),
+            i::__("Assistente de Roteiro"),
+            i::__("Assistente de Som"),
+            i::__("Assistente de Transporte"),
+            i::__("Assistente Mixador(a)"),
+            i::__("Audiodescritor(a)"),
+            i::__("Barreira"),
+            i::__("Bilheteiro(a)"),
+            i::__("Bordadeiro(a)"),
+            i::__("Cabeleireiro"),
+            i::__("Cabeleireiro(a)"),
+            i::__("Camareiro(a)"),
+            i::__("Capataz(a) - Montador(a)"),
+            i::__("Carpinteiro(a)"),
+            i::__("Cenógrafo(a)"),
+            i::__("Cenotécnico(a)"),
+            i::__("Chefe de Maquinária"),
+            i::__("Cinegrafista"),
+            i::__("Colorista"),
+            i::__("Colorista Assistente"),
+            i::__("Consultor de Imagem"),
+            i::__("Consultor em Legendagem"),
+            i::__("Consultor(a) em Audiodescrição"),
+            i::__("Consultor(a) em Braille"),
+            i::__("Consultor(a) em Libras"),
+            i::__("Continuista"),
+            i::__("Contrarregra"),
+            i::__("Coolhunter"),
+            i::__("Coordenador(a) de Palco"),
+            i::__("Cortineiro(a)"),
+            i::__("Costureiro(a)"),
+            i::__("Design de Montagem"),
+            i::__("Diagramador(a)"),
+            i::__("Digitalizador(a)"),
+            i::__("Diretor(a) de Palco"),
+            i::__("Editor de Partituras"),
+            i::__("Editor(a)"),
+            i::__("Editor(a) de Som"),
+            i::__("Eletricista"),
+            i::__("Eletricista Chefe"),
+            i::__("Engenheiro(a) de Som"),
+            i::__("Ensaiador(a)"),
+            i::__("Estampador"),
+            i::__("Figurinista"),
+            i::__("Foley"),
+            i::__("Guia-intérprete de língua de sinais"),
+            i::__("Iluminador"),
+            i::__("Iluminador(a)"),
+            i::__("Legendista ou Tradutor(a)"),
+            i::__("Logger"),
+            i::__("Luthier"),
+            i::__("Maquiador"),
+            i::__("Maquiador(a)"),
+            i::__("Maquinista"),
+            i::__("Marcador(a) de Cena"),
+            i::__("Mediador(a)"),
+            i::__("Mestre(a) de Pista"),
+            i::__("Montador(a)"),
+            i::__("Montador(a) de Palco"),
+            i::__("Motorista de Audiovisual"),
+            i::__("Músico-Musicista"),
+            i::__("Operador(a) de Luz"),
+            i::__("Operador(a) de Som"),
+            i::__("Outra função técnica"),
+            i::__("Passador (a)"),
+            i::__("Peruqueiro"),
+            i::__("Peruqueiro(a)"),
+            i::__("Pilotista"),
+            i::__("Produtor de Casting"),
+            i::__("Produtor(a) de Casting/Booker"),
+            i::__("Produtor(a) Fonográfico"),
+            i::__("Radialista"),
+            i::__("Roadie"),
+            i::__("Sapateiro"),
+            i::__("Secretario(a) de Frente"),
+            i::__("Secretário(a) Teatral"),
+            i::__("Serigrafista"),
+            i::__("Sonoplasta"),
+            i::__("Tatuador"),
+            i::__("Técnico de Luz"),
+            i::__("Técnico(a) Contábil"),
+            i::__("Técnico(a) de Estúdio"),
+            i::__("Técnico(a) de Luz"),
+            i::__("Técnico(a) de Palco"),
+            i::__("Técnico(a) de Som"),
+            i::__("Técnico(a) de Som Direto"),
+            i::__("Tradutor(a) ou Intérprete de Libras"),
+            i::__("Transcritor ou Revisor em Braille"),
+            i::__("Visagista"),
+            i::__("Visual Merchandiser"),
+            i::__("Vitrinista"),
+        );
+        //ID É O VALOR DO INDICE DO ARRAY DO ARQUIVO TAXONOMI
+        $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, false);
+        $app->registerTaxonomy('MapasCulturais\Entities\Agent', $def);
+    }
     /**
      * Fix agent Permission
      *
@@ -2061,12 +2384,12 @@ class Theme extends BaseV1\Theme
     {
         $app = App::i();
         $conn = $app->em->getConnection();
-
+        //VERIFICA SE TEM AGENTE COM O USUÁRIO QUE RECEBER
         $agents = $app->repo('Agent')->findBy(['user' => $user]);
+        //PARA NA HIPOTESE DE SER MAIS QUE 2 REGISTROS ENCONTRADOS
         if (count($agents) > 2) return;
 
         if ($user->createTimestamp < new \DateTime("2020-02-15")) return;
-
         $agent_profile = $app->repo('Agent')->findBy(['id' => $user->profile->id, 'status' => 0]);
 
         if (count($agent_profile) > 1) {
