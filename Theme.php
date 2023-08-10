@@ -2,6 +2,7 @@
 
 namespace Ceara;
 
+use \MapasCulturais\i;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
