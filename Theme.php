@@ -6,7 +6,6 @@ use \MapasCulturais\i;
 use MapasCulturais\App;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
-use MapasCulturais\i;
 use MapasCulturais\Utils;
 
 // Constante para definir itens por página
