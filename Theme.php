@@ -4,9 +4,12 @@ namespace Ceara;
 
 use \MapasCulturais\i;
 use MapasCulturais\App;
+use MapasCulturais\Utils;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
-use MapasCulturais\Utils;
+use MapasCulturais\Entities\RegistrationFileConfiguration;
+use MapasCulturais\Entities\RegistrationFieldConfiguration;
+use MapasCulturais\Entities\RegistrationFileConfigurationFile;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -1961,6 +1964,49 @@ class Theme extends BaseV1\Theme
             $this->enqueueScript('app', 'auth', 'js/auth/auth.js');
             //CRIADO UMA VIEW PARA MOSTRAR A MENSAGEM
             $this->part('auth/feedback', ['feedback_success' => $feedback_success, 'feedback_msg' => $this->feedback_msg]);
+        });
+
+        //HOOK PARA MELHORAR A IMPORTAÇÃO DOS ARQUIVOS
+        $app->hook("entity(Opportunity).importFields:after", function (&$importSource, &$created_fields, &$created_files) use ($app) {
+            //LOOP com os campos já criados            
+            foreach($importSource->fields as $key => $field) {
+                //Verifica se tem condicional
+                if($importSource->fields[$key]->conditional)
+                {
+                    //separando o valor para obter somenete o id do campo original
+                    $idParent = explode("_" , $importSource->fields[$key]->conditionalField);
+                    //Id da oportunidade atual
+                    $idOpActual = $field->newField->owner->id;
+
+                    //Retorno da instancia do campo original
+                    /**
+                     * Busca o campo original e procura esse mesmo campo na oportunidade atual
+                     * registrada na tabela para saber o ID do campo para substituir no campo 
+                     * conditionalField da oportunidade atual
+                     */
+                    $fieldParent = $app->repo('RegistrationFieldConfiguration')->find($idParent[1]);
+
+                    $fieldChidren = $app->repo('RegistrationFieldConfiguration')->findBy([
+                        'owner' => $idOpActual,
+                        'title' => $fieldParent->title,
+                        'description' => $fieldParent->description,
+                        'maxSize' => $fieldParent->maxSize ,
+                        'fieldType' => $fieldParent->fieldType ,
+                        'displayOrder' => $fieldParent->displayOrder
+                    ]);
+                    //Se encontrar registro
+                    if(is_array($fieldChidren) && count($fieldChidren) > 0) {
+                        //Adiciona ao campo conditionalField uma concatenação com o nome campo registrado para ter dep.
+                        //anteriormente está sendo registrado o campo original perdendo o relacionamento no frontEnd
+                        $field->newField->conditional = true;
+                        $field->newField->conditionalField =  "field_" . strval($fieldChidren[0]->id) ;
+                        $field->newField->conditionalValue = $field->conditionalValue;
+                        $app->em->persist($field->newField);
+                        $app->em->flush();
+
+                    }
+                }
+            }
         });
     }
 
