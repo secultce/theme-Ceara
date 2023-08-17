@@ -7,6 +7,8 @@ use MapasCulturais\App;
 use MapasCulturais\Utils;
 use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
+use MapasCulturais\Entities\Agent;
+use MapasCulturais\Entities\Opportunity;
 use MapasCulturais\Entities\RegistrationFileConfiguration;
 use MapasCulturais\Entities\RegistrationFieldConfiguration;
 use MapasCulturais\Entities\RegistrationFileConfigurationFile;
@@ -2008,8 +2010,52 @@ class Theme extends BaseV1\Theme
                 }
             }
         });
+
     }
 
+    /**
+     * Mesmo métido da Entidade User.php, mas com uma validação para tratar o erro
+     * em caso de uma inscrição excluída
+     *
+     * @return void
+     */
+    function getOpportunitiesCanBeEvaluated() {
+        $app = App::i();
+        $app->user->profile->checkPermission('modify');
+        $opportunities = [];
+        $user_id = $app->user->id;
+        
+        $opportunitiesPermission = $app->repo('MapasCulturais\Entities\PermissionCache')->findBy([
+            'action' => 'viewUserEvaluation',
+            'userId' => $user_id
+        ]);
+       
+        if (count($opportunitiesPermission) > 0 ) {
+            $opportunityIDs = [];
+            foreach ($opportunitiesPermission as $keyOp => $opportunity) {
+                //TRATANDO ERRO EM CASO DA INSCRIÇÃO TER SIDO EXCLUIDA
+                try {
+                    $op = $app->repo('Registration')->find($opportunity->objectId);
+                    $opportunityIDs[] = $op->opportunity->id;
+                } catch (\Throwable $th) {
+                    unset($opportunitiesPermission[$keyOp]);
+                }
+            }
+           
+            $opportunities = $app->repo('Opportunity')->findBy([
+                'id' => $opportunityIDs,
+                'status' => [Opportunity::STATUS_ENABLED, Agent::STATUS_RELATED]
+            ]);
+
+            foreach ($opportunities as $key => $opportunity) {
+                $_is_opportunity_owner = $user_id === $opportunity->owner->userId;
+                if (!$opportunity->evaluationMethodConfiguration->canUser('@control') || $_is_opportunity_owner) {
+                    unset($opportunities[$key]);
+                }
+            }
+        }
+        return array_reverse($opportunities);
+    }
     /**
      * atribuindo mensagem de alerta para manutenção
      */
