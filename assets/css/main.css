@@ -6877,4 +6877,8 @@ button.mfp-arrow-left {
   overflow: visible !important;
   padding: 0px !important; }
 
+#registration-attachments textarea {
+  white-space: break-spaces;
+  min-height: 75px; }
+
 /*# sourceMappingURL=main.css.map */
