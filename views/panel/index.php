@@ -7,7 +7,8 @@ $posini = 0;
 $posfin = 0;
 $msg = "";
 $button = "";
-
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', 0);
 ?>
 <?php $this->applyTemplateHook('content','before'); ?>
 <div class="panel-main-content">
