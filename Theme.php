@@ -2268,7 +2268,33 @@ class Theme extends BaseV1\Theme
                 }
             }
         });
-
+       
+        /**
+         * Hook para excluir o registro que tem inscrições excluidas relacionada ao usuário como avalidor e etc
+         */   
+        $app->hook('view.partial(panel/opportunities):before', function ($arguments) use ($app) {
+            //ADD MAIS MEMORIA PARA CASOS DE MUITO REGISTROS NA PCACHE
+            ini_set('memory_limit', '256M');
+            ini_set('max_execution_time', 0);
+            $opportunitiesPermission = $app->repo('MapasCulturais\Entities\PermissionCache')->findBy([
+                'action' => 'viewUserEvaluation',
+                'userId' => $app->user->id
+            ]);
+            //Se tiver registro
+            if (count($opportunitiesPermission) > 0 ) {
+               
+                foreach ($opportunitiesPermission as $keyOp => $opportunity) {
+                    //TRATANDO ERRO EM CASO DA INSCRIÇÃO TER SIDO EXCLUIDA
+                    try {
+                        $app->repo('Registration')->find($opportunity->objectId);
+                        
+                    } catch (\Throwable $th) {
+                        $deletePCache = $app->repo('MapasCulturais\Entities\PermissionCache')->find($opportunitiesPermission[$keyOp]);
+                        $deletePCache->delete(true);
+                    }
+                }
+            }
+        }); 
     }
 
     /**
