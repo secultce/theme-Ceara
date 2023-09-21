@@ -97,10 +97,16 @@ class Registration extends EntityController {
             $finfo = pathinfo($this->name);
             $hash = uniqid();
 
-            $this->name = $this->owner->number . ' - ' . $hash . ' - ' . substr( preg_replace ('/[^\p{L}\p{N}]/u', '', $rfc->title),0,64) . '.' . $finfo['extension'];
+            $arr = explode(' ', trim($rfc->title));
+            //Criando um string com a primeira palavra do titulo do campo + numeros randomicos + as horas
+            $title = $arr[0] . "-".rand()."-".microtime(true);
+          
+            $this->name = $this->owner->number . ' - ' . $hash . ' - ' . substr( preg_replace ('/[^\p{L}\p{N}]/u', '', $title),0,64) . '.' . $finfo['extension'];
             $tmpFile = $this->tmpFile;
+
             $tmpFile['name'] = $this->name;
             $this->tmpFile = $tmpFile;
+
         });
 
         $app->hook('<<GET|POST|PUT|PATCH|DELETE>>(registration.<<*>>):before', function() {
