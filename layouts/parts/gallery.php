@@ -20,7 +20,7 @@ if (!is_object($entity)) : ?>
 <?php endif; ?>
 
 <?php if ($this->isEditable() || $gallery) : ?>
-    <h3><?php \MapasCulturais\i::_e("Galeria"); ?></h3>
+    <h3><?php \MapasCulturais\i::_e("Galeria");?></h3>
     <!-- chamada da função de ancoragem do Theme.php-->
     <?php $ancora = $this->scroll(); ?>    
     <div class="clearfix js-gallery" id="<?php echo $ancora?>">
@@ -28,7 +28,12 @@ if (!is_object($entity)) : ?>
             foreach ($results['images'] as $key => $img) : ?>
                 <div id="file-<?php echo $img->id; ?>" class="image-gallery-item">
                     <?php if (isset($galleryUrl['className'])) { ?>
-                        <a href="<?php echo $galleryUrl['url'] . 'files/' . $galleryUrl['className'] . '/' . $galleryUrl['profile'] . '/' . $img->name; ?>"> <img src="<?php echo $galleryUrl['url'] . 'files/' . $galleryUrl['className'] . '/' . $galleryUrl['profile'] . '/' . $img->name; ?>" class="image-gallery-item" /> </a>
+                        <a 
+                            href="<?php echo $galleryUrl['url'] . 'files/' . $galleryUrl['className'] . '/' . $galleryUrl['profile'] . '/' . $img->name; ?>"
+                            title="<?php echo htmlspecialchars($img->description, ENT_QUOTES); ?> - Cadastrado em <?php echo $img->createTimestamp->format('d/m/Y á\s H:i:s')?>"
+                        > 
+                            <img src="<?php echo $galleryUrl['url'] . 'files/' . $galleryUrl['className'] . '/' . $galleryUrl['profile'] . '/' . $img->name; ?>" class="image-gallery-item" />
+                        </a>
                         <?php if ($this->isEditable()) : ?>
                             <a data-href="<?php echo $galleryUrl['url'] . '/arquivos/apaga/' . $img->id ?>" data-target="#file-<?php echo $img->id ?>" class="btn btn-default delete hltip js-remove-item" data-hltip-classes="hltip-ajuda" title="<?php \MapasCulturais\i::esc_attr_e("Excluir"); ?>"></a>
                         <?php endif; ?>
