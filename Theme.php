@@ -2295,7 +2295,14 @@ class Theme extends BaseV1\Theme
                     }
                 }
             }
-        }); 
+        });
+
+        /**
+         * Hook para inscluir aviso de admins para perfil de coletivo add a uma oportunidade
+         */
+        $app->hook('template(registration.view.form):begin', function() use ($app) {
+            $this->part('registration/ceara/alert-collective');
+        });
     }
 
     /**
