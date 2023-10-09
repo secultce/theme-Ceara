@@ -2303,6 +2303,8 @@ class Theme extends BaseV1\Theme
         $app->hook('template(registration.view.form):begin', function() use ($app) {
             $this->part('registration/ceara/alert-collective');
         });
+
+       
     }
 
     /**
@@ -2757,6 +2759,8 @@ class Theme extends BaseV1\Theme
         //ID É O VALOR DO INDICE DO ARRAY DO ARQUIVO TAXONOMI
         $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, false);
         $app->registerTaxonomy('MapasCulturais\Entities\Agent', $def);
+
+        $app->registerController('avaliacoes', 'Ceara\Controllers\Evaluations');
     }
     /**
      * Fix agent Permission
