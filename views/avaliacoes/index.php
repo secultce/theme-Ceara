@@ -69,19 +69,19 @@ textarea.form-control {
     <form id="form-force-evaluations">
         <div>
             <label for="">Nº Inscrição</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="registration_id" value="1957410443" class="form-control">
             <label for="">Id Usuário</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="user_id" value="17964" class="form-control">
             <label for="">Resultado (result)</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="result" value="1" class="form-control">
             <label for="">Dados da avaliação</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="evaluation_data" class="form-control">
             <label for="">Status</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="status" value="1" class="form-control">
             <label for="">Data da Criação</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="create_timestamp" value="2023-09-22 17:15:08.000" class="form-control">
             <label for="">Data da Atualização</label>
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" name="update_timestamp" class="form-control">
             <button class="btn btn-primary" id="btn-submit-evaluations">Cadastrar Avaliação</button>
         </div>
     </form>
