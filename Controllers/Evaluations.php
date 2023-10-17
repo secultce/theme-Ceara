@@ -76,4 +76,52 @@ class Evaluations extends \MapasCulturais\Controller
         // dump($this->data);
         // $this->json(['message' => 'success'], 200);
     }
+
+    function GET_loadCsv()
+    {
+        $app = App::i();
+        dump('GET_loadCsv');
+        $file = THEMES_PATH.'Ceara/Controllers/csv/avaliacoes.csv';
+        dump($file);
+        $row = 1;
+        $handle = fopen($file, "r");
+        while (($data = fgetcsv($handle, 0, ",")) !== FALSE) {
+            $num = count($data);
+            echo "<p> $num campos na linha $row: <br /></p>\n";
+            // $row++;
+            // for ($c=0; $c < $num; $c++) {
+            //     echo $data[$c] . "<br />\n";
+            // }
+            $dataConsolidate = json_encode($data[3]);
+            // dump($data);
+            $reg = $data[0];
+            $user_id = $data[1];
+            $result = $data[2];
+            // $evalData =  str_replace('\\"', '', $dataConsolidate);
+            $evalData = $data[3];
+            $status = $data[4];
+            $create = date($data[5]);
+            $update = $data[6];
+            echo $evalData."<br/>";
+            // $dtime = DateTime::createFromFormat($data[5]);
+          
+              
+            if($data[6] !== "")
+            {
+                // $query_insert = "INSERT INTO public.registration_evaluation
+                // (id, registration_id, user_id, result, evaluation_data, status, create_timestamp, update_timestamp)
+                // VALUES(nextval('registration_evaluation_pkey'), $reg, $user_id, $result, $evalData, $status, $create, $update);";
+                // $stmt_file = $app->em->getConnection()->prepare($query_insert);
+                // $stmt_file->execute();
+            }else{
+                $upTimeDate = date($data[6]);
+                // $query_insert = "INSERT INTO public.registration_evaluation
+                // (id, registration_id, user_id, result, evaluation_data, status, create_timestamp, update_timestamp)
+                // VALUES(nextval('registration_evaluation_pkey'), $reg, $user_id, $result, $evalData, $status, $create, $update);";
+                // $stmt_file = $app->em->getConnection()->prepare($query_insert);
+                // $stmt_file->execute();
+            }
+
+        }
+    }
 }
