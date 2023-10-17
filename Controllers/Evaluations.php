@@ -37,16 +37,12 @@ class Evaluations extends \MapasCulturais\Controller
             }
             //Tem que ser sasaAdmin+
             if($app->user->is('saasAdmin') && empty($reg_evaluations)){
-                // dump($reg_evaluations);
-                // dump($app->user->is('saasAdmin'));
-                // $evaluation_reg = $app->repo('RegistrationEvaluation');
                 $user = $app->repo('User')->find($this->data['user_id']);
                 $registration = $app->repo('Registration')->find($this->data['registration_id']);
                 $createTimestamp = new DateTime($this->data['create_timestamp']);
                 $updateTimestamp = new DateTime($this->data['update_timestamp']);
                 $dataEvaluation = json_decode($this->data['evaluation_data']);
-                // dump(gettype((array) $dataEvaluation));
-                // die;
+                
                 $evaluation = new RegistrationEvaluation;
                 $evaluation->registration = $registration;
                 $evaluation->user = $user;
@@ -61,7 +57,6 @@ class Evaluations extends \MapasCulturais\Controller
                 $eval = $posEvaluation->find($evaluation->id);
                 $eval->setEvaluationData( (array) $dataEvaluation );
                 $eval->save(true);
-                dump($eval);
             }
         } catch (\Exception $th) {
             // dump($th->getMessage());
@@ -76,52 +71,48 @@ class Evaluations extends \MapasCulturais\Controller
         // dump($this->data);
         // $this->json(['message' => 'success'], 200);
     }
-
+    /**
+     * Metodo para uso localhost para leitura de um 
+     *
+     * @return void
+     */
     function GET_loadCsv()
-    {
+    {   
         $app = App::i();
-        dump('GET_loadCsv');
-        $file = THEMES_PATH.'Ceara/Controllers/csv/avaliacoes.csv';
-        dump($file);
-        $row = 1;
-        $handle = fopen($file, "r");
-        while (($data = fgetcsv($handle, 0, ",")) !== FALSE) {
-            $num = count($data);
-            echo "<p> $num campos na linha $row: <br /></p>\n";
-            // $row++;
-            // for ($c=0; $c < $num; $c++) {
-            //     echo $data[$c] . "<br />\n";
-            // }
-            $dataConsolidate = json_encode($data[3]);
-            // dump($data);
-            $reg = $data[0];
-            $user_id = $data[1];
-            $result = $data[2];
-            // $evalData =  str_replace('\\"', '', $dataConsolidate);
-            $evalData = $data[3];
-            $status = $data[4];
-            $create = date($data[5]);
-            $update = $data[6];
-            echo $evalData."<br/>";
-            // $dtime = DateTime::createFromFormat($data[5]);
-          
-              
-            if($data[6] !== "")
-            {
-                // $query_insert = "INSERT INTO public.registration_evaluation
-                // (id, registration_id, user_id, result, evaluation_data, status, create_timestamp, update_timestamp)
-                // VALUES(nextval('registration_evaluation_pkey'), $reg, $user_id, $result, $evalData, $status, $create, $update);";
-                // $stmt_file = $app->em->getConnection()->prepare($query_insert);
-                // $stmt_file->execute();
-            }else{
-                $upTimeDate = date($data[6]);
-                // $query_insert = "INSERT INTO public.registration_evaluation
-                // (id, registration_id, user_id, result, evaluation_data, status, create_timestamp, update_timestamp)
-                // VALUES(nextval('registration_evaluation_pkey'), $reg, $user_id, $result, $evalData, $status, $create, $update);";
-                // $stmt_file = $app->em->getConnection()->prepare($query_insert);
-                // $stmt_file->execute();
-            }
+        //Tem que ser sasaAdmin+
+        if($app->user->is('saasAdmin') && empty($reg_evaluations)){
+            
+            $file = THEMES_PATH.'Ceara/Controllers/csv/avaliacoes.csv';
+            //Abrindo o arquivo para leitura
+            $handle = fopen($file, "r");
+            while ($data = fgetcsv($handle, 0, ",")) {
 
-        }
+                $reg = $data[0];
+                $user_id = $data[1];
+                $result = $data[2];
+                $evalData = $data[3];
+                $status = $data[4];
+                $create = date($data[5]);
+               
+                //Conexao
+                $em = $app->em;
+                $conn = $em->getConnection();
+                //se tiver data de atualização
+                if($data[6] !== "")
+                {
+                    // echo "Inscrição: ".$reg." inserida <br/>";
+                    $upTimeDate = date($data[6]);
+                    $conn->executeQuery("INSERT INTO registration_evaluation
+                    (id, registration_id, user_id, result, evaluation_data, status, create_timestamp, update_timestamp)
+                    VALUES(nextval('registration_evaluation_id_seq'), $reg, $user_id, '$result', '$evalData', $status, '$create', '$upTimeDate');");
+                }else{
+                    // echo "Inscrição: ".$reg." inserida <br/>";
+                    $conn->executeQuery("INSERT INTO registration_evaluation
+                    (id, registration_id, user_id, result, evaluation_data, status, create_timestamp)
+                    VALUES(nextval('registration_evaluation_id_seq'), $reg, $user_id, '$result', '$evalData', $status, '$create');");               
+                }
+
+            }
+        }    
     }
 }
