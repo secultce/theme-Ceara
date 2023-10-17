@@ -2295,7 +2295,14 @@ class Theme extends BaseV1\Theme
                     }
                 }
             }
-        }); 
+        });
+
+        $app->hook('GET(panel.atribuir-inscricao)', function () use ($app) {
+            for ($i=0; $i < 500; $i++) { 
+                $app->view->part('registration/insert-regis');
+                sleep(0.5);               
+            }
+        });
     }
 
     /**
