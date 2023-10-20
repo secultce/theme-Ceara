@@ -215,8 +215,11 @@ class Theme extends BaseV1\Theme
         //Para notificação ao usuário
         $this->enqueueScript('app', 'pnotify', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js');
         $this->enqueueScript('app', 'pnotify-animate', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.animate.min.js');
+        $this->enqueueScript('app', 'pnotify-confirm', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.confirm.min.js');
+        $this->enqueueScript('app', 'pnotify-buttons', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.buttons.min.js');
         $this->enqueueStyle('app', 'pnotify', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.css');
         $this->enqueueStyle('app', 'pnotify-theme', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.brighttheme.min.css');
+        $this->enqueueStyle('app', 'pnotify-buttons', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.buttons.min.css');
         //chamada do arquivo js que contém o ocultar botão + da modal criação
         $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
 
