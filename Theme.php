@@ -212,6 +212,11 @@ class Theme extends BaseV1\Theme
         $this->enqueueScript('app', 'accessibility', 'js/accessibility.js');
         $this->enqueueScript('app', 'analytics', 'js/analytics.js');
         $this->enqueueStyle('app', 'accessibility', 'css/accessibility.css');
+        //Para notificação ao usuário
+        $this->enqueueScript('app', 'pnotify', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js');
+        $this->enqueueScript('app', 'pnotify-animate', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.animate.min.js');
+        $this->enqueueStyle('app', 'pnotify', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.css');
+        $this->enqueueStyle('app', 'pnotify-theme', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.brighttheme.min.css');
         //chamada do arquivo js que contém o ocultar botão + da modal criação
         $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
 
@@ -2295,7 +2300,14 @@ class Theme extends BaseV1\Theme
                     }
                 }
             }
-        }); 
+        });
+
+        /**
+         * Hook para inscluir aviso de admins para perfil de coletivo add a uma oportunidade
+         */
+        $app->hook('template(registration.view.form):begin', function() use ($app) {
+            $this->part('registration/ceara/alert-collective');
+        });
     }
 
     /**
