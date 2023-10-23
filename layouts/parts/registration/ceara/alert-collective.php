@@ -86,7 +86,7 @@
                                                     addClass: 'btn-perfil-collective',
                                                     click: function(notice) {
                                                         console.log()
-                                                        let url = MapasCulturais.createUrl('agente' , 132894)
+                                                        let url = MapasCulturais.createUrl('agente' , collectiveId)
                                                         window.location.href = url
                                                     }
                                                 },
