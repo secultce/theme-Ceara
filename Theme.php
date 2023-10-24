@@ -2311,7 +2311,9 @@ class Theme extends BaseV1\Theme
         $app->hook('template(registration.view.form):begin', function() use ($app) {
             $this->part('registration/ceara/alert-collective');
         });
-    }
+       
+//
+     }
 
     /**
      * Mesmo métido da Entidade User.php, mas com uma validação para tratar o erro
@@ -2390,6 +2392,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         parent::register();
 
+        $app->registerController('pesquisar', Controllers\SearchAll::class);
         /**
          * Adicionando novos metadata na entidade Projeto
          *
@@ -2765,6 +2768,8 @@ class Theme extends BaseV1\Theme
         //ID É O VALOR DO INDICE DO ARRAY DO ARQUIVO TAXONOMI
         $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, false);
         $app->registerTaxonomy('MapasCulturais\Entities\Agent', $def);
+
+
     }
     /**
      * Fix agent Permission
