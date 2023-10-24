@@ -193,7 +193,8 @@
                     },50)
                 });
             },
-            
+
+                       
             registrationStatuses: MapasCulturais.entity.registrationStatuses,
 
             registrationStatusesNames: MapasCulturais.entity.registrationStatuses,
@@ -1209,6 +1210,13 @@ module.controller('RegistrationFieldsController', ['$scope', '$rootScope', '$int
         $scope.data.editableEntity[field.fieldName] = value !== undefined ? JSON.parse(angular.toJson(value)) : null;
 
         console.log($scope.data.editableEntity);
+
+        var valueSendRequest = value;
+
+        //se for campo do tipo de endereço
+        if(value !== null && value.endereco) {
+            valueSendRequest = value.endereco
+        }
         
         var dataPostSendAudit = {
             "user_id": MapasCulturais.userId,
@@ -1217,8 +1225,10 @@ module.controller('RegistrationFieldsController', ['$scope', '$rootScope', '$int
             "action": "Alterar",
             "message": "Alterou o campo: ",
             "key": field.fieldName,
-            "value": value
+            "value": valueSendRequest
         }
+        console.log({dataPostSendAudit})
+           
         jQuery.ajax({
             url:'http://localhost:5000/audit',
             type: "POST",
@@ -1228,20 +1238,14 @@ module.controller('RegistrationFieldsController', ['$scope', '$rootScope', '$int
             success: function(res){
                 console.log({res})
             },
-            error: function(err){
+            error: function(err){,
                 console.log({err})
             }
             
         })
-        .done(function() {
-            console.log( "second success" );
-          })
-          .fail(function() {
-            console.log( "error" );
-          })
-          .always(function() {
-            console.log( "finished" );
-          });
+        .always(function() {
+        console.log( "finished" );
+        });
 
         $timeout.cancel(saveTimeout);
         
