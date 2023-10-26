@@ -10,6 +10,7 @@ class SearchAll extends \MapasCulturais\Controller
 
     function GET_all()
     {
+        $this->requireAuthentication();
         $app = App::i();
         $app->view->enqueueScript('app', 'agent-search', 'js/agents/search/ng.agent-search.js');
         $app->view->enqueueStyle('app', 'tabs-style', 'css/search/style.css');
@@ -22,6 +23,8 @@ class SearchAll extends \MapasCulturais\Controller
      */
     function POST_searchAgent()
     {
+        $this->requireAuthentication();
+        
         $app = App::i();
         if ($this->data['type'] == 'email') {
             //Busca somente por um resultado por que não tem o mesmo email varias vezes
