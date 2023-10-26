@@ -17,59 +17,67 @@ if (!$app->user->is('admin'))
                 </a>
             </h2>
         </header>
-        <div  ng-app="agent-search">
-            <div  ng-controller="AgentSearchController">            
+        <div ng-app="agent-search">
+            <div ng-controller="AgentSearchController">
                 <div class="panel panel-default">
                     <div class="panel-heading">Pesquisa avançada de agentes</div>
                     <div class="panel-body">
                         <div id="tabs-1">
                             <div class="form-group">
                                 <label for="">Pesquisar por </label>
-                                <select name="selectSearch" class="form-control" id="" ng-model="selectedSearch" >
-                                    <option value="null">--Selecione--</option>
+                                <select name="selectSearch" class="form-control" id="" ng-model="selectedSearch" ng-change="clearInput()">
                                     <option value="email">E-mail</option>
                                     <option value="cpf">CPF</option>
-                                    <option value="dataDeNascimento" selected>Data de nascimento</option>
+                                    <option value="dataDeNascimento">Data de nascimento</option>
                                     <option value="cnpj">CNPJ</option>
                                 </select>
-                                <small>Select: {{selectedItem}}</small>
                             </div>
                             <div class="form-group">
-                                <input type="text" value="27.950.673/0001-69" ng-model="inputSearch" class="form-control">
-                            </div>
-                            <div class="forn-group">
-                                <button class="btn btn-success" ng-click="searchForm()">Pesquisar</button>
+                                <label for="">Valor da pesquisa</label>
+                                <input type="text" ng-model="inputSearch" class="form-control" placeholder="Preencher com mascara ou formato de Data">
+
+                                <div class="forn-group">
+                                    <button class="btn btn-success btn-search-all" ng-click="searchForm()">Pesquisar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Resultado da pesquisa</div>
-                    <div class="panel-body">
-                        <div class="bs-example" data-example-id="hoverable-table">
-                            <div class="list-group" ng-repeat="(key, value) in result">
-                               
-                                <a href="#" class="list-group-item">
-                                    <div style="display: flex; justify-content: space-between;">
-                                    <h4 class="list-group-item-heading">Joao Belo Junior</h4>
-                                        <button class="btn btn-info" ng-click="search($event)">Informação</button>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Resultado da pesquisa</div>
+                        <div class="panel-body">
+                            <div class="bs-example" data-example-id="hoverable-table">
+                                <div ng-if="result[0].length == 0">
+                                    <h5 for="">Busca sem resultado.</h5>
+                                </div>
+                                <div ng-repeat="(key, value) in result" ng-if="selectedSearch !== 'email' && result">
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item" ng-repeat="(key2, value2) in value">
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <h4 class="list-group-item-heading"> {{value2.name}}</h4>
+                                                <button class="btn btn-info" ng-click="searchItem(value2.id)">Informação</button>
+                                            </div>
+                                            <p class="list-group-item-text sub-title-search">
+                                                <strong>Descrição:</strong> {{value2.longDescription}}
+                                            </p>
+                                        </a>
                                     </div>
-                                        <p class="list-group-item-text sub-title-search" ng-repeat="(key2, value2) in value">
-                                        {{value2.owner}}
-                                        </p>    
-                                </a>
-                               
+                                </div>
+
+                                <div class="list-group" ng-if="selectedSearch == 'email' && result">
+                                    <a href="#" class="list-group-item" ng-repeat="(key, value) in result">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <h4 class="list-group-item-heading"> {{value.name}}</h4>
+                                            <button class="btn btn-info" ng-click="searchItem(value.id)">Informação</button>
+                                        </div>
+                                        <p class="list-group-item-text sub-title-search">
+                                            <strong>Descrição:</strong> {{value.longDescription}}
+                                        </p>
+                                    </a>
+                                </div>
                             </div>
-                            <!-- <div ng-controller="AgentSearchController">
-                                <h1>Lista de itens</h1>
-                                <ul>
-                                    <li ng-repeat="item in data.items">{{item.title}} - <a>remover</a></li>
-                                </ul>
-                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

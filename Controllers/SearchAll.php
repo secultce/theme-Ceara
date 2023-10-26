@@ -1,78 +1,102 @@
 <?php
+
 namespace Ceara\Controllers;
+
 use DateTime;
 use MapasCulturais\App;
 
-class SearchAll extends \MapasCulturais\Controller {
+class SearchAll extends \MapasCulturais\Controller
+{
 
-     function GET_all() {
-         $app = App::i();
-
-         // $this->requireAutentication();
-         // $app->view->enqueueScript('app', 'tabs', 'https://code.jquery.com/ui/1.13.2/jquery-ui.js');
-         $app->view->enqueueScript('app', 'agent-search', 'js/agents/search/ng.agent-search.js');
-         $app->view->enqueueStyle('app', 'tabs-style', 'css/tabs/style.css');
-         $this->render("index");
-     }
-
-     function GET_index() {
-        echo 'teste';
-     }
-
-     function POST_searchAgent()
-     {
-        // dump($this->data);
+    function GET_all()
+    {
         $app = App::i();
-        if($this->data['type'] == 'email')
-        {
-            $query = new \MapasCulturais\ApiQuery ('MapasCulturais\Entities\User', ['@select' => 'id', 'email' => 'ILIKE(' . $this->data['value'] . ')']);
-            // dump($query); 
-            if($user = $query->findOne()){
-                $user = $app->repo("User")->findOneBy($user);
-            }
-            return $this->json(['data' => $user], 200);
+        $app->view->enqueueScript('app', 'agent-search', 'js/agents/search/ng.agent-search.js');
+        $app->view->enqueueStyle('app', 'tabs-style', 'css/search/style.css');
+        $this->render("index");
+    }
+    /**
+     * Metodo que recebe os paramentros e realiza uma busca no banco e devolvo para front
+     *
+     * @return void
+     */
+    function POST_searchAgent()
+    {
+        $app = App::i();
+        if ($this->data['type'] == 'email') {
+            //Busca somente por um resultado por que não tem o mesmo email varias vezes
+            $row = $app->repo('User')->findOneBy(['email' => $this->data['value']]);
+            //Dados para envio
+            $result = $this->getReturnData($row);
+            return $this->json(['data' => $result], 200);
         }
 
-        if($this->data['type'] == 'cpf')
-        {
-           try {           
-                $user = $app->repo("AgentMeta")->findBy([
-                    'key' => 'cpf', 'value' => $this->data['value']
+        if ($this->data['type'] == 'cpf') {
+            try {
+                //Busca por cpf ou documento em caso de agente em rascunho
+                $row = $app->repo("AgentMeta")->findBy([
+                    'key' => array('cpf','documento'), 'value' => $this->data['value']
                 ]);
-                return $this->json(['data' => $user], 200);
-           } catch (\Throwable $th) {
+                $result = $this->getReturnData($row);
+                return $this->json(['data' => $result], 200);
+            } catch (\Throwable $th) {
                 throw $th;
-           }
+            }
         }
 
-        if($this->data['type'] == 'dataDeNascimento')
-        {
+        if ($this->data['type'] == 'dataDeNascimento') {
             //Alterando formato da data
             $birthDate = str_replace("/", "-", $this->data['value']);
-            try {           
-                $user = $app->repo("AgentMeta")->findBy([
+            try {
+                $row = $app->repo("AgentMeta")->findBy([
                     'key' => 'dataDeNascimento', 'value' => date('Y-m-d', strtotime($birthDate))
                 ]);
-                return $this->json(['data' => $user], 200);
-           } catch (\Throwable $th) {
+                $result = $this->getReturnData($row);
+             
+                return $this->json(['data' => $result], 200);
+            } catch (\Throwable $th) {
                 throw $th;
-           }
+            }
         }
 
-        if($this->data['type'] == 'cnpj')
-        {
-            try {           
-                $user = $app->repo("AgentMeta")->findOneBy([
-                    'key' => 'cnpj', 'value' => $this->data['value']
+        if ($this->data['type'] == 'cnpj') {
+            try {
+                $row = $app->repo("AgentMeta")->findBy([
+                    'key' => array('cnpj','documento'), 'value' => $this->data['value']
                 ]);
-                return $this->json(['data' => $user], 200);
-           } catch (\Throwable $th) {
+                $result = $this->getReturnData($row);
+             
+                return $this->json(['data' => $result], 200);
+            } catch (\Throwable $th) {
                 throw $th;
-           }
+            }
         }
-            
-       
-     }
+    }
 
-
+    /**
+     * Funcao que retorna uma matriz de array
+     *
+     * @param [object] $rows
+     * @return array
+     */
+    function getReturnData($rows) {
+        $result = [];
+        $app = App::i();
+        //Para busca com email
+        if(gettype($rows) == 'object'){
+            $agent = $app->repo('Agent')->find($rows->profile->id);
+            $result['id'] = $agent->owner->user->id;
+            $result['name'] = $agent->name;
+            $result['longDescription'] = $agent->longDescription;
+        }
+        foreach ($rows as $key => $value) {
+            //Buscando instancia de cada agente para montar o array de resultado
+            $agent = $app->repo('Agent')->find($value->owner->id);
+            //Preenchendo array
+            $result[$key]['id'] = $agent->owner->user->id;
+            $result[$key]['name'] = $agent->name;
+            $result[$key]['longDescription'] = $agent->longDescription;
+        }
+        return $result;
+    }
 }

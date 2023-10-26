@@ -32,34 +32,36 @@
               ]
         };
         $scope.selectedSearch = '';
-        $scope.inputSearch = '05/11/1984';
+        $scope.inputSearch = '';
         $scope.result = []
 
         $scope.searchForm = function() {
+            $scope.result = [];
+            //Criando objeto para envio na requisição
             var data = {
                 type: $scope.selectedSearch,
                 value: $scope.inputSearch
             }
             AgentSearchService.getData(data)
-            .success(function (data, status) {
-                console.log(data)
-                console.log(typeof $scope.result)
+            .success(function (data, status) {                
                 for (const [key, value] of Object.entries(data)) {
-                    console.log(value);
                     $scope.result.push(value)
-                  }
-               console.log($scope.result)
+                }
              }).
              error(function (data, status) {
-                
                  console.log(data)
-                 console.log({status})
+                 MapasCulturais.Messages.error('Ocorreu um erro inesperado');
              });
         }
 
-        $scope.updateForm = function() {
-            console.log('select',$scope.selectedItem)
- 
+        $scope.searchItem = function(userId) {
+          var url = MapasCulturais.baseURL + 'painel/userManagement/?userId=' + userId
+          window.open(url, '_blank'); 
+        }
+
+        $scope.clearInput = function () {
+            $scope.inputSearch = '';
+            $scope.result = [];
         }
     }]);
 })(angular);

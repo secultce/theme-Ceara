@@ -166,3 +166,9 @@ button.list-group-item {
   font-size: small;
   color: #918f8f;
 }
+.btn-search-all {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center !important;
+}

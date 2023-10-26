@@ -2311,8 +2311,19 @@ class Theme extends BaseV1\Theme
         $app->hook('template(registration.view.form):begin', function() use ($app) {
             $this->part('registration/ceara/alert-collective');
         });
+
+        /**
+         * Hook para colocar link na lateral esqueda
+         */
+        $app->hook('template(<<*>>.nav.panel.userManagement):before', function() use ($app) {
+            $url = $app->config['base.url'] . 'pesquisar/all';
+            echo '<li>
+            <a href="'. $url .'" target="_blank">
+                    <span class="icon icon-publication-status-open"></span> Busca avançada Usuário </a>
+            </li>';
+        });
        
-//
+
      }
 
     /**
