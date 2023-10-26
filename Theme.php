@@ -2311,7 +2311,20 @@ class Theme extends BaseV1\Theme
         $app->hook('template(registration.view.form):begin', function() use ($app) {
             $this->part('registration/ceara/alert-collective');
         });
-    }
+
+        /**
+         * Hook para colocar link na lateral esqueda
+         */
+        $app->hook('template(<<*>>.nav.panel.userManagement):before', function() use ($app) {
+            $url = $app->config['base.url'] . 'pesquisar/all';
+            echo '<li>
+            <a href="'. $url .'" target="_blank">
+                    <span class="icon icon-publication-status-open"></span> Busca avançada Usuário </a>
+            </li>';
+        });
+       
+
+     }
 
     /**
      * Mesmo métido da Entidade User.php, mas com uma validação para tratar o erro
@@ -2390,6 +2403,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         parent::register();
 
+        $app->registerController('pesquisar', Controllers\SearchAll::class);
         /**
          * Adicionando novos metadata na entidade Projeto
          *
@@ -2765,6 +2779,8 @@ class Theme extends BaseV1\Theme
         //ID É O VALOR DO INDICE DO ARRAY DO ARQUIVO TAXONOMI
         $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, false);
         $app->registerTaxonomy('MapasCulturais\Entities\Agent', $def);
+
+
     }
     /**
      * Fix agent Permission
