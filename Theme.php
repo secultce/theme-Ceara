@@ -1995,6 +1995,10 @@ class Theme extends BaseV1\Theme
             $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
         });
 
+        $app->hook('template(opportunity.single.tab-about):begin', function () use ($app) {
+            $app->view->enqueueScript('app', 'btn-disable-on-register', 'js/opportunity-ceara/btn-disable-on-register.js');
+        });
+
         //relatórios de inscritos botão antigo 
         $app->hook("<<GET|POST>>(opportunity.reportOld)", function () use ($app) {
             //return var_dump("ola");
