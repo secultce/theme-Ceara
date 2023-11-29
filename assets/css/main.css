@@ -6881,4 +6881,14 @@ button.mfp-arrow-left {
   white-space: break-spaces;
   min-height: 75px; }
 
+#sidebars {
+  position: sticky;
+  top: 0 !important;
+  display: block !important;
+  justify-content: space-between; }
+
+@media (max-width: 1199px) {
+  #sidebars {
+    flex-direction: column; } }
+
 /*# sourceMappingURL=main.css.map */

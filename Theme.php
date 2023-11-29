@@ -215,8 +215,11 @@ class Theme extends BaseV1\Theme
         //Para notificação ao usuário
         $this->enqueueScript('app', 'pnotify', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js');
         $this->enqueueScript('app', 'pnotify-animate', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.animate.min.js');
+        $this->enqueueScript('app', 'pnotify-confirm', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.confirm.min.js');
+        $this->enqueueScript('app', 'pnotify-buttons', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.buttons.min.js');
         $this->enqueueStyle('app', 'pnotify', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.css');
         $this->enqueueStyle('app', 'pnotify-theme', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.brighttheme.min.css');
+        $this->enqueueStyle('app', 'pnotify-buttons', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.buttons.min.css');
         //chamada do arquivo js que contém o ocultar botão + da modal criação
         $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
 
@@ -1992,6 +1995,10 @@ class Theme extends BaseV1\Theme
             $this->part('report/opportunity-report-buttons', ['entity' => $opportunity]);
         });
 
+        $app->hook('template(opportunity.single.tab-about):begin', function () use ($app) {
+            $app->view->enqueueScript('app', 'btn-disable-on-register', 'js/opportunity-ceara/btn-disable-on-register.js');
+        });
+
         //relatórios de inscritos botão antigo 
         $app->hook("<<GET|POST>>(opportunity.reportOld)", function () use ($app) {
             //return var_dump("ola");
@@ -2308,7 +2315,20 @@ class Theme extends BaseV1\Theme
         $app->hook('template(registration.view.form):begin', function() use ($app) {
             $this->part('registration/ceara/alert-collective');
         });
-    }
+
+        /**
+         * Hook para colocar link na lateral esqueda
+         */
+        $app->hook('template(<<*>>.nav.panel.userManagement):before', function() use ($app) {
+            $url = $app->config['base.url'] . 'pesquisar/all';
+            echo '<li>
+            <a href="'. $url .'" target="_blank">
+                    <span class="icon icon-publication-status-open"></span> Busca avançada Usuário </a>
+            </li>';
+        });
+       
+
+     }
 
     /**
      * Mesmo métido da Entidade User.php, mas com uma validação para tratar o erro
@@ -2387,6 +2407,7 @@ class Theme extends BaseV1\Theme
         $app = App::i();
         parent::register();
 
+        $app->registerController('pesquisar', Controllers\SearchAll::class);
         /**
          * Adicionando novos metadata na entidade Projeto
          *
@@ -2762,6 +2783,8 @@ class Theme extends BaseV1\Theme
         //ID É O VALOR DO INDICE DO ARRAY DO ARQUIVO TAXONOMI
         $def = new \MapasCulturais\Definitions\Taxonomy(6, 'funcao', 'Função', $newsTaxo, false);
         $app->registerTaxonomy('MapasCulturais\Entities\Agent', $def);
+
+
     }
     /**
      * Fix agent Permission
