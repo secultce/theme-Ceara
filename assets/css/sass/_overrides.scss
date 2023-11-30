@@ -118,11 +118,18 @@
     }
 }
 
-#sidebars {
+#sidebars:has(#registration-evaluation-form) {
     position: sticky;
     top: 0 !important;
     display: block !important;
-    justify-content: space-between; }
+    justify-content: space-between;
+}
+#sidebar-right:has(#registration-evaluation-form) {
+    max-height: 100vh;
+    overflow: auto;
+}
 @media (max-width: 1199px) {
     #sidebars {
-        flex-direction: column; } }
+        flex-direction: column;
+    }
+}
