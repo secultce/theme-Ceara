@@ -2327,7 +2327,15 @@ class Theme extends BaseV1\Theme
             </li>';
         });
        
-
+        $app->hook('template(opportunity.edit.registration-config):begin', function() use ($app) {
+            /**
+             * Previnir a importação de campos para uma oportunidade que já tem campos cadastrados
+            */
+            $app->view->enqueueStyle('app', 'vex', 'vex/vex.css');
+            $app->view->enqueueStyle('app', 'vex-theme', 'vex/vex-theme-os.css');
+            $app->view->enqueueScript('app', 'vex', 'vex/vex.combined.min.js');
+            $this->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
+        });
      }
 
     /**
@@ -2408,6 +2416,8 @@ class Theme extends BaseV1\Theme
         parent::register();
 
         $app->registerController('pesquisar', Controllers\SearchAll::class);
+        $app->registerController('quantidadeCampos', \Ceara\Controllers\Opportunity::class);
+
         /**
          * Adicionando novos metadata na entidade Projeto
          *
@@ -2786,6 +2796,7 @@ class Theme extends BaseV1\Theme
 
 
     }
+
     /**
      * Fix agent Permission
      *
