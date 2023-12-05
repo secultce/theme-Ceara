@@ -2326,7 +2326,14 @@ class Theme extends BaseV1\Theme
                     <span class="icon icon-publication-status-open"></span> Busca avançada Usuário </a>
             </li>';
         });
-       
+
+        $app->hook('template(<<opportunity>>.edit.registration-config):after', function () use ($app) {
+            $app->view->enqueueScript(
+                'app',
+                'prevent-remove-evaluator',
+                'js/opportunity-ceara/prevent-remove-evaluator.js'
+            );
+        });
 
      }
 
