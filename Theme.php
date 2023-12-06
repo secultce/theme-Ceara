@@ -2335,6 +2335,14 @@ class Theme extends BaseV1\Theme
             $app->view->enqueueScript('app', 'swal2', 'swal2/sweetalert2.min.js');
             $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
         });
+
+        $app->hook('template(opportunity.edit.registration-config):after', function () use ($app) {
+            $app->view->enqueueScript(
+                'app',
+                'prevent-remove-evaluator',
+                'js/opportunity-ceara/prevent-remove-evaluator.js'
+            );
+        });
      }
 
     /**
