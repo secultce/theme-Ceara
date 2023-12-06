@@ -1,7 +1,6 @@
 $(document).ready(() => {
-    vex.defaultOptions.className = 'vex-theme-os'
-
     const btnSubmitFields = $('form[name=impotFields] [type=submit]')
+
 
     btnSubmitFields.on('click', e => {
         e.preventDefault();
@@ -17,12 +16,18 @@ $(document).ready(() => {
                         return;
                     }
 
-                    vex.dialog.buttons.YES.text = 'Sim';
-                    vex.dialog.buttons.NO.text = 'Cancelar';
-                    vex.dialog.confirm({
-                        message: 'Já existem campos nessa oportunidade. Se importar, poderá duplicar quaisquer campos que já existirem. Deseja continuar?',
-                        callback: confirmed => confirmed ? $('form[name=impotFields]').submit() : $('form[name=impotFields]')[0].reset(),
+                    Swal.fire({
+                        html: 'Campos já estão preenchidos nesta oportunidade. Se prosseguir, será feita a duplicação de quaisquer campos já existentes. <strong>Gostaria de continuar?</strong>',
+                        confirmButtonText: 'Sim',
+                        denyButtonText: 'Cancelar',
+                        showDenyButton: true,
+                        reverseButtons: true,
                     })
+                        .then(result => {
+                            if(result.isConfirmed) $('form[name=impotFields]').submit()
+
+                            $('form[name=impotFields]')[0].reset()
+                        })
                 }
             })
     })

@@ -2331,10 +2331,9 @@ class Theme extends BaseV1\Theme
             /**
              * Previnir a importação de campos para uma oportunidade que já tem campos cadastrados
             */
-            $app->view->enqueueStyle('app', 'vex', 'vex/vex.css');
-            $app->view->enqueueStyle('app', 'vex-theme', 'vex/vex-theme-os.css');
-            $app->view->enqueueScript('app', 'vex', 'vex/vex.combined.min.js');
-            $this->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
+            $app->view->enqueueStyle('app', 'swal2', 'swal2/swal2.bootstrap-4.min.css');
+            $app->view->enqueueScript('app', 'swal2', 'swal2/sweetalert2.min.js');
+            $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
         });
      }
 
