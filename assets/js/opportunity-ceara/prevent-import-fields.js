@@ -1,9 +1,13 @@
 $(document).ready(() => {
     const btnSubmitFields = $('form[name=impotFields] [type=submit]')
 
-
     btnSubmitFields.on('click', e => {
         e.preventDefault();
+
+        if(!$('form[name=impotFields] [name=fieldsFile]').val()) {
+            MapasCulturais.Messages.alert('Preencha o campo com o arquivo que deseja importar!');
+            return;
+        }
 
         fetch(MapasCulturais.baseURL + 'quantidadecampos?opportunityId=' + MapasCulturais.entity.id)
             .then(response => response.json())
