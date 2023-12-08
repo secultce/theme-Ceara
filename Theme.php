@@ -2326,12 +2326,15 @@ class Theme extends BaseV1\Theme
                     <span class="icon icon-publication-status-open"></span> Busca avançada Usuário </a>
             </li>';
         });
-       
+
+        /**
+         * Previnir a importação de campos para uma oportunidade que já tem campos cadastrados
+         */
         $app->hook('template(opportunity.edit.registration-config):begin', function() use ($app) {
             /**
-             * Previnir a importação de campos para uma oportunidade que já tem campos cadastrados
-            */
-            $app->view->enqueueStyle('app', 'swal2', 'swal2/swal2.bootstrap-4.min.css');
+             * @todo Adicionar biblioteca ao tema como um todo e remover essa importação
+             */
+            $app->view->enqueueStyle('app', 'swal2', 'swal2/swal2.secultce.min.css');
             $app->view->enqueueScript('app', 'swal2', 'swal2/sweetalert2.min.js');
             $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
         });

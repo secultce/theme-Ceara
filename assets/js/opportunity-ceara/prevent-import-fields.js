@@ -2,10 +2,10 @@ $(document).ready(() => {
     const btnSubmitFields = $('form[name=impotFields] [type=submit]')
 
     btnSubmitFields.on('click', e => {
-        e.preventDefault();
+        e.preventDefault()
 
         if(!$('form[name=impotFields] [name=fieldsFile]').val()) {
-            MapasCulturais.Messages.alert('Preencha o campo com o arquivo que deseja importar!');
+            MapasCulturais.Messages.alert('Preencha o campo com o arquivo que deseja importar!')
             return;
         }
 
@@ -21,9 +21,10 @@ $(document).ready(() => {
                     }
 
                     Swal.fire({
-                        html: 'Campos já estão preenchidos nesta oportunidade. Se prosseguir, será feita a duplicação de quaisquer campos já existentes. <strong>Gostaria de continuar?</strong>',
+                        html: 'Campos já estão preenchidos nesta oportunidade. Se prosseguir, será feita a duplicação de quaisquer campos já existentes. <br/>' +
+                            '<strong>Gostaria de continuar?</strong>',
                         confirmButtonText: 'Sim',
-                        denyButtonText: 'Cancelar',
+                        denyButtonText: 'Não',
                         showDenyButton: true,
                         reverseButtons: true,
                     })
