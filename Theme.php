@@ -14,6 +14,7 @@ use MapasCulturais\Entities\RegistrationFileConfiguration;
 use MapasCulturais\Entities\RegistrationFieldConfiguration;
 use MapasCulturais\Entities\RegistrationFileConfigurationFile;
 use Doctrine\ORM\Query\ResultSetMapping;
+use function MapasCulturais\dump;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -2345,6 +2346,11 @@ class Theme extends BaseV1\Theme
                 'prevent-remove-evaluator',
                 'js/opportunity-ceara/prevent-remove-evaluator.js'
             );
+        });
+
+        $app->hook('entity(<<Agent|Event|Project|Seal|Space>>).validations', function (&$properties_validations) use ($app) {
+            unset($properties_validations['shortDescription']['v::stringType()->length(0,400)']);
+            $properties_validations['shortDescription']['v::stringType()->length(0,900)'] = 'A descrição curta deve ter no máximo 900 caracteres';
         });
      }
 

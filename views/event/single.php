@@ -160,7 +160,7 @@ $editEntity = $this->controller->action === 'create' || $this->controller->actio
                         <?php $this->part('widget-tags', array('entity'=>$entity)); ?>
             </div>
             <?php if($this->isEditable() && $entity->shortDescription && mb_strlen($entity->shortDescription) > 900): ?>
-                    <div class="alert warning"><?php \MapasCulturais\i::_e("O limite de caracteres da descrição curta foi diminuido para 900, mas seu texto atual possui");?> <?php echo mb_strlen($entity->shortDescription) ?> <?php \MapasCulturais\i::_e("caracteres. Você deve alterar seu texto ou este será cortado ao salvar.");?></div>
+                    <div class="alert warning"><?php \MapasCulturais\i::_e("O limite de caracteres da descrição curta é de 900, mas seu texto atual possui");?> <?php echo mb_strlen($entity->shortDescription) ?> <?php \MapasCulturais\i::_e("caracteres. Você deve alterar seu texto ou este será cortado ao salvar.");?></div>
                 <?php endif; ?>
                 <div class="widget">
                     <?php if ($this->isEditable() || $entity->shortDescription): ?>
