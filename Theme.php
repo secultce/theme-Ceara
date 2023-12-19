@@ -2327,14 +2327,25 @@ class Theme extends BaseV1\Theme
             </li>';
         });
 
-        $app->hook('template(<<opportunity>>.edit.registration-config):after', function () use ($app) {
+        /**
+         * Previnir a importação de campos para uma oportunidade que já tem campos cadastrados
+         */
+        $app->hook('template(opportunity.edit.registration-config):begin', function() use ($app) {
+            /**
+             * @todo Adicionar biblioteca ao tema como um todo e remover essa importação
+             */
+            $app->view->enqueueStyle('app', 'swal2', 'swal2/swal2.secultce.min.css');
+            $app->view->enqueueScript('app', 'swal2', 'swal2/sweetalert2.min.js');
+            $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
+        });
+
+        $app->hook('template(opportunity.edit.registration-config):after', function () use ($app) {
             $app->view->enqueueScript(
                 'app',
                 'prevent-remove-evaluator',
                 'js/opportunity-ceara/prevent-remove-evaluator.js'
             );
         });
-
      }
 
     /**
@@ -2415,6 +2426,8 @@ class Theme extends BaseV1\Theme
         parent::register();
 
         $app->registerController('pesquisar', Controllers\SearchAll::class);
+        $app->registerController('quantidadeCampos', \Ceara\Controllers\Opportunity::class);
+
         /**
          * Adicionando novos metadata na entidade Projeto
          *
@@ -2793,6 +2806,7 @@ class Theme extends BaseV1\Theme
 
 
     }
+
     /**
      * Fix agent Permission
      *
