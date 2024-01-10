@@ -14,6 +14,7 @@ use MapasCulturais\Entities\RegistrationFileConfiguration;
 use MapasCulturais\Entities\RegistrationFieldConfiguration;
 use MapasCulturais\Entities\RegistrationFileConfigurationFile;
 use Doctrine\ORM\Query\ResultSetMapping;
+use function MapasCulturais\dump;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -2326,8 +2327,31 @@ class Theme extends BaseV1\Theme
                     <span class="icon icon-publication-status-open"></span> Busca avançada Usuário </a>
             </li>';
         });
-       
 
+        /**
+         * Previnir a importação de campos para uma oportunidade que já tem campos cadastrados
+         */
+        $app->hook('template(opportunity.edit.registration-config):begin', function() use ($app) {
+            /**
+             * @todo Adicionar biblioteca ao tema como um todo e remover essa importação
+             */
+            $app->view->enqueueStyle('app', 'swal2', 'swal2/swal2.secultce.min.css');
+            $app->view->enqueueScript('app', 'swal2', 'swal2/sweetalert2.min.js');
+            $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
+        });
+
+        $app->hook('template(opportunity.edit.registration-config):after', function () use ($app) {
+            $app->view->enqueueScript(
+                'app',
+                'prevent-remove-evaluator',
+                'js/opportunity-ceara/prevent-remove-evaluator.js'
+            );
+        });
+
+        $app->hook('entity(<<Agent|Event|Project|Seal|Space>>).validations', function (&$properties_validations) use ($app) {
+            unset($properties_validations['shortDescription']['v::stringType()->length(0,400)']);
+            $properties_validations['shortDescription']['v::stringType()->length(0,900)'] = 'A descrição curta deve ter no máximo 900 caracteres';
+        });
      }
 
     /**
@@ -2408,6 +2432,8 @@ class Theme extends BaseV1\Theme
         parent::register();
 
         $app->registerController('pesquisar', Controllers\SearchAll::class);
+        $app->registerController('quantidadeCampos', \Ceara\Controllers\Opportunity::class);
+
         /**
          * Adicionando novos metadata na entidade Projeto
          *
@@ -2786,6 +2812,7 @@ class Theme extends BaseV1\Theme
 
 
     }
+
     /**
      * Fix agent Permission
      *
