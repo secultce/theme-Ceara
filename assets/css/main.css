@@ -6895,4 +6895,7 @@ button.mfp-arrow-left {
   #sidebars {
     flex-direction: column; } }
 
+.mr-5 {
+  margin-right: 45px;
+}
 /*# sourceMappingURL=main.css.map */
