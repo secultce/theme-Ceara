@@ -16,6 +16,7 @@
 </div>
 
 <script>
+    //Remover esse codigo script para arquivo .js
     function confirmPublishSite() {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {

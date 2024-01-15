@@ -2362,6 +2362,7 @@ class Theme extends BaseV1\Theme
 
         /**
          * Hook para criar um metadata da Oportunidade com registro de publicação no site
+         * @params Object Request
          */
         $app->hook('POST(opportunity.publish_site)', function () use ($app) {
                 //Recebendo id da oportunidade, instanciando OpportunityMeta e inserindo o metadata
