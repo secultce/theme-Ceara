@@ -5,7 +5,7 @@ namespace Ceara\Controllers;
 use MapasCulturais\App;
 use MapasCulturais\Controllers\EntityController;
 
-class Opportunity extends EntityController
+class OpportunityFields extends EntityController
 {
     public function GET_index(): void
     {
