@@ -3,6 +3,7 @@
 namespace Ceara;
 
 
+use MapasCulturais\Entities\OpportunityMeta;
 use \MapasCulturais\i;
 use MapasCulturais\App;
 use MapasCulturais\Utils;
@@ -2352,10 +2353,36 @@ class Theme extends BaseV1\Theme
             unset($properties_validations['shortDescription']['v::stringType()->length(0,400)']);
             $properties_validations['shortDescription']['v::stringType()->length(0,900)'] = 'A descrição curta deve ter no máximo 900 caracteres';
         });
+
+        $app->hook('template(opportunity.single.header-inscritos):actions', function () use ($app) {
+            if ($app->user->is('superAdmin')) {
+                $this->part('opportunity/btn-publish-site');
+            }
+        });
+
+        /**
+         * Hook para criar um metadata da Oportunidade com registro de publicação no site
+         * @params Object Request
+         */
+        $app->hook('POST(opportunity.publish_site)', function () use ($app) {
+                //Recebendo id da oportunidade, instanciando OpportunityMeta e inserindo o metadata
+                $op = $app->repo('Opportunity')->find($this->data['id']);
+                $newOpMeta = new OpportunityMeta;
+                $newOpMeta->owner = $op;
+                $newOpMeta->key = 'publish_site';
+                $newOpMeta->value = $this->postData['publish_site'];
+                $error = $newOpMeta->save(true);
+
+                if($error !== null){
+                    $this->errorJson(false, 400);
+                }
+                $this->json(['message' => 'Publicação realizada com sucesso', 'status' => 200],200);
+
+        });
      }
 
     /**
-     * Mesmo métido da Entidade User.php, mas com uma validação para tratar o erro
+     * Mesmo método da Entidade User.php, mas com uma validação para tratar o erro
      * em caso de uma inscrição excluída
      *
      * @return void
@@ -2676,6 +2703,12 @@ class Theme extends BaseV1\Theme
              ),
             'available_for_opportunities' => true,
         ]);
+
+        $this->registerOpportunityMetadata('publish_site', [
+            'type' => 'text',
+            'label' => \MapasCulturais\i::__('Publicar no site')
+        ]);
+
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
             i::__("Aderecista"),
