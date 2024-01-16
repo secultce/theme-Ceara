@@ -2704,6 +2704,11 @@ class Theme extends BaseV1\Theme
             'available_for_opportunities' => true,
         ]);
 
+        $this->registerOpportunityMetadata('publish_site', [
+            'type' => 'text',
+            'label' => \MapasCulturais\i::__('Publicar no site')
+        ]);
+
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
             i::__("Aderecista"),
