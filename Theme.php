@@ -2432,7 +2432,7 @@ class Theme extends BaseV1\Theme
         parent::register();
 
         $app->registerController('pesquisar', Controllers\SearchAll::class);
-        $app->registerController('quantidadeCampos', \Ceara\Controllers\Opportunity::class);
+        $app->registerController('quantidadeCampos', \Ceara\Controllers\OpportunityFields::class);
 
         /**
          * Adicionando novos metadata na entidade Projeto
