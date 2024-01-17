@@ -2446,6 +2446,8 @@ class Theme extends BaseV1\Theme
         $this->jsObject['assets']['lei-aldir'] = $this->asset('img/lei-aldir.png', false);
         $this->jsObject['assets']['lei-aldir-small'] = $this->asset('img/lei-aldir-small.png', false);
         $this->jsObject['assets']['logo-ce-small'] = $this->asset('img/logo-org-ceara-small.png', false);
+        $this->enqueueStyle('app', 'secultalert', 'css/secultce/dist/secultce.min.css');
+        $this->enqueueScript('app','sweetalert2','https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js');
     }
 
     /**
