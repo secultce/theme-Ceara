@@ -1,0 +1,26 @@
+{
+  "name": "@sweetalert2/theme-secultce",
+  "version": "1.0.0",
+  "repository": "sweetalert2/sweetalert2-themes",
+  "homepage": "https://sweetalert2.github.io/",
+  "description": "Secultce theme for SweetAlert2",
+  "author": "Ronny John (https://ronnyjohnti.dev)",
+  "scripts": {
+    "build": "sass secultce.scss dist/secultce.min.css --style=compressed --load-path=../node_modules"
+  },
+  "files": [
+    "*.css",
+    "*.scss"
+  ],
+  "main": "secultce.css",
+  "keywords": [
+    "sweetalert2",
+    "secultce",
+    "theme",
+    "themes",
+    "theming",
+    "sass"
+  ],
+  "bugs": "https://github.com/ronnyjohnti/sweetalert2-themes/issues",
+  "license": "MIT"
+}

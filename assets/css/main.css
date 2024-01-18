@@ -6895,4 +6895,8 @@ button.mfp-arrow-left {
   #sidebars {
     flex-direction: column; } }
 
+/*Publicar site de editais*/
+.mr-5 {
+  margin-right: 45px;
+}
 /*# sourceMappingURL=main.css.map */
