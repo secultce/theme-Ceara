@@ -1,4 +1,5 @@
 <?php
+namespace MapasCulturais\ApiOutputs;
 use MapasCulturais\App;
 
 class Json extends \MapasCulturais\ApiOutput{
