@@ -224,6 +224,8 @@ class Theme extends BaseV1\Theme
         $this->enqueueStyle('app', 'pnotify-buttons', 'https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.buttons.min.css');
         //chamada do arquivo js que contém o ocultar botão + da modal criação
         $this->enqueueScript('app', 'hidebutton', 'js/opportunity-ceara/hidebutton.js');
+        // adiciona tracker do Hotjar
+        $this->enqueueScript('app', 'hotjar', 'js/hotjar.js');
 
         $app->hook('view.render(<<*>>):before', function () use ($app) {
             $this->_publishAssets();
