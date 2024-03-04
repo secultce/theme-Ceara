@@ -811,8 +811,8 @@ class Opportunity extends EntityController {
         $sql_status = "";
         if (isset($this->data['status'])) {
             if(preg_match('#EQ\( *(-?\d) *\)#', $this->data['status'], $matches)) {
-                $status = $matches[1];
-                $sql_status = " AND evaluation_status = {$status}";
+                $status = $matches[1] == -1 ? "IS NULL" : "= {$matches[1]}";
+                $sql_status = " AND evaluation_status {$status}";
             }
         }
 

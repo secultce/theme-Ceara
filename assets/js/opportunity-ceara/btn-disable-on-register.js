@@ -1,7 +1,7 @@
 $( document ).ready(function() {
     const btnRegister = document.querySelector("#opportunity-registration a.btn")
 
-    btnRegister.addEventListener('click', e => {
+    btnRegister?.addEventListener('click', e => {
         const inputAgent = document.querySelector('#select-registration-owner-button').innerText
 
         if(inputAgent !== 'Agente responsável pela inscrição') {
