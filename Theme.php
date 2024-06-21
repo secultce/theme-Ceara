@@ -11,11 +11,7 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
-use MapasCulturais\Entities\RegistrationFileConfiguration;
-use MapasCulturais\Entities\RegistrationFieldConfiguration;
-use MapasCulturais\Entities\RegistrationFileConfigurationFile;
-use Doctrine\ORM\Query\ResultSetMapping;
-use function MapasCulturais\dump;
+use GuzzleHttp\Client;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -687,6 +683,49 @@ class Theme extends BaseV1\Theme
                 }
                 $this->json(['message' => 'Publicação realizada com sucesso', 'status' => 200],200);
 
+        });
+
+        $app->hook("entity(Opportunity).update:after", function () use ($app) {
+            $entity = $this->controller->requestedEntity;
+           
+            $actionRequest = [
+              'audit' => 
+                [   
+                    'user_id' => $app->user->id,
+                    'type' => "Opportunity",
+                    'object_id' => $entity->id,
+                    'action' => 'Alterar',
+                    'message' => 'Clicou em alterar oportunidade'
+                ]
+            ];
+            var_dump($actionRequest);
+            $request = array_merge($app->request()->params(), $actionRequest);
+
+            $client = new Client([
+                // Base URI is used with relative requests
+                'base_uri' => 'http://172.18.3.44:9501/',
+                // You can set any number of default request options.
+                'timeout'  => 2.0,
+            ]);
+            // $response = $client->post('data-opportunity',
+            // [                
+            //     'headers' => [
+            //         'Content-Type' => 'application/x-www-form-urlencoded'
+            //     ],
+            //     'request' => $request
+            // ]);
+            $response = $client->request('POST', 'data-opportunity',
+            [                
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded'
+                ],
+                'form_params' => $request
+            ]);
+            $code = $response->getStatusCode();
+            var_dump($request);
+
+
+            // die;
         });
      }
 
