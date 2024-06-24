@@ -686,8 +686,9 @@ class Theme extends BaseV1\Theme
         });
 
         $app->hook("entity(Opportunity).update:after", function () use ($app) {
+            //Oportunidade em questão
             $entity = $this->controller->requestedEntity;
-           
+            //Sub array com dados para registrar em auditoria
             $actionRequest = [
               'audit' => 
                 [   
@@ -698,34 +699,24 @@ class Theme extends BaseV1\Theme
                     'message' => 'Clicou em alterar oportunidade'
                 ]
             ];
-            var_dump($actionRequest);
+            //Fazendo merge de dois arrays
             $request = array_merge($app->request()->params(), $actionRequest);
-
+            // var_dump($request);die;
+            //Host para envio de requisições externa
+            $hostApiAudit = 'http://' . $_ENV['HOST_API_AUDIT'] . ':'. $_ENV['PORT_API_AUDIT'] . '/';
             $client = new Client([
-                // Base URI is used with relative requests
-                'base_uri' => 'http://172.18.3.44:9501/',
-                // You can set any number of default request options.
+                //URi base para envio das requisições
+                'base_uri' => $hostApiAudit,
                 'timeout'  => 2.0,
             ]);
-            // $response = $client->post('data-opportunity',
-            // [                
-            //     'headers' => [
-            //         'Content-Type' => 'application/x-www-form-urlencoded'
-            //     ],
-            //     'request' => $request
-            // ]);
-            $response = $client->request('POST', 'data-opportunity',
+            $response = $client->request('POST', 'opportunity/store',
             [                
                 'headers' => [
                     'Content-Type' => 'application/x-www-form-urlencoded'
                 ],
                 'form_params' => $request
             ]);
-            $code = $response->getStatusCode();
-            var_dump($request);
-
-
-            // die;
+            return $response->getStatusCode();
         });
      }
 
