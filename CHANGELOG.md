@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## [Unreleased]
+### Removido
+- Removido botão de apagar inscrição
+
 ## [v1.4.11] - 2024-03-08
 
 ### 🚀 - Atualizações

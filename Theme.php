@@ -263,7 +263,7 @@ class Theme extends BaseV1\Theme
         });
 
         
-        $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
+        /*$app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
 
@@ -299,7 +299,7 @@ class Theme extends BaseV1\Theme
             }
 
             $this->json(array($result_type => $result));
-        });
+        });*/
 
         //HOOK PARA FORÇAR A INCLUSAO DE PERFIL INDIVIDUAL E COLETIVO
         $app->hook('template(agent.edit.type):before', function () use ($app) {
@@ -314,7 +314,7 @@ class Theme extends BaseV1\Theme
             }
         });
         
-        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
+        /*$app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button> </td>';
             }
@@ -324,7 +324,7 @@ class Theme extends BaseV1\Theme
             if ($app->user->is('admin')) {
                 echo '<button class="btn btn-danger" data-id=' . $registrationId . ' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
             }
-        });
+        });*/
 
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
