@@ -294,13 +294,13 @@ class Theme extends BaseV1\Theme
             $this->part('singles/agents/type', ['entity' => $entity]);
         });
 
-        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
+        /*$app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<th class="registration-status-col">Administrador</th>';
             }
         });
         
-        /*$app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
+        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button> </td>';
             }
