@@ -12,6 +12,7 @@ use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -502,7 +503,68 @@ class Theme extends BaseV1\Theme
 
         $app->hook('auth.successful', function () use ($app, $theme) {
             $theme->fixAgentPermission($app->user);
+            $req = $app->request();
+            $dtNow = Carbon::now();
+            $requestAudit = [
+                'ip_remote'     => $req->getIp(),
+                'addr_host'     => $req->getHostWithPort(),
+                'referer'       => $req->getReferer(),
+                'resource_uri'  => $req->getResourceUri(),
+                'userAgent'     => $req->getUserAgent(),
+                'createTime'    => $dtNow->format('Y-m-d H:i:s'),
+                'userLogin'     => $app->user->id,
+                'action'        => 'Realizou Login'
+            ];
+            $hostApiAudit = 'http://' . $_ENV['HOST_API_AUDIT'] . ':'. $_ENV['PORT_API_AUDIT'] . '/';
+            $client = new Client([
+                //URi base para envio das requisições
+                'base_uri' => $hostApiAudit,
+                'timeout'  => 2.0,
+            ]);
+            // var_dump($requestAudit); die;
+            $response = $client->request('POST', 'user/store',
+            [                
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded'
+                ],
+                'form_params' => $requestAudit
+            ]);
+            return $response->getStatusCode();
         });
+
+        $app->hook('auth.logout:before', function () use ($app, $theme) {
+            // $theme->fixAgentPermission($app->user);
+            $req = $app->request();
+          
+            $dtNow = Carbon::now();
+            $requestAudit = [
+                'ip_remote'     => $req->getIp(),
+                'addr_host'     => $req->getHostWithPort(),
+                'referer'       => $req->getReferer(),
+                'resource_uri'  => $req->getResourceUri(),
+                'userAgent'     => $req->getUserAgent(),
+                'createTime'    => $dtNow->format('Y-m-d H:i:s'),
+                'userLogin'     => $app->user->id,
+                'action'        => 'Deslogou do sistema'
+            ];
+            $hostApiAudit = 'http://' . $_ENV['HOST_API_AUDIT'] . ':'. $_ENV['PORT_API_AUDIT'] . '/';
+            $client = new Client([
+                //URi base para envio das requisições
+                'base_uri' => $hostApiAudit,
+                'timeout'  => 2.0,
+            ]);
+            
+            $response = $client->request('POST', 'user/store',
+            [                
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded'
+                ],
+                'form_params' => $requestAudit
+            ]);
+            return $response->getStatusCode();
+        });
+
+        
 
         //disparo de e-mail quando iniciar uma inscrição
         $app->hook("entity(Registration).insert:finish", function () use ($app){
