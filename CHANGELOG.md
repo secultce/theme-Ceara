@@ -5,12 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
-## [Unreleased]
-### Correções
+## [v1.4.12] - 2024-08-19
+### Adicionado
+- Adicionada mensagem sinalizando o número máximo de vagas.
+### Corrigido
 - Corrigido CSS.
-
 ### Removido
-- Removido botão de apagar inscrição
+- Removido botão de apagar inscrição.
+- Removida coluna de administrador na aba de inscritos.
 
 ## [v1.4.11] - 2024-03-08
 
