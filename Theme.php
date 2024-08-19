@@ -231,20 +231,6 @@ class Theme extends BaseV1\Theme
             $this->_publishAssets();
         });
 
-             
-        $app->hook('template(site.index.home-search):begin', function () use ($app) {
-            return;
-            /*
-            $titulo = "AUXÍLIO FINANCEIRO AOS PROFISSIONAIS DO SETOR DE EVENTOS";
-            $titulo_url =  $app->createUrl('opportunity','single', [2852]);
-            $texto = "Ação do Governo do Estado do Ceará que tem por objetivo conceder aos trabalhadores e trabalhadoras do setor de eventos um auxílio financeiro. Faz parte de um pacote de ações para socorrer o setor de eventos no Estado em meio à pandemia da Covid-19. <br/><br/> O auxílio será pago em duas parcelas de R$ 500, mediante cadastro dos profissionais junto à Secretaria da Cultura do Estado, através do Mapa Cultural do Ceará. Cerca de 10 mil profissionais, como músicos, humoristas e técnicos de som, deverão ser beneficiados. Ao todo R$ 10 milhões serão investidos pelo Estado para transferência dessa renda. Estão inclusos músicos, humoristas, profissionais de circo, técnicos de som, luz e imagem, montadores de palcos, etc.";
-            $botao = "Solicite seu auxílio";
-            $botao_url = $app->createUrl('opportunity','single', [2852]);
-
-            $this->part('auxilioeventos/home-search', ['texto' => $texto, 'botao' => $botao, 'titulo' => $titulo, 'titulo_url'=> $titulo_url, 'botao_url' => $botao_url]);
-            */
-        });
-
         /**
          * Conjunto de Hooks para add botão de suporte dentro do tema
          */
@@ -263,7 +249,7 @@ class Theme extends BaseV1\Theme
         });
 
         
-        $app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
+        /*$app->hook('<<GET|POST>>(registration.remove)', function () use ($app) {
 
             $this->requireAuthentication();
 
@@ -299,7 +285,7 @@ class Theme extends BaseV1\Theme
             }
 
             $this->json(array($result_type => $result));
-        });
+        });*/
 
         //HOOK PARA FORÇAR A INCLUSAO DE PERFIL INDIVIDUAL E COLETIVO
         $app->hook('template(agent.edit.type):before', function () use ($app) {
@@ -308,7 +294,7 @@ class Theme extends BaseV1\Theme
             $this->part('singles/agents/type', ['entity' => $entity]);
         });
 
-        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
+        /*$app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
             if ($app->user->is('admin')) {
                 echo '<th class="registration-status-col">Administrador</th>';
             }
@@ -324,7 +310,7 @@ class Theme extends BaseV1\Theme
             if ($app->user->is('admin')) {
                 echo '<button class="btn btn-danger" data-id=' . $registrationId . ' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
             }
-        });
+        });*/
 
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
