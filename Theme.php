@@ -1006,6 +1006,13 @@ class Theme extends BaseV1\Theme
             'label' => \MapasCulturais\i::__('Publicar no site')
         ]);
 
+        $this->registerOpportunityMetadata('hasVacanciesForQuotaHolders', [
+            'label' => \MapasCulturais\i::__('Selecione uma opção'),
+            'type' => 'select',
+            'options' => ['Sim', 'Não'],
+            'default' => 'Sim',
+        ]);
+
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
             i::__("Aderecista"),
