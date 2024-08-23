@@ -1013,6 +1013,15 @@ class Theme extends BaseV1\Theme
             'default' => 'Sim',
         ]);
 
+        $this->registerOpportunityMetadata('numberVacancies', [
+            'label' => \MapasCulturais\i::__('Digite o número de vagas'),
+            'type' => 'string',
+            'validations' => [
+                'required' => 'Digite um número maior que zero',
+                'v::intVal()->positive()' => 'O valor deve ser um número maior que zero'
+            ]
+        ]);
+
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
             i::__("Aderecista"),
