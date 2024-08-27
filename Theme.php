@@ -2,7 +2,6 @@
 
 namespace Ceara;
 
-
 use MapasCulturais\Entities\OpportunityMeta;
 use \MapasCulturais\i;
 use MapasCulturais\App;
@@ -11,11 +10,6 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
-use MapasCulturais\Entities\RegistrationFileConfiguration;
-use MapasCulturais\Entities\RegistrationFieldConfiguration;
-use MapasCulturais\Entities\RegistrationFileConfigurationFile;
-use Doctrine\ORM\Query\ResultSetMapping;
-use function MapasCulturais\dump;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -674,7 +668,7 @@ class Theme extends BaseV1\Theme
                 $this->json(['message' => 'Publicação realizada com sucesso', 'status' => 200],200);
 
         });
-     }
+    }
 
     /**
      * Mesmo método da Entidade User.php, mas com uma validação para tratar o erro
@@ -1017,7 +1011,6 @@ class Theme extends BaseV1\Theme
             'label' => \MapasCulturais\i::__('Digite o número de vagas'),
             'type' => 'string',
             'validations' => [
-                'required' => 'Digite um número maior que zero',
                 'v::intVal()->positive()' => 'O valor deve ser um número maior que zero'
             ]
         ]);
