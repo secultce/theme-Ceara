@@ -1015,22 +1015,6 @@ class Theme extends BaseV1\Theme
             ]
         ]);
 
-        $this->registerOpportunityMetadata('hasBonusesForRegistrations', [
-            'label' => \MapasCulturais\i::__('Selecione uma opção'),
-            'type' => 'select',
-            'options' => ['Sim', 'Não'],
-            'default' => 'Sim',
-        ]);
-
-        $this->registerOpportunityMetadata('bonusAmount', [
-            'label' => \MapasCulturais\i::__('Digite um número'),
-            'type' => 'string',
-            'default' => 1,
-            'validations' => [
-                'v::intVal()->positive()' => 'O valor deve ser um número maior que zero'
-            ]
-        ]);
-
         //GERANDO NOVAS TAXONOMIA DE FUNCAO - NECESSÁRIO PARA V5.6.20
         $newsTaxo = array(
             i::__("Aderecista"),
