@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## [v1.4.13] - 2024-08-29
+### Adicionado
+- Configuração de vagas para cotista
+- Quantidade de vagas para cotista
+
 ## [v1.4.12] - 2024-08-19
 ### Adicionado
 - Adicionada mensagem sinalizando o número máximo de vagas.
