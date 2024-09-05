@@ -668,6 +668,12 @@ class Theme extends BaseV1\Theme
                 $this->json(['message' => 'Publicação realizada com sucesso', 'status' => 200],200);
 
         });
+
+        // Troca alguns termos em oportunidades de prestação de contas
+        $app->hook('view.partial(opportunity/<<single|edit>>):after', function ($template, &$html) {
+            $opportunity = $this->controller->requestedEntity;
+            $html = Utils::getTermsByOpportunity($html, $opportunity);
+        });
     }
 
     /**
