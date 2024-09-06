@@ -10,6 +10,7 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
+use MapasCulturais\Entities\ProjectOpportunity;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -669,9 +670,10 @@ class Theme extends BaseV1\Theme
 
         });
 
-        // Troca alguns termos em oportunidades de prestação de contas
-        $app->hook('view.partial(opportunity/<<single|edit>>):after', function ($template, &$html) {
-            $opportunity = $this->controller->requestedEntity;
+        // Troca alguns termos em oportunidades/inscrições de prestação de contas
+        $app->hook('view.partial(<<opportunity|registration>>/<<single|edit>>):after', function ($template, &$html) {
+            $entity = $this->controller->requestedEntity;
+            $opportunity = $entity instanceof ProjectOpportunity ? $entity : $entity->opportunity;
             $html = Utils::getTermsByOpportunity($html, $opportunity);
         });
     }
