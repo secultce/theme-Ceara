@@ -625,14 +625,6 @@ class Theme extends BaseV1\Theme
             $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
         });
 
-        $app->hook('template(opportunity.edit.registration-config):after', function () use ($app) {
-            $app->view->enqueueScript(
-                'app',
-                'prevent-remove-evaluator',
-                'js/opportunity-ceara/prevent-remove-evaluator.js'
-            );
-        });
-
         $app->hook('entity(<<Agent|Event|Project|Seal|Space>>).validations', function (&$properties_validations) use ($app) {
             unset($properties_validations['shortDescription']['v::stringType()->length(0,400)']);
             $properties_validations['shortDescription']['v::stringType()->length(0,900)'] = 'A descrição curta deve ter no máximo 900 caracteres';
