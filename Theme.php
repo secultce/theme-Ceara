@@ -10,6 +10,7 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
+use MapasCulturais\Entities\ProjectOpportunity;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -624,14 +625,6 @@ class Theme extends BaseV1\Theme
             $app->view->enqueueScript('app', 'prevent-import-fields', 'js/opportunity-ceara/prevent-import-fields.js');
         });
 
-        $app->hook('template(opportunity.edit.registration-config):after', function () use ($app) {
-            $app->view->enqueueScript(
-                'app',
-                'prevent-remove-evaluator',
-                'js/opportunity-ceara/prevent-remove-evaluator.js'
-            );
-        });
-
         $app->hook('entity(<<Agent|Event|Project|Seal|Space>>).validations', function (&$properties_validations) use ($app) {
             unset($properties_validations['shortDescription']['v::stringType()->length(0,400)']);
             $properties_validations['shortDescription']['v::stringType()->length(0,900)'] = 'A descrição curta deve ter no máximo 900 caracteres';
@@ -667,6 +660,13 @@ class Theme extends BaseV1\Theme
                 }
                 $this->json(['message' => 'Publicação realizada com sucesso', 'status' => 200],200);
 
+        });
+
+        // Troca alguns termos em oportunidades/inscrições de prestação de contas
+        $app->hook('view.partial(<<opportunity|registration>>/<<single|edit>>):after', function ($template, &$html) {
+            $entity = $this->controller->requestedEntity;
+            $opportunity = $entity instanceof ProjectOpportunity ? $entity : $entity->opportunity;
+            $html = Utils::getTermsByOpportunity($html, $opportunity);
         });
     }
 

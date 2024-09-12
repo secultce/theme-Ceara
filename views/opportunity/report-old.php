@@ -3,6 +3,8 @@
 use MapasCulturais\Entities\Registration as R;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\i;
+use MapasCulturais\Utils;
+
 ini_set('memory_limit', '256M');
 ini_set('max_execution_time', '200');
 
@@ -80,7 +82,7 @@ foreach ($metas as $metadata) {
 
             <?php showIfField($entity->projectName, i::__("Nome do projeto")); ?>
 
-            <th> <?php i::_e("Avaliação") ?> </th>
+            <th> <?php i::_e(Utils::getTermsByOpportunity("Avaliação", $entity)) ?> </th>
             <th><?php i::_e("Status") ?></th>
             <th><?php i::_e("Inscrição - Data de envio") ?></th>
             <th><?php i::_e("Inscrição - Hora de envio") ?></th>

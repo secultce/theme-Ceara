@@ -5,6 +5,8 @@ use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Space as SpaceRelation;
 use MapasCulturais\i;
 use MapasCulturais\App;
+use MapasCulturais\Utils;
+
 $app = App::i();
 
 function returnStatus($registration)
@@ -87,7 +89,7 @@ ksort($custom_fields);
 $header = array_values(array_filter([
     i::__("Número"),
     showIfField($entity->projectName, i::__("Nome do projeto")),
-    i::__("Avaliação"),
+    i::__(Utils::getTermsByOpportunity("Avaliação", $entity)),
     i::__("Status"),
     i::__("Inscrição - Data de envio"),
     i::__("Inscrição - Hora de envio"),
