@@ -665,7 +665,7 @@ class Theme extends BaseV1\Theme
         // Troca alguns termos em oportunidades/inscrições de prestação de contas
         $app->hook('view.partial(<<opportunity|registration>>/<<single|edit>>):after', function ($template, &$html) {
             $entity = $this->controller->requestedEntity;
-            $opportunity = $entity instanceof ProjectOpportunity ? $entity : $entity->opportunity;
+            $opportunity = $entity instanceof Opportunity ? $entity : $entity->opportunity;
             $html = Utils::getTermsByOpportunity($html, $opportunity);
         });
     }
