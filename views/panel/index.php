@@ -147,7 +147,7 @@ ini_set('max_execution_time', 0);
     
 <div class="panel-activities">
     <?php $this->applyTemplateHook('content.avaluations','before'); ?>
-    <?php if($opportunitiesToEvaluate = $this->getOpportunitiesCanBeEvaluated()): ?>
+    <?php if($opportunitiesToEvaluate = $app->user->getOpportunitiesNotAccountability()): ?>
     <section id="avaliacoes" class="panel-list">
         <?php $this->applyTemplateHook('content.avaluations','begin'); ?>
         <header>
