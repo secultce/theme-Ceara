@@ -162,7 +162,7 @@ ini_set('max_execution_time', 0);
     <?php $this->applyTemplateHook('content.avaluations','after'); ?>
 
     <?php $this->applyTemplateHook('content.registration','before'); ?>
-    <?php $drafts = $app->repo('Registration')->findByUser($app->user, \MapasCulturais\Entities\Registration::STATUS_DRAFT); ?>
+    <?php $drafts = $app->user->getRegistrationsNotAccountability(\MapasCulturais\Entities\Registration::STATUS_DRAFT); ?>
     <?php if ($drafts): ?>
     <section id="inscricoes-rascunho" class="panel-list">      
         <?php $this->applyTemplateHook('content.registration','begin'); ?>
@@ -183,7 +183,7 @@ ini_set('max_execution_time', 0);
     </section>
     <?php endif; ?>
 
-    <?php $sent = $app->repo('Registration')->findByUser($app->user, 'sent', 3); ?>
+    <?php $sent = $app->user->getRegistrationsNotAccountability('sent', 3); ?>
     <?php if ($sent): ?>
         <section id="inscricoes-enviadas" class="panel-list">
             <header>
