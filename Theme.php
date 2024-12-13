@@ -226,6 +226,24 @@ class Theme extends BaseV1\Theme
             $this->_publishAssets();
         });
 
+        // Ativaçao de modal
+        $app->hook('template(site.index.home-search):before', function () use ($app) {
+            $this->enqueueStyle('app', 'remodal-css', 'css/modal/remodal.min.css');
+            $this->enqueueStyle('app', 'remodal-theme-css', 'css/modal/remodal-default-theme.css');
+            $this->enqueueStyle('app', 'remodal-style-css', 'css/modal/style.css');
+            $this->enqueueScript('app', 'remodal-js', 'js/modal/remodal.min.js');
+            $this->enqueueScript('app', 'remodal-custom', 'js/modal/custom.js');
+            $this->part('modal/active-account');
+        });
+        // Verificando se o usuário já aceitou os termos para ocutar o modal
+        $app->hook("GET(agent.verify-email)", function () use ($app) {
+            if($app->user->is('guest')) {
+                return $this->json(['result' => false]);
+            }
+            if($app->user->getMetadata('accountIsActive') == "1"){
+                return $this->json(['result' => true]);
+            }            
+        }); 
         /**
          * Conjunto de Hooks para add botão de suporte dentro do tema
          */
