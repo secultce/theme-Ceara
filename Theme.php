@@ -240,8 +240,11 @@ class Theme extends BaseV1\Theme
             if($app->user->is('guest')) {
                 return $this->json(['result' => false]);
             }
+            // Para usuário ativos nao mostra o modal
             if($app->user->getMetadata('accountIsActive') == "1"){
                 return $this->json(['result' => true]);
+            }else{
+                return $this->json(['result' => false]);
             }            
         }); 
         /**
