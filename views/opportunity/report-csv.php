@@ -90,7 +90,7 @@ $header = array_values(array_filter([
     i::__("Número"),
     showIfField($entity->projectName, i::__("Nome do projeto")),
     i::__(Utils::getTermsByOpportunity("Avaliação", $entity)),
-    i::__("Recebeu bonificação?"),
+    i::__("Recebeu bonificação"),
     i::__("Status"),
     i::__("Inscrição - Data de envio"),
     i::__("Inscrição - Hora de envio"),
