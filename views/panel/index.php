@@ -150,12 +150,43 @@ ini_set('max_execution_time', 0);
     <?php if($opportunitiesToEvaluate = $app->user->getOpportunitiesNotAccountability()): ?>
     <section id="avaliacoes" class="panel-list">
         <?php $this->applyTemplateHook('content.avaluations','begin'); ?>
-        <header>
-            <h2><?php \MapasCulturais\i::_e("Avaliações pendentes");?></h2>
-        </header>
-        <?php foreach($opportunitiesToEvaluate as $entity): ?>
-            <?php $this->part('panel-evaluation', array('entity' => $entity)); ?>
-        <?php endforeach; ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong><?php \MapasCulturais\i::_e("Suas avaliações");?></strong>
+            </div>
+        <?php foreach($opportunitiesToEvaluate as $key => $entity): ?>
+            <div class="panel-body">
+                <small><small><?php isset($entity->parent->name) ? $entity->parent->name : null ; ?></small></small> <br>
+                <a href="<?= $entity->singleUrl ?>" title="Ir para oportunidade">
+                    <?php echo $entity->name; ?>
+                </a>
+                <div style="border-bottom: 1px solid #e3e1e1;padding-bottom: 5px;">
+                    <span class="label">Tipo:</span>
+                        <?php echo $entity->type->name?>
+                    <span class="label">
+                        <?php \MapasCulturais\i::_e("Organização:");?>
+                    </span> <?php echo $entity->owner->name; ?> <br>
+                    <a class="btn btn-default"
+                       style="border-radius: 5px;padding: 0 0.23333rem; height: 30px;font-size: 10px;"
+                       href="<?php echo $entity->singleUrl; ?>#/tab=evaluations">
+                        <?php
+                        \MapasCulturais\i::_e("Visualizar Inscritos");
+                        ?>
+                    </a>
+                </div>
+
+            </div>
+        <?php
+        if($key == 2){
+            break;
+        }
+        endforeach; ?>
+            <div class="panel-footer">
+                <a href="<?= $app->getBaseUrl(); ?>painel/opportunities/#tab=avaliacoes"
+                   class="btn btn-primary">Ver todas as avaliações
+                </a>
+            </div>
+        </div>
         <?php $this->applyTemplateHook('content.avaluations','end'); ?>
     </section>
     <?php endif; ?>
