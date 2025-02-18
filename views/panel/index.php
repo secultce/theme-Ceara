@@ -154,6 +154,13 @@ ini_set('max_execution_time', 0);
             <div class="panel-heading">
                 <strong><?php \MapasCulturais\i::_e("Suas avaliações");?></strong>
             </div>
+           <div style="padding: 10px;">
+               <p class="info-evaluation-panel">
+                   Essa área lhe dá um feedback sobre suas avaliações, mas em
+                   <strong>Minhas Oportunidades</strong>
+                   você visualizará todas as oportunidades que você é avaliador.
+               </p>
+           </div>
         <?php foreach($opportunitiesToEvaluate as $key => $entity): ?>
             <div class="panel-body">
                 <small><small><?php isset($entity->parent->name) ? $entity->parent->name : null ; ?></small></small> <br>
@@ -166,8 +173,7 @@ ini_set('max_execution_time', 0);
                     <span class="label">
                         <?php \MapasCulturais\i::_e("Organização:");?>
                     </span> <?php echo $entity->owner->name; ?> <br>
-                    <a class="btn btn-default"
-                       style="border-radius: 5px;padding: 0 0.23333rem; height: 30px;font-size: 10px;"
+                    <a class="btn btn-default btn-views-registrations"
                        href="<?php echo $entity->singleUrl; ?>#/tab=evaluations">
                         <?php
                         \MapasCulturais\i::_e("Visualizar Inscritos");
