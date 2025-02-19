@@ -2,4 +2,4 @@
 .project
 .settings/
 .idea
-.sass-cache
+assets/css/.sass-cache
