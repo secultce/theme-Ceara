@@ -2,7 +2,6 @@
 
 namespace Ceara;
 
-use MapasCulturais\ApiOutputs\Json;
 use MapasCulturais\Entities\OpportunityMeta;
 use \MapasCulturais\i;
 use MapasCulturais\App;
@@ -11,7 +10,6 @@ use MapasCulturais\AssetManager;
 use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
-use MapasCulturais\Entities\ProjectOpportunity;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -1230,7 +1228,7 @@ class Theme extends BaseV1\Theme
             }elseif(// Verifica o limite
                 $key == 'registrationLimit' &&
                 !is_null($valueMeta) &&
-                count($countReg) > intval($reg->opportunity->getMetadata('registrationLimit'))
+                count($countReg) > (int) $reg->opportunity->getMetadata('registrationLimit')
             ){
                 $limit = true;
             }
@@ -1238,10 +1236,22 @@ class Theme extends BaseV1\Theme
 
         if($limit && $locationTheme)
         {
-            $app->contentType('application/json');
-            $app->halt(200, json_encode(['error' => true, 'data' => 'exceeded']));
-        }elseif( count($countReg) > intval($reg->opportunity->getMetadata('registrationLimit')) ){
+            $this->jsonError(200, 'exceeded');
+        }elseif( count($countReg) > (int) $reg->opportunity->getMetadata('registrationLimit') ){
             return $limit;
         }
+    }
+
+    /**
+     * Funcionalidade para uso quando necessitar enviar mensagem de erro ao javascript
+     * int $status
+     * object|array $data
+     * string void
+     */
+    public function jsonError($status, $data): string
+    {
+        $app = App::i();
+        $app->contentType('application/json');
+        return $app->halt($status, json_encode(['error' => true, 'data' => $data]));
     }
 }
