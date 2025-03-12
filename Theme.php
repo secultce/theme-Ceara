@@ -2,6 +2,7 @@
 
 namespace Ceara;
 
+use MapasCulturais\ApiOutputs\Json;
 use MapasCulturais\Entities\OpportunityMeta;
 use \MapasCulturais\i;
 use MapasCulturais\App;
@@ -310,23 +311,6 @@ class Theme extends BaseV1\Theme
             $this->part('singles/agents/type', ['entity' => $entity]);
         });
 
-        /*$app->hook('template(opportunity.<<create|edit|single>>.registration-list-header):end', function () use ($app) {
-            if ($app->user->is('admin')) {
-                echo '<th class="registration-status-col">Administrador</th>';
-            }
-        });
-        
-        $app->hook('template(opportunity.<<create|edit|single>>.registration-list-item):end', function () use ($app) {
-            if ($app->user->is('admin')) {
-                echo '<td><button data-id="{{reg.id}}" onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button> </td>';
-            }
-        });
-
-        $app->hook('template.opportunity.single.header.registration-item', function ($registrationId) use ($app) {
-            if ($app->user->is('admin')) {
-                echo '<button class="btn btn-danger" data-id=' . $registrationId . ' onclick=\'if (confirm("Tem certeza que você deseja apagar a inscrição n. on-" + this.dataset.id + " ?")) {$.ajax({url: MapasCulturais.baseURL + "/registration/remove/registration_id:"+ this.dataset.id , success: function(result){ if(result.success) {MapasCulturais.Messages.success("Inscrição excluida com sucesso!");} else{ MapasCulturais.Messages.error(result.error);} }});}\'> Apagar </button>';
-            }
-        });*/
 
         /* Adicionando novos campos na entidade entity revision agent */
         $app->hook('template(entityrevision.history.tab-about-service):end', function () {
@@ -688,6 +672,12 @@ class Theme extends BaseV1\Theme
             $entity = $this->controller->requestedEntity;
             $opportunity = $entity instanceof Opportunity ? $entity : $entity->opportunity;
             $html = Utils::getTermsByOpportunity($html, $opportunity);
+        });
+
+        $app->hook("entity(Registration).send:before", function () use ($app, $theme) {
+            $reg = $this;
+            $locationTheme = true;
+            $theme->hasExceededRegistrationLimit($app, $reg, $locationTheme);
         });
     }
 
@@ -1221,6 +1211,37 @@ class Theme extends BaseV1\Theme
                     $app->em->flush();
                 }
             }
+        }
+    }
+
+    /**
+     * Verifica se o limite de inscrições foi atingido e retorna um json para uso no javascript
+     * ou boolean para uso na view
+     */
+    public function hasExceededRegistrationLimit($app, $reg, $locationTheme)
+    {
+        $countReg = $app->repo('Registration')->findBy(['opportunity' => $reg->opportunity->id]);
+        $limit = false;
+        // verifica se tem o campo e valor diferente de null
+        foreach ($reg->opportunity->getMetadata() as $key => $valueMeta) {
+            if($key == 'registrationLimit' && !is_null($valueMeta) && $valueMeta == "0" )
+            {
+                $limit = false;
+            }elseif(// Verifica o limite
+                $key == 'registrationLimit' &&
+                !is_null($valueMeta) &&
+                count($countReg) > intval($reg->opportunity->getMetadata('registrationLimit'))
+            ){
+                $limit = true;
+            }
+        }
+
+        if($limit && $locationTheme)
+        {
+            $app->contentType('application/json');
+            $app->halt(200, json_encode(['error' => true, 'data' => 'exceeded']));
+        }elseif( count($countReg) > intval($reg->opportunity->getMetadata('registrationLimit')) ){
+            return $limit;
         }
     }
 }

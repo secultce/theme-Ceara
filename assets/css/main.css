@@ -9981,3 +9981,6 @@ button.mfp-arrow-left {
   border-radius: 5px;padding: 0 0.23333rem; height: 30px;font-size: 10px;
 }
 
+.text-danger {
+  color: #a94442;
+}
