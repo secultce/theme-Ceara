@@ -1,18 +1,10 @@
-<?php
-?>
-<div style="width: 100%; display: block">
-    <hr>
-    <div style="width: 100%; display: block">
-        <h3 for="">Site Editais</h3>
-        <button type="button" class="btn btn-primary"
-                title="Publicar somente no site de editais"
-                id="btn-publish-site" onclick="confirmPublishSite()">
-            Publicar no site
-        </button>
-        <hr>
-        <br>
-    </div>
-
+<div style="width:100%;display:flex;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid #ccc;margin-bottom:1.3rem;">
+    <h3>Site Editais</h3>
+    <button type="button" class="btn btn-primary"
+            title="Publicar somente no site de editais"
+            id="btn-publish-site" onclick="confirmPublishSite()">
+        Publicar no site
+    </button>
 </div>
 
 <script>
