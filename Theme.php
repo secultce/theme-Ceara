@@ -653,13 +653,13 @@ class Theme extends BaseV1\Theme
         });
 
         //Hook somente para admin da oportunidade ou admin do mapa
-        $app->hook('template(opportunity.single.header-inscritos):actions', function () use ($app) {
+        $app->hook('template(opportunity.single.opportunity-registrations--tables):begin', function () use ($app) {
             //Buscando no banco de dados os agentes que podem publicar no site
             //taxonomy tem que está 'publish_site'
             $sitePublish = $app->repo('Term')->findBy(['taxonomy' => 'publish_site']);
             $agentesId = array_map(function($term) { return $term->term; }, $sitePublish);
             //Conferindo se quem está logado tem o id que consta no array do retorno do banco
-            if ($app->user->is('superAdmin') || in_array($app->getUser()->profile->id, $agentesId)) {
+            if ($app->user->is('superAdmin') || in_array($app->getUser()->profile->id ?? -1, $agentesId)) {
                 $this->part('opportunity/btn-publish-site');
             }
         });
