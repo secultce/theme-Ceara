@@ -233,7 +233,8 @@ class Theme extends BaseV1\Theme
             $this->enqueueStyle('app', 'remodal-style-css', 'css/modal/style.css');
             $this->enqueueScript('app', 'remodal-js', 'js/modal/remodal.min.js');
             $this->enqueueScript('app', 'remodal-custom', 'js/modal/custom.js');
-            $this->part('modal/active-account');
+            // Comentado para adicionar futuros avisos
+            if (false)  $this->part('modal/active-account');
         });
         // Verificando se o usuário já aceitou os termos para ocutar o modal
         $app->hook("GET(agent.verify-email)", function () use ($app) {
