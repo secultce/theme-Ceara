@@ -1,8 +1,7 @@
 <?php
 
 use MapasCulturais\Entities\Registration as R;
-use MapasCulturais\Entities\Agent;
-use MapasCulturais\Entities\Space as SpaceRelation;
+use MapasCulturais\Entities\RegistrationFieldConfiguration;
 use MapasCulturais\i;
 use MapasCulturais\App;
 use MapasCulturais\Utils;
@@ -74,6 +73,26 @@ if ($entity->isOpportunityPhase) {
     $registrations = $entity->sentRegistrations;
 }
 
+# @todo: Remover depois de algum período ###############################################################################
+$newFieldsConfigurations = [];
+foreach ($fields_configurations as $index => $registrationFieldConfiguration) {
+    $conditionalFieldName = $registrationFieldConfiguration->conditionalField ?? null;
+    $conditionalValue = $registrationFieldConfiguration->conditionalValue ?? null;
+
+    if (null !== $conditionalFieldName) {
+        $conditionalFieldId = (int) str_replace('field_', '', $conditionalFieldName);
+        $conditionalField = App::i()->repo(RegistrationFieldConfiguration::class)->find($conditionalFieldId);
+
+        if ($conditionalFieldName && $conditionalValue !== $conditionalField->value) {
+            $registrationFieldConfiguration->value = null;
+        }
+    }
+
+    $newFieldsConfigurations[] = $registrationFieldConfiguration;
+}
+$fields_configurations = $newFieldsConfigurations;
+// @todo ###############################################################################################################
+
 $custom_fields = [];
 foreach ($fields_configurations as $field) :
     $custom_fields[] = [
@@ -90,6 +109,7 @@ $header = array_values(array_filter([
     i::__("Número"),
     showIfField($entity->projectName, i::__("Nome do projeto")),
     i::__(Utils::getTermsByOpportunity("Avaliação", $entity)),
+    i::__("Recebeu bonificação"),
     i::__("Status"),
     i::__("Inscrição - Data de envio"),
     i::__("Inscrição - Hora de envio"),
@@ -150,6 +170,7 @@ foreach($registrations as $i => $r) {
         $r->number,
         showIfField($entity->projectName, $r->projectName),
         $result_string ?: '""',
+        $r->consolidatedResult > $r->getEvaluationResultString() ? 'Sim' : 'Não',
         returnStatus($r) ?: '""',
         ((!is_null($dataHoraEnvio)) ? $dataHoraEnvio->format('d-m-Y') : '-'),
         ((!is_null($dataHoraEnvio)) ? $dataHoraEnvio->format('H:i') : '-'),
