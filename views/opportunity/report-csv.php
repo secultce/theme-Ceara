@@ -1,7 +1,6 @@
 <?php
 
 use MapasCulturais\Entities\Registration as R;
-use MapasCulturais\Entities\RegistrationFieldConfiguration;
 use MapasCulturais\i;
 use MapasCulturais\App;
 use MapasCulturais\Utils;
@@ -72,26 +71,6 @@ if ($entity->isOpportunityPhase) {
     $entity_phase = $entity;
     $registrations = $entity->sentRegistrations;
 }
-
-# @todo: Remover depois de algum período ###############################################################################
-$newFieldsConfigurations = [];
-foreach ($fields_configurations as $index => $registrationFieldConfiguration) {
-    $conditionalFieldName = $registrationFieldConfiguration->conditionalField ?? null;
-    $conditionalValue = $registrationFieldConfiguration->conditionalValue ?? null;
-
-    if (null !== $conditionalFieldName) {
-        $conditionalFieldId = (int) str_replace('field_', '', $conditionalFieldName);
-        $conditionalField = App::i()->repo(RegistrationFieldConfiguration::class)->find($conditionalFieldId);
-
-        if ($conditionalFieldName && $conditionalValue !== $conditionalField->value) {
-            $registrationFieldConfiguration->value = null;
-        }
-    }
-
-    $newFieldsConfigurations[] = $registrationFieldConfiguration;
-}
-$fields_configurations = $newFieldsConfigurations;
-// @todo ###############################################################################################################
 
 $custom_fields = [];
 foreach ($fields_configurations as $field) :
