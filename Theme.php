@@ -791,7 +791,7 @@ class Theme extends BaseV1\Theme
         ]);
 
         $this->registerAgentMetadata('documento', [
-            'private' => false,
+            'private' => true,
             'label' => \MapasCulturais\i::__('CPF ou CNPJ'),
             'validations' => array(
                 'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
