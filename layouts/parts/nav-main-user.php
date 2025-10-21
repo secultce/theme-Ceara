@@ -81,7 +81,15 @@
             </li>
             <?php $this->applyTemplateHook('nav.dropdown.registrations','after'); ?>
         <?php endif; ?>
-
+        <div class="my-terms">
+            <a href="">Visualizar termos</a>
+            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            <ul class="terms-submenu">
+                <li><a href="/termos-de-uso">Termos de uso</a></li>
+                <li><a href="/politica-de-privacidade">Políticas de privacidade</a></li>
+                <li><a href="/lgpd/accept/termsUse/">Termos de imagem</a></li>
+            </ul>
+        </div>
         <?php if($app->user->is('saasAdmin') && $app->isEnabled('subsite')): ?>
             <?php $this->applyTemplateHook('nav.dropdown.subsite','before'); ?>
             <li>
