@@ -11,6 +11,7 @@ use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
 use MapasCulturais\Entities\ProjectOpportunity;
+use MapasCulturais\Entities\RegistrationMeta;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -696,7 +697,7 @@ class Theme extends BaseV1\Theme
             $opportunity = $registration->opportunity;
             $em = $opportunity->getEvaluationMethod();
             $bonusAmount = $this->opportunity->evaluationMethodConfiguration->getMetadata('bonusAmount');
-            $consolidated_result = $registration->consolidatedResult;
+            $consolidated_result = $registration->consolidatedResult ?? $result;
             $evaluator = $opportunity->getEvaluationCommittee(false);
             $canEvaluate = [];
             $registrationEvaluations = $app->repo('RegistrationEvaluation')->findBy([
