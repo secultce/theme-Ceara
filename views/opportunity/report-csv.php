@@ -146,6 +146,16 @@ foreach($registrations as $i => $r) {
     $em = $r->getEvaluationMethod();
     $result_string = $em->valueToString($r->consolidatedResult);
     $bonusB2Value = null;
+    $registrationEvaluations = $app->repo('RegistrationMeta')->findBy([
+        'owner' => $r,
+    ]);
+
+    foreach ($registrationEvaluations as $bonus_b2) {
+        if (strpos($bonus_b2->key, 'bonificated_field_bonus_b2') === 0) {
+            $bonusB2Value = $bonus_b2->value; 
+            break;
+        }
+    }
 
     $outRow = array_values(array_filter([
         $r->number,
