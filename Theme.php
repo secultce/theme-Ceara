@@ -863,7 +863,7 @@ class Theme extends BaseV1\Theme
                 "CAPISTRANO",
                 "CARIDADE",
                 "CARIRE",
-                "CARIRIACU",ldpla
+                "CARIRIACU",
                 "CARIUS",
                 "CARNAUBAL",
                 "CASCAVEL",
