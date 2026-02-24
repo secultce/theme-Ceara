@@ -93,6 +93,7 @@ $header = array_values(array_filter([
     i::__("Inscrição - Data de envio"),
     i::__("Inscrição - Hora de envio"),
     showIfField($entity->registrationCategories, $entity->registrationCategTitle),
+    i::__("Bonificação B2"),
 ]));
 
 foreach ($app->config['registration.reportOwnerProperties'] as $field) {
@@ -144,6 +145,17 @@ foreach($registrations as $i => $r) {
     
     $em = $r->getEvaluationMethod();
     $result_string = $em->valueToString($r->consolidatedResult);
+    $bonusB2Value = null;
+    $registrationEvaluations = $app->repo('RegistrationMeta')->findBy([
+        'owner' => $r,
+    ]);
+
+    foreach ($registrationEvaluations as $bonus_b2) {
+        if (strpos($bonus_b2->key, 'bonificated_field_bonus_b2') === 0) {
+            $bonusB2Value = $bonus_b2->value; 
+            break;
+        }
+    }
 
     $outRow = array_values(array_filter([
         $r->number,
@@ -153,7 +165,8 @@ foreach($registrations as $i => $r) {
         returnStatus($r) ?: '""',
         ((!is_null($dataHoraEnvio)) ? $dataHoraEnvio->format('d-m-Y') : '-'),
         ((!is_null($dataHoraEnvio)) ? $dataHoraEnvio->format('H:i') : '-'),
-        showIfField($entity->registrationCategories, $r->category)
+        showIfField($entity->registrationCategories, $r->category),
+        ($bonusB2Value === 'true') ? 'Sim' : 'Não'
     ]));
 
     foreach ($app->config['registration.reportOwnerProperties'] as $field) {

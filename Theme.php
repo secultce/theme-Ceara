@@ -11,6 +11,8 @@ use MapasCulturais\Themes\BaseV1;
 use MapasCulturais\Entities\Agent;
 use MapasCulturais\Entities\Opportunity;
 use MapasCulturais\Entities\ProjectOpportunity;
+use MapasCulturais\Entities\RegistrationMeta;
+use MapasCulturais\Services\BonificationB2Service;
 
 // Constante para definir itens por página
 define("ITEMS_PER_PAGE", 100);
@@ -690,6 +692,22 @@ class Theme extends BaseV1\Theme
             $opportunity = $entity instanceof Opportunity ? $entity : $entity->opportunity;
             $html = Utils::getTermsByOpportunity($html, $opportunity);
         });
+
+        $app->hook('entity(Registration).consolidateResult', function (&$result, $caller) use ($app) {
+            $registration  = $this;
+            $opportunity   = $registration->opportunity;
+
+            $bonusAmount = $opportunity->evaluationMethodConfiguration->getMetadata('bonusAmount');
+            $consolidated_result = $registration->consolidatedResult ?? $result;
+
+            $service = new BonificationB2Service(
+                $registration,
+                $bonusAmount,
+                $consolidated_result
+            );
+
+            return $service->process($result);
+        });
     }
 
     /**
@@ -758,7 +776,7 @@ class Theme extends BaseV1\Theme
         $this->jsObject['assets']['lei-aldir-small'] = $this->asset('img/lei-aldir-small.png', false);
         $this->jsObject['assets']['logo-ce-small'] = $this->asset('img/logo-org-ceara-small.png', false);
         $this->enqueueStyle('app', 'secultalert', 'css/secultce/dist/secultce.min.css');
-        $this->enqueueScript('app','sweetalert2','https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js');
+        $this->enqueueScript('app','sweetalert2','js/sweetalert2.all.min.js');
     }
 
     /**
@@ -791,7 +809,7 @@ class Theme extends BaseV1\Theme
         ]);
 
         $this->registerAgentMetadata('documento', [
-            'private' => true,
+            'private' => false,
             'label' => \MapasCulturais\i::__('CPF ou CNPJ'),
             'validations' => array(
                 'v::oneOf(v::cpf(),v::cnpj())' => \MapasCulturais\i::__('O número de documento informado é inválido.'),
