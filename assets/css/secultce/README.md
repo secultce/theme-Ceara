@@ -32,7 +32,7 @@ Copy the file `secultce.min.css` in `dist` to your project and include:
 <link rel="stylesheet" href="<your-path-project-styles>/secultce.min.css">
 
 <script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js
+js/sweetalert2.all.min.js
 "></script>
 ```
 <!--
