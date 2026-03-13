@@ -692,22 +692,6 @@ class Theme extends BaseV1\Theme
             $opportunity = $entity instanceof Opportunity ? $entity : $entity->opportunity;
             $html = Utils::getTermsByOpportunity($html, $opportunity);
         });
-
-        $app->hook('entity(Registration).consolidateResult', function (&$result, $caller) use ($app) {
-            $registration  = $this;
-            $opportunity   = $registration->opportunity;
-
-            $bonusAmount = $opportunity->evaluationMethodConfiguration->getMetadata('bonusAmount');
-            $consolidated_result = $registration->consolidatedResult ?? $result;
-
-            $service = new BonificationB2Service(
-                $registration,
-                $bonusAmount,
-                $consolidated_result
-            );
-
-            return $service->process($result);
-        });
     }
 
     /**
