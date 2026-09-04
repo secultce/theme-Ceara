@@ -214,7 +214,7 @@
         <?php $this->part('user-management/user-info/info-opportunities', array('opportunities' => $user->archivedOpportunities)); ?>
       </div>
     </div>
-  
+
     <div id="permissoes" class="aba-content">
       <div>
 
@@ -343,3 +343,7 @@
   </div>
 
 </div>
+
+<?php if (!empty($canManageEntityMetadata)): ?>
+  <?php $this->part('user-management/user-info/entity-metadata-dialog'); ?>
+<?php endif; ?>
