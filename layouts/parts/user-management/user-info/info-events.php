@@ -29,6 +29,7 @@
       </td>
       <td class="fit">
         <div class="entity-actions">
+          <?php $this->part('user-management/user-info/entity-metadata-button', ['entity' => $event, 'entityType' => 'event']); ?>
           <?php if($event->status === Event::STATUS_ENABLED): ?>
             <a class="btn btn-small btn-warning" href="<?php echo $event->unpublishUrl; ?>"><?php \MapasCulturais\i::_e("tornar rascunho");?></a>
             <a class="btn btn-small btn-danger"  href="<?php echo $event->deleteUrl; ?> ">  <?php \MapasCulturais\i::_e("excluir");?></a>
@@ -55,5 +56,4 @@
 
 
   
-
 
