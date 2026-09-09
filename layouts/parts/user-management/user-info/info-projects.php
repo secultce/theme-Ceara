@@ -26,6 +26,7 @@
         <td><?php echo $project->subsite?$project->subsite->name:'';?></td>
         <td class="fit">
           <div class="entity-actions">
+              <?php $this->part('user-management/user-info/entity-metadata-button', ['entity' => $project, 'entityType' => 'project']); ?>
               <?php if($project->status === Project::STATUS_ENABLED): ?>
                   <a class="btn btn-small btn-danger" href="<?php echo $project->deleteUrl; ?>"><?php \MapasCulturais\i::_e("excluir");?></a>
                   <a class="btn btn-small btn-success" href="<?php echo $project->archiveUrl; ?>"><?php \MapasCulturais\i::_e("arquivar");?></a>

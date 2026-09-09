@@ -26,6 +26,7 @@
         <td><?php echo $space->subsite?$space->subsite->name:'';?></td>
         <td class="fit">
           <div class="entity-actions">
+              <?php $this->part('user-management/user-info/entity-metadata-button', ['entity' => $space, 'entityType' => 'space']); ?>
               <?php if($space->status === Space::STATUS_ENABLED): ?>
                   <a class="btn btn-small btn-danger" href="<?php echo $space->deleteUrl; ?>"><?php \MapasCulturais\i::_e("excluir");?></a>
                   <a class="btn btn-small btn-success" href="<?php echo $space->archiveUrl; ?>"><?php \MapasCulturais\i::_e("arquivar");?></a>

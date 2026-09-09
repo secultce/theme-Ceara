@@ -36,6 +36,7 @@ $agents = array_merge($agent_, $agents);
 
         <td class="fit">
           <div class="entity-actions">
+            <?php $this->part('user-management/user-info/entity-metadata-button', ['entity' => $agent, 'entityType' => 'agent']); ?>
             <?php if (!$agent->isUserProfile) : ?>
               <?php if ($agent->status === Agent::STATUS_ENABLED) : ?>
                 <a class="btn btn-small btn-danger" href="<?php echo $agent->deleteUrl; ?>"><?php \MapasCulturais\i::_e("excluir"); ?></a>

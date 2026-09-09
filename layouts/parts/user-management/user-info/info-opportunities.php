@@ -26,6 +26,7 @@
         <td><?php echo $opportunity->subsite?$opportunity->subsite->name:'';?></td>
         <td class="fit">
           <div class="entity-actions">
+              <?php $this->part('user-management/user-info/entity-metadata-button', ['entity' => $opportunity, 'entityType' => 'opportunity']); ?>
               <?php if($opportunity->status === Opportunity::STATUS_ENABLED): ?>
                   <a class="btn btn-small btn-danger" href="<?php echo $opportunity->deleteUrl; ?>"><?php \MapasCulturais\i::_e("excluir");?></a>
                   <a class="btn btn-small btn-success" href="<?php echo $opportunity->archiveUrl; ?>"><?php \MapasCulturais\i::_e("arquivar");?></a>
