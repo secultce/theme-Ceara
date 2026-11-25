@@ -513,29 +513,7 @@ class Theme extends BaseV1\Theme
             $theme->fixAgentPermission($app->user);
         });
 
-        //disparo de e-mail quando iniciar uma inscrição
-        $app->hook("entity(Registration).insert:finish", function () use ($app){
-            //Array com dados para preencher o template do email
-            //@ParaMelhorar: chamar os dados atraves dos métodos mágicos
-            $dataValue = [
-                'siteName' => $app->view->dict('site: name', false),
-                'baseUrl' => $app->getBaseUrl(),
-                'userName' => $app->auth->authenticatedUser->profile->name,
-                'projectId' => $this->entity['opportunity']->id,
-                'projectName' => $this->entity['opportunity']->name,
-                'registrationId' => $this->entity['id'],
-                'registrationNumber' => $this->entity['number']
-            ];
-            
-            $message = $app->renderMailerTemplate('start_registration',$dataValue);
-            $app->createAndSendMailMessage([
-                'from' => $app->config['mailer.from'],
-                'to' => $app->auth->authenticatedUser->profile->user->email,
-                'subject' => $message['title'],
-                'body' => $message['body']
-            ]);
-            
-        });
+        // O e-mail de "Inscrição iniciada" é publicado na fila da API de e-mail pelo módulo MailNotification
 
         //EM CASOS DE RECUPERAÇÃO DE SENHA, FOI CRIADO UM HOOK PARA SUBISTITUIR A MENSAGEM DE FEEDBACK
         $app->hook("template(auth.recover.head):begin", function() use($app){
